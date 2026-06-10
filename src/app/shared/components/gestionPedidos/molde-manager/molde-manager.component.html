@@ -1,0 +1,227 @@
+<div class="component-wrapper">
+  <div class="page-header">
+    <div class="header-content">
+      <h1 class="page-title">
+        <mat-icon class="title-icon">content_cut</mat-icon>
+        Gestión de Moldes
+      </h1>
+      <p class="page-subtitle">Diseña y administra los moldes para tu producción</p>
+    </div>
+    <div class="header-decoration"></div>
+  </div>
+
+  <div class="content-grid">
+    <mat-card class="form-panel">
+      <mat-card-header class="form-header">
+        <div class="header-icon">
+          <mat-icon>{{ moldeEnEdicionId ? 'edit_note' : 'add_circle' }}</mat-icon>
+        </div>
+        <div>
+          <mat-card-title class="form-title">
+            {{ moldeEnEdicionId ? 'Editar Molde' : 'Nuevo Molde' }}
+          </mat-card-title>
+          <mat-card-subtitle class="form-subtitle">
+            {{ moldeEnEdicionId ? 'Modifica los datos del molde seleccionado' : 'Crea un nuevo molde para tu catálogo' }}
+          </mat-card-subtitle>
+        </div>
+      </mat-card-header>
+
+      <mat-card-content class="form-content">
+        <form [formGroup]="moldeForm">
+          <div class="form-fields">
+            <div class="field-group">
+              <label class="field-label"><mat-icon>badge</mat-icon> Nombre del Molde</label>
+              <mat-form-field appearance="outline" class="modern-field">
+                <input matInput formControlName="nombre" placeholder="Ej: Polera deportiva unisex" />
+                <mat-error *ngIf="moldeForm.get('nombre')?.hasError('required')">El nombre es obligatorio.</mat-error>
+              </mat-form-field>
+            </div>
+
+            <div class="field-group">
+              <label class="field-label"><mat-icon>palette</mat-icon> Gama de Tela</label>
+              <mat-form-field appearance="outline" class="modern-field">
+                <mat-select formControlName="gamaTelaId">
+                  <mat-option *ngFor="let gama of datos?.todasLasGamasConTelas || []" [value]="gama.id">
+                    <div class="gama-option">
+                      <span class="gama-name">{{ gama.nombre }}</span>
+                    </div>
+                  </mat-option>
+                </mat-select>
+                <mat-error *ngIf="moldeForm.get('gamaTelaId')?.hasError('required')">La gama es obligatoria.</mat-error>
+              </mat-form-field>
+            </div>
+
+            <div class="field-group full-width tipo-prenda-selector">
+                <label class="field-label"><mat-icon>styler</mat-icon> Tipo de Prenda</label>
+                <mat-radio-group formControlName="tipoParte" class="radio-group">
+                    <mat-radio-button value="SUPERIOR">Parte Superior (Poleras, etc.)</mat-radio-button>
+                    <mat-radio-button value="INFERIOR">Parte Inferior (Pantalones, etc.)</mat-radio-button>
+                </mat-radio-group>
+            </div>
+
+            <div *ngIf="moldeForm.get('tipoParte')?.value === 'SUPERIOR'" class="field-group full-width">
+                <label class="field-label"><mat-icon>style</mat-icon> ¿La prenda lleva mangas?</label>
+                <mat-radio-group formControlName="llevaMangas" class="radio-group">
+                    <mat-radio-button [value]="true">Sí</mat-radio-button>
+                    <mat-radio-button [value]="false">No</mat-radio-button>
+                </mat-radio-group>
+            </div>
+            
+            <div class="field-group full-width">
+              <label class="field-label"><mat-icon>straighten</mat-icon> Medidas por Talla</label>
+              
+              <div formArrayName="detallesTalla">
+                <div *ngFor="let tallaGroup of detallesTalla.controls; let i = index" [formGroupName]="i" class="talla-card">
+                  
+                  <div class="talla-header">
+                     <mat-form-field appearance="outline" class="talla-name-field">
+                        <mat-label>Nombre de la Talla</mat-label>
+                        <input matInput formControlName="talla" placeholder="Ej: S, M, 42...">
+                      </mat-form-field>
+                      
+                      <mat-form-field appearance="outline" class="talla-unit-field">
+                        <mat-label>Unidad</mat-label>
+                        <mat-select formControlName="unidadMedida">
+                          <mat-option *ngFor="let unidad of unidadesMedida" [value]="unidad">{{ unidad }}</mat-option>
+                        </mat-select>
+                      </mat-form-field>
+
+                      <button mat-icon-button color="warn" (click)="removeTalla(i)" type="button" matTooltip="Eliminar esta talla">
+                          <mat-icon>delete_forever</mat-icon>
+                      </button>
+                  </div>
+
+                  <div class="piezas-grid" formArrayName="piezas">
+                     <ng-container *ngFor="let piezaGroup of getPiezas(i).controls; let j = index" [formGroupName]="j">
+                         <div class="pieza-form" 
+                              *ngIf="piezaGroup.get('tipoPieza')?.value !== 'MANGA' || moldeForm.get('llevaMangas')?.value"
+                              [class.disabled]="piezaGroup.disabled">
+                            
+                            <h4 class="pieza-title">{{ piezaGroup.get('nombrePieza')?.value }}</h4>
+                            <div class="pieza-fields">
+                               <mat-form-field appearance="outline" class="table-field">
+                                  <mat-label>Ancho</mat-label>
+                                  <input matInput type="number" formControlName="ancho">
+                               </mat-form-field>
+                               <mat-form-field appearance="outline" class="table-field">
+                                  <mat-label>Alto</mat-label>
+                                  <input matInput type="number" formControlName="alto">
+                               </mat-form-field>
+                               <mat-form-field appearance="outline" class="table-field">
+                                  <mat-label>Margen</mat-label>
+                                  <input matInput type="number" formControlName="margen">
+                               </mat-form-field>
+                            </div>
+                         </div>
+                     </ng-container>
+                  </div>
+                </div>
+              </div>
+              <mat-error *ngIf="detallesTalla.hasError('minlength') && detallesTalla.touched" class="form-array-error">
+                Debe agregar al menos una talla.
+              </mat-error>
+
+              <button mat-stroked-button color="primary" (click)="addTalla()" type="button" class="add-talla-btn">
+                  <mat-icon>add</mat-icon> Añadir Talla
+              </button>
+            </div>
+          </div>
+        </form>
+
+        <div class="upload-section">
+          <label class="field-label"><mat-icon>photo_library</mat-icon> Imágenes del Molde</label>
+          <div class="upload-area" (click)="fileInput.click()" (drop)="onDrop($event)" (dragover)="onDragOver($event)" (dragleave)="onDragLeave($event)" [class.drag-active]="isDragActive">
+            <input #fileInput type="file" (change)="onFileSelected($event)" multiple accept="image/*" hidden />
+            <div class="upload-content" *ngIf="previewUrls.length === 0">
+              <mat-icon class="upload-icon">cloud_upload</mat-icon>
+              <h3 class="upload-title">Arrastra imágenes aquí</h3>
+              <p class="upload-subtitle">o haz clic para seleccionar</p>
+              <span class="upload-hint">Máximo 4 imágenes • PNG, JPG, WEBP</span>
+            </div>
+            <div class="upload-preview" *ngIf="previewUrls.length > 0">
+              <div class="preview-grid">
+                <div class="preview-card" *ngFor="let url of previewUrls; let i = index">
+                  <div class="preview-image-container">
+                    <img [src]="url" class="preview-image" />
+                    <button mat-mini-fab color="warn" class="remove-btn" (click)="removerImagen(url, i); $event.stopPropagation()">
+                      <mat-icon>close</mat-icon>
+                    </button>
+                  </div>
+                </div>
+                <div class="add-more-card" *ngIf="previewUrls.length < 4" (click)="fileInput.click()">
+                  <mat-icon>add_photo_alternate</mat-icon>
+                  <span>Agregar más</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button mat-raised-button color="primary" [disabled]="loading" (click)="guardarMolde()" class="save-button">
+            <div class="button-content">
+              <mat-icon>{{ moldeEnEdicionId ? 'save' : 'add' }}</mat-icon>
+              <span>{{ moldeEnEdicionId ? 'Guardar Cambios' : 'Crear Molde' }}</span>
+              <mat-spinner *ngIf="loading" diameter="20" class="button-spinner"></mat-spinner>
+            </div>
+          </button>
+          <button *ngIf="moldeEnEdicionId" mat-stroked-button color="warn" (click)="resetForm()" class="cancel-button">
+            <mat-icon>cancel</mat-icon>
+            Cancelar
+          </button>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="list-panel">
+      <mat-card-header class="list-header">
+        <div class="header-icon"><mat-icon>view_list</mat-icon></div>
+        <div>
+          <mat-card-title class="list-title">Moldes Existentes</mat-card-title>
+          <mat-card-subtitle class="list-subtitle">{{ (moldes.length || 0) }} moldes en el sistema</mat-card-subtitle>
+        </div>
+      </mat-card-header>
+      <mat-card-content class="list-content">
+        <div class="moldes-grid" *ngIf="moldes.length > 0; else emptyState">
+          <div class="molde-card" *ngFor="let molde of moldes" [class.editing]="moldeEnEdicionId === molde.id">
+            <div class="molde-image">
+              <div class="thumbnail-grid" [ngClass]="'count-' + (molde.urlsImagenes.length || 1)">
+                <div class="thumbnail-item" *ngFor="let imgUrl of molde.urlsImagenes?.slice(0, 4)">
+                  <img [src]="imgUrl" [alt]="molde.nombre" />
+                </div>
+                <div *ngIf="!molde.urlsImagenes || molde.urlsImagenes.length === 0" class="thumbnail-placeholder">
+                  <mat-icon>image_not_supported</mat-icon>
+                </div>
+              </div>
+              <div class="molde-overlay">
+                <button mat-icon-button class="action-btn view-btn" matTooltip="Visualizar imágenes" (click)="visualizarImagenes(molde)">
+                  <mat-icon>visibility</mat-icon>
+                </button>
+                <button mat-icon-button color="primary" class="action-btn edit-btn" matTooltip="Editar molde" (click)="editarMolde(molde)">
+                  <mat-icon>edit</mat-icon>
+                </button>
+                <button mat-icon-button color="warn" class="action-btn delete-btn" matTooltip="Eliminar molde" (click)="eliminarMolde(molde.id!)">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </div>
+            </div>
+            <div class="molde-info">
+              <h3 class="molde-name">{{ molde.nombre }}</h3>
+              <p class="molde-gama"><mat-icon>widgets</mat-icon>{{ molde.gamaTelaNombre }}</p>
+              <div class="molde-stats">
+                <span class="stat"><mat-icon>photo</mat-icon>{{ molde.urlsImagenes.length || 0 }} imágenes</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <ng-template #emptyState>
+          <div class="empty-state">
+            <div class="empty-icon"><mat-icon>inventory_2</mat-icon></div>
+            <h3 class="empty-title">No hay moldes registrados</h3>
+            <p class="empty-subtitle">Comienza creando tu primer molde usando el formulario</p>
+          </div>
+        </ng-template>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

@@ -1,0 +1,106 @@
+<div class="container">
+  <mat-card class="proveedor-card">
+    <mat-card-header class="header-centrado">
+      <div mat-card-avatar class="proveedor-avatar">
+        <img src="assets/proveedor.png" alt="Proveedor Logo">
+      </div>
+      <mat-card-title>Gestión de Proveedores</mat-card-title>
+      <mat-card-subtitle>Materiales para confección textil</mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <div class="add-fab-container">
+        <button mat-fab color="primary" class="fab-table-add" (click)="abrirModalAgregar()">
+          <mat-icon>add</mat-icon>
+        </button>
+      </div>
+      <h2 class="lista-titulo">
+        <mat-icon class="icon-orange">list</mat-icon>
+        Listado de Proveedores
+      </h2>
+
+      <div class="tabla-responsive">
+        <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 tabla-proveedores">
+          <ng-container matColumnDef="nombre">
+            <th mat-header-cell *matHeaderCellDef>Nombre</th>
+            <td mat-cell *matCellDef="let p">{{ p.nombre }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="nombreEmpresa">
+            <th mat-header-cell *matHeaderCellDef>Empresa</th>
+            <td mat-cell *matCellDef="let p">{{ p.nombreEmpresa }}</td>
+          </ng-container>
+
+          <!-- ✨ CORRECCIÓN: Se llama al método 'getMaterialesString' en el componente -->
+          <ng-container matColumnDef="materiales">
+            <th mat-header-cell *matHeaderCellDef>Materiales</th>
+            <td mat-cell *matCellDef="let p">
+              {{ getMaterialesString(p) }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="contacto">
+            <th mat-header-cell *matHeaderCellDef>Contacto</th>
+            <td mat-cell *matCellDef="let p">{{ p.contacto }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="acciones">
+            <th mat-header-cell *matHeaderCellDef>Acciones</th>
+            <td mat-cell *matCellDef="let p">
+              <button mat-icon-button color="accent" (click)="abrirModalEditar(p)">
+                <mat-icon>edit</mat-icon>
+              </button>
+              <button mat-icon-button color="warn" (click)="eliminarProveedor(p.id)">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="columnas"></tr>
+          <tr mat-row *matRowDef="let row; columns: columnas;"></tr>
+        </table>
+        
+        <div class="custom-paginator">
+          <div class="paginator-info">
+            <span>Elementos por página:</span>
+            <select class="page-size-select">
+              <option value="5">5</option>
+              <option value="10">10</option>
+              <option value="20">20</option>
+            </select>
+            <span class="range-label">1 - 5 de 25</span>
+          </div>
+          <div class="paginator-controls">
+            <button class="paginator-button" disabled>
+              <mat-icon>chevron_left</mat-icon>
+            </button>
+            <button class="paginator-button">
+              <mat-icon>chevron_right</mat-icon>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="boton-pedidos-container">
+        <button mat-raised-button color="accent" class="boton-pedidos" (click)="abrirGestionPedidos()">
+          <mat-icon>assignment</mat-icon>
+          Pedidos a Proveedores
+        </button>
+      </div>
+    </mat-card-content>
+  </mat-card>
+  
+</div>
+<!-- ✨ NUEVO: Modal de confirmación definido en el mismo componente -->
+<ng-template #confirmacionEliminarModal>
+  <h2 mat-dialog-title>Confirmar Eliminación</h2>
+  <mat-dialog-content>
+    ¿Estás seguro de que quieres eliminar este proveedor? Esta acción no se puede deshacer.
+  </mat-dialog-content>
+  <mat-dialog-actions align="end">
+    <!-- El botón de cancelar cierra el modal con el valor 'false' -->
+    <button mat-button [mat-dialog-close]="false">Cancelar</button>
+    <!-- El botón de confirmar cierra el modal con el valor 'true' -->
+    <button mat-raised-button color="warn" [mat-dialog-close]="true">Eliminar</button>
+  </mat-dialog-actions>
+</ng-template>

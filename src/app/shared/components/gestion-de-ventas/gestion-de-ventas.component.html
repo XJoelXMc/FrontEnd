@@ -1,0 +1,49 @@
+
+
+<div class="catalogo-container">
+  <div class="categoria-circular-buttons">
+    <button 
+      *ngFor="let categoria of categorias"
+      class="categoria-button"
+      
+      (click)="seleccionarCategoria(categoria)"
+    >
+      <img [src]="categoria.imagen" [alt]="categoria.titulo">
+      <span>{{ categoria.titulo }}</span>
+    </button>
+  </div>
+
+  <section *ngIf="categoriaSeleccionada">
+    <h2>{{ categoriaSeleccionada.titulo }}</h2>
+    <div class="galeria">
+      <mat-card *ngFor="let modelo of categoriaSeleccionada.modelos" class="card">
+        <img mat-card-image [src]="modelo.imagenUrl" [alt]="modelo.nombre">
+        <mat-card-content>
+          <p>{{ modelo.nombre }}</p>
+        </mat-card-content>
+        <mat-card-actions>
+          <button mat-icon-button (click)="descargarImagen(modelo.imagenUrl)" matTooltip="Descargar">
+            <mat-icon>download</mat-icon>
+          </button>
+
+          <ng-container *ngIf="isAdminOrOwner()">
+            <button mat-icon-button (click)="editarModelo(modelo)" matTooltip="Editar">
+              <mat-icon>edit</mat-icon>
+            </button>
+            <button mat-icon-button color="warn" (click)="eliminarModelo(modelo.id)" matTooltip="Eliminar">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </ng-container>
+        </mat-card-actions>
+      </mat-card>
+    </div>
+
+    <div class="add-button-container" *ngIf="isAdminOrOwner()">
+      <button mat-fab color="accent" class="add-button" (click)="abrirDialogo()">
+        <mat-icon>add</mat-icon>
+      </button>
+    </div>
+  </section>
+</div>
+
+

@@ -1,0 +1,172 @@
+<div class="component-wrapper">
+  <!-- Header moderno añadido -->
+  <div class="page-header">
+    <div class="header-content">
+      <h1 class="page-title">
+        <mat-icon class="title-icon">inventory_2</mat-icon>
+        Crear Nuevo Pack
+      </h1>
+      <p class="page-subtitle">Combina moldes y define un precio único para el pack</p>
+    </div>
+    <div class="header-decoration"></div>
+  </div>
+
+  <mat-card class="elevation-2">
+    <mat-card-header>
+      <mat-card-title>Crear un Nuevo Pack</mat-card-title>
+      <mat-card-subtitle>Combina moldes y define un precio único para el pack.</mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <!-- Información básica -->
+      <div class="form-section">
+        <h3>Información del Pack</h3>
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="flex-item">
+            <mat-label>Nombre del Pack</mat-label>
+            <input matInput [(ngModel)]="packRequest.nombre" name="nombre" required>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="flex-item">
+            <mat-label>Descripción</mat-label>
+            <textarea matInput rows="2" [(ngModel)]="packRequest.descripcion" name="descripcion"></textarea>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="flex-item">
+            <mat-label>Precio Total (Bs.)</mat-label>
+            <input matInput type="number" min="0" [(ngModel)]="packRequest.precio" name="precio" required>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <!-- ✅ Nueva sección: configuración del pack -->
+      <div class="form-section config-section">
+        <h3>Configuración del Pack</h3>
+
+        <!-- Primera fila: selección de partes -->
+        <div class="toggles-row">
+          <div class="config-toggle parte-superior" [class.active]="packRequest.incluyeParteSuperior">
+            <div class="toggle-content">
+              <div class="toggle-icon">👕</div>
+              <div class="toggle-info">
+                <div class="toggle-label">Incluye Parte Superior</div>
+                <div class="toggle-description">Poleras, camisas, blusas, etc.</div>
+              </div>
+              <div class="toggle-control">
+                <mat-slide-toggle
+                  color="primary"
+                  [(ngModel)]="packRequest.incluyeParteSuperior"
+                  name="incluyeParteSuperior">
+                </mat-slide-toggle>
+              </div>
+            </div>
+          </div>
+
+          <div class="config-toggle parte-inferior" [class.active]="packRequest.incluyeParteInferior">
+            <div class="toggle-content">
+              <div class="toggle-icon">👖</div>
+              <div class="toggle-info">
+                <div class="toggle-label">Incluye Parte Inferior</div>
+                <div class="toggle-description">Pantalones, shorts, faldas, etc.</div>
+              </div>
+              <div class="toggle-control">
+                <mat-slide-toggle
+                  color="primary"
+                  [(ngModel)]="packRequest.incluyeParteInferior"
+                  name="incluyeParteInferior">
+                </mat-slide-toggle>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Segunda fila: opciones de sublimado -->
+        <div class="toggles-row" *ngIf="packRequest.incluyeParteSuperior || packRequest.incluyeParteInferior">
+          <div class="config-toggle sublimado-superior" 
+               [class.active]="packRequest.parteSuperiorSublimada"
+               [class.disabled]="!packRequest.incluyeParteSuperior">
+            <div class="toggle-content">
+              <div class="toggle-icon">🎨</div>
+              <div class="toggle-info">
+                <div class="toggle-label">Parte Superior Sublimada</div>
+                <div class="toggle-description">Incluye diseño personalizado</div>
+              </div>
+              <div class="toggle-control">
+                <mat-slide-toggle
+                  color="accent"
+                  [(ngModel)]="packRequest.parteSuperiorSublimada"
+                  [disabled]="!packRequest.incluyeParteSuperior"
+                  name="parteSuperiorSublimada">
+                </mat-slide-toggle>
+              </div>
+            </div>
+          </div>
+
+          <div class="config-toggle sublimado-inferior"
+               [class.active]="packRequest.parteInferiorSublimada"
+               [class.disabled]="!packRequest.incluyeParteInferior">
+            <div class="toggle-content">
+              <div class="toggle-icon">🖌️</div>
+              <div class="toggle-info">
+                <div class="toggle-label">Parte Inferior Sublimada</div>
+                <div class="toggle-description">Incluye diseño personalizado</div>
+              </div>
+              <div class="toggle-control">
+                <mat-slide-toggle
+                  color="accent"
+                  [(ngModel)]="packRequest.parteInferiorSublimada"
+                  [disabled]="!packRequest.incluyeParteInferior"
+                  name="parteInferiorSublimada">
+                </mat-slide-toggle>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Resumen de configuración -->
+        <div class="config-summary" *ngIf="packRequest.incluyeParteSuperior || packRequest.incluyeParteInferior">
+          <p><strong>Resumen de configuración:</strong></p>
+          <ul>
+            <li *ngIf="packRequest.incluyeParteSuperior">
+              Parte Superior
+              <span *ngIf="packRequest.parteSuperiorSublimada">(Sublimada)</span>
+            </li>
+            <li *ngIf="packRequest.incluyeParteInferior">
+              Parte Inferior
+              <span *ngIf="packRequest.parteInferiorSublimada">(Sublimada)</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Selección de moldes -->
+      <div class="form-section">
+        <h3>Selecciona los Moldes del Pack</h3>
+        <p>Haz clic sobre los moldes que formarán parte del pack.</p>
+
+        <div class="moldes-gallery">
+          <div *ngFor="let molde of datos?.todosLosMoldes"
+               class="molde-item"
+               [class.selected]="isMoldeSelected(molde.id!)"
+               (click)="toggleMoldeSelection(molde.id!)">
+            <img [src]="molde.urlsImagenes[0] || 'https://via.placeholder.com/150'" alt="Molde {{ molde.nombre }}">
+            <p>{{ molde.nombre }}</p>
+          </div>
+        </div>
+      </div>
+    </mat-card-content>
+
+    <mat-card-actions align="end">
+      <button mat-raised-button color="accent"
+              (click)="crearPack()"
+              [disabled]="!isFormValid() || loading">
+        <mat-icon>save</mat-icon>
+        <span *ngIf="!loading">Crear Pack</span>
+        <span *ngIf="loading" class="loading-state">
+          <span class="spinner"></span>
+          Creando...
+        </span>
+      </button>
+    </mat-card-actions>
+  </mat-card>
+</div>

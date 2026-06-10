@@ -1,0 +1,106 @@
+.control-container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.header-page {
+  text-align: center;
+  margin-bottom: 3rem;
+  h1 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    font-size: 2rem;
+    color: #333;
+  }
+  .subtitle {
+    color: #666;
+  }
+}
+
+// --- Estilos Cliente (Buscador) ---
+.search-box {
+  max-width: 500px;
+  margin: 0 auto 3rem auto;
+}
+
+.result-dashboard {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  animation: fadeIn 0.5s ease-out;
+}
+
+.dashboard-card {
+  border-radius: 16px;
+  border: 1px solid #eee;
+  
+  &.highlight {
+    border: 2px solid #FF6600; // Color primario
+    background: #fff8f5;
+  }
+
+  .avatar-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    color: white;
+    &.money { background: #4CAF50; }
+    &.design { background: #FF6600; }
+  }
+
+  .info-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    padding: 5px 0;
+    border-bottom: 1px dashed #eee;
+    
+    &.total { font-size: 1.2rem; border: none; }
+  }
+
+  .status-text {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: bold;
+    &.ok { color: #4CAF50; }
+    &.pending { color: #FF9800; }
+  }
+
+  mat-card-actions {
+    padding: 16px;
+    display: flex;
+    justify-content: center;
+    button { width: 100%; }
+  }
+}
+
+// --- Estilos Admin (Tabla) ---
+.admin-table {
+  width: 100%;
+  
+  th { background: #f5f5f5; font-weight: bold; }
+  
+  .badge {
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    background: #eee;
+    color: #666;
+    
+    &.success {
+      background: #e8f5e9;
+      color: #2e7d32;
+      font-weight: bold;
+    }
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}

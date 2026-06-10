@@ -1,0 +1,127 @@
+/* Estilos del header (coherente con tu login) */
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 24px;
+  background: linear-gradient(135deg, #FF6600, #FF8533);
+  color: white;
+  
+  .modal-title {
+    display: flex;
+    align-items: center;
+    margin: 0;
+    font-weight: 500;
+    font-size: 1.25rem;
+    
+    .icon-primary {
+      margin-right: 12px;
+      color: white;
+    }
+  }
+  
+  .close-btn {
+    color: white;
+    transition: all 0.3s ease;
+    
+    &:hover {
+      transform: rotate(90deg);
+      background: rgba(255, 255, 255, 0.1);
+    }
+  }
+}
+
+/* Contenido del modal */
+mat-dialog-content {
+  padding: 20px;
+  max-height: 70vh;
+  overflow-y: auto;
+  
+  .table-container {
+    border-radius: 8px;
+    overflow: hidden;
+    
+    .pedidos-table {
+      width: 100%;
+      
+      /* Cabeceras */
+      .header-cell {
+        background-color: #f5f5f5;
+        font-weight: 600;
+        color: #333;
+        padding: 12px 16px;
+      }
+      
+      /* Celdas */
+      .data-cell {
+        padding: 12px 16px;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        
+        &.acciones-cell {
+          display: flex;
+          gap: 8px;
+        }
+      }
+      
+      /* Filas */
+      .header-row {
+        height: 56px;
+      }
+      
+      .data-row {
+        height: 56px;
+        transition: background-color 0.2s ease;
+        
+        &:hover {
+          background-color: rgba(#FF6600, 0.03);
+        }
+      }
+    }
+  }
+}
+
+/* Acciones del modal */
+.modal-actions {
+  padding: 16px 24px;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  
+  .action-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 500;
+    
+    /* Botón primario (coherente con tu login) */
+    &[color="primary"] {
+      background-color: #FF6600;
+      color: white;
+      
+      &:hover {
+        background-color: darken(#FF6600, 5%);
+      }
+    }
+  }
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  mat-dialog-content {
+    padding: 12px;
+    
+    .table-container {
+      overflow-x: auto;
+    }
+  }
+  
+  .modal-actions {
+    flex-direction: column-reverse;
+    gap: 8px;
+    
+    button {
+      width: 100%;
+    }
+  }
+}

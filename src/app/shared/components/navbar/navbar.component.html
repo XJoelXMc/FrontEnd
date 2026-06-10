@@ -1,0 +1,59 @@
+<ng-container *ngIf="!isLoggedIn">
+  <mat-toolbar class="mat-elevation-z4 custom-toolbar">
+    <img src="assets/logo.png" alt="Logo" class="logo">
+    <span class="spacer"></span>
+    
+    <button mat-button routerLink="/home">Inicio</button>
+    <button mat-button>Nosotros</button>
+    <button mat-button>Contáctanos</button>
+
+    <button mat-raised-button color="primary" routerLink="/login" class="login-button">
+      <mat-icon>login</mat-icon>
+      Iniciar Sesión
+    </button>
+  </mat-toolbar>
+</ng-container>
+
+
+<ng-container *ngIf="isLoggedIn">
+  <mat-toolbar class="mat-elevation-z4 custom-toolbar">
+    <img src="assets/logo.png" alt="Logo" class="logo">
+    <span class="spacer"></span>
+
+    <button class="nav-button" (click)="logout()">
+      <mat-icon class="nav-icon">logout</mat-icon>
+      SALIR
+    </button>
+
+    <button class="nav-button">
+      <mat-icon>account_circle</mat-icon>
+      {{ rolUsuario }}
+    </button>
+
+    <button class="nav-button">
+      <mat-icon class="nav-icon">help_outline</mat-icon>
+      AYUDA
+    </button>
+  </mat-toolbar>
+
+  <nav class="secondary-nav">
+    <button mat-button routerLink="/home">Inicio</button>
+    <button mat-button>Nosotros</button>
+    <button mat-button>Contáctanos</button>
+
+    <button mat-button [matMenuTriggerFor]="menuOpciones" class="menu-selector">
+      <mat-icon>list</mat-icon>
+      <span>Opciones</span>
+      <mat-icon>arrow_drop_down</mat-icon>
+    </button>
+
+    <mat-menu #menuOpciones="matMenu">
+      <ng-container *ngFor="let opcion of opcionesSeleccion">
+        <button mat-menu-item [routerLink]="getRutaPorOpcion(opcion)">
+          <mat-icon mat-menu-icon>{{ iconosOpciones[opcion] || 'arrow_right' }}</mat-icon>
+          <span>{{ opcion }}</span>
+        </button>
+      </ng-container>
+    </mat-menu>
+  </nav>
+</ng-container>

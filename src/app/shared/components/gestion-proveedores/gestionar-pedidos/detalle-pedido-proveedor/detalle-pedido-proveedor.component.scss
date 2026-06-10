@@ -1,0 +1,219 @@
+/* SCSS Completo Optimizado */
+
+/* Variables */
+$primary-color: #FF6600;
+$primary-light: lighten($primary-color, 15%);
+$accent-color: #4A4A4A;
+$light-color: #ffffff;
+$dark-color: #333333;
+$background-color: #f9f9f9;
+$card-gradient: linear-gradient(135deg, rgba(255,255,255,0.95), rgba(245,245,245,0.95));
+
+/* Estructura principal */
+.detail-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 24px;
+  background: linear-gradient(135deg, $primary-color, $primary-light);
+  color: $light-color;
+  
+  .detail-title {
+    display: flex;
+    align-items: center;
+    margin: 0;
+    font-size: 1.3rem;
+    font-weight: 500;
+    
+    .icon-white {
+      margin-right: 12px;
+      font-size: 28px;
+      width: 28px;
+      height: 28px;
+    }
+  }
+  
+  .close-btn {
+    color: $light-color;
+    transition: transform 0.3s ease;
+    
+    &:hover {
+      transform: rotate(90deg);
+    }
+  }
+}
+
+.detail-content {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  background: $background-color;
+  
+  .card-style {
+    background: $card-gradient;
+    border-radius: 10px;
+    padding: 18px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+    border: 1px solid rgba(0,0,0,0.05);
+  }
+  
+  .section-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: $primary-color;
+    margin: 0 0 18px 0;
+    font-size: 1.15rem;
+    
+    .accent-icon {
+      font-size: 24px;
+      width: 24px;
+      height: 24px;
+    }
+  }
+  
+  .detail-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 16px;
+  }
+  
+  .detail-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    
+    .detail-icon {
+      color: $primary-color;
+      font-size: 22px;
+      width: 22px;
+      height: 22px;
+    }
+    
+    .detail-info {
+      .detail-label {
+        font-size: 0.9rem;
+        color: $accent-color;
+        font-weight: 500;
+      }
+      
+      .detail-value {
+        font-size: 1.05rem;
+        color: $dark-color;
+        word-break: break-word;
+      }
+    }
+  }
+  
+  /* Variables actualizadas */
+$primary-color: #FF6600;
+$primary-dark: darken($primary-color, 10%);
+$primary-light: lighten($primary-color, 15%);
+$text-on-orange: #FFFFFF;
+
+/* Estilos para la tabla naranja */
+.orange-table {
+  width: 100%;
+  min-width: fit-content;
+  background: linear-gradient(135deg, $primary-color, $primary-dark);
+  color: $text-on-orange;
+  
+  .header-cell {
+    background: rgba(0, 0, 0, 0.2);
+    color: $text-on-orange;
+    font-weight: 600;
+    padding: 14px 16px;
+    font-size: 0.95rem;
+    text-align: left;
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    white-space: nowrap;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    
+    &:not(:last-child) {
+      border-right: 1px solid rgba(255, 255, 255, 0.1);
+    }
+  }
+  
+  .data-cell {
+    padding: 12px 16px;
+    font-size: 0.92rem;
+    color: $text-on-orange;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    vertical-align: middle;
+    
+    &:not(:last-child) {
+      border-right: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    /* Estilos específicos para celdas */
+    .quantity-cell, .total-cell {
+      text-align: center;
+      font-weight: 500;
+    }
+    
+    .presentation-cell, .unit-cell {
+      text-align: center;
+    }
+  }
+  
+  .color-display {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    
+    .color-circle {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      flex-shrink: 0;
+    }
+    
+    .color-value {
+      font-size: 0.9rem;
+      min-width: 80px;
+    }
+  }
+  
+  .header-row {
+    height: 52px;
+  }
+  
+  .data-row {
+    height: 50px;
+    transition: background-color 0.2s;
+    
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.1) !important;
+    }
+    
+    &:nth-child(even) {
+      background: rgba(0, 0, 0, 0.05);
+    }
+  }
+}
+
+/* Ajustes para el contenedor de la tabla */
+.table-container {
+  border-radius: 8px;
+  overflow: auto;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+/* Asegurar visibilidad en móviles */
+@media (max-width: 768px) {
+  .orange-table {
+    .header-cell, .data-cell {
+      padding: 10px 12px;
+    }
+    
+    .color-display .color-value {
+      min-width: 60px;
+    }
+  }
+} 
+}

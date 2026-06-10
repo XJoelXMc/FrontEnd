@@ -1,0 +1,542 @@
+/* Variables de color mejoradas para contraste */
+$primary-color: #FF6600;      // Naranja vibrante para acentos
+$primary-light: lighten($primary-color, 15%);
+$primary-dark: darken($primary-color, 10%);
+$accent-color: #BBBBBB;       // Gris claro para acentos en fondos oscuros
+$light-color: #F0F0F0;         // Gris muy claro para texto principal en oscuro
+$dark-color: #1A1A1A;          // Negro casi puro para fondos
+$background-color: #2E2E2E;    // Plomo oscuro para el degradado
+$card-gradient: linear-gradient(135deg, rgba(40,40,40,0.98), rgba(25,25,25,0.98)); // Degradado sutil para tarjetas
+$error-color: #EF5350;        // Rojo más brillante para errores
+$success-color: #66BB6A;      // Verde brillante para éxito
+$text-color: #F0F0F0;         // Texto principal ahora muy claro
+$text-light: #AAAAAA;         // Texto secundario más claro para fondos oscuros
+
+/* Tipografía mejorada */
+$font-family: 'Roboto', 'Helvetica Neue', sans-serif;
+$font-size-base: 14px;
+$font-size-lg: 16px;
+
+/* Estilos generales del modal mejorados */
+.dialog-content {
+  padding: 0;
+  // **NUEVO FONDO DEGRADADO PARA EL MODAL**
+  background: linear-gradient(145deg, $dark-color, $background-color); // De negro a plomo
+  border-radius: 10px;
+  overflow: hidden;
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5); // Sombra más oscura para destacar
+  font-family: $font-family;
+
+  .dialog-header {
+    background: linear-gradient(135deg, $primary-color, $primary-dark);
+    color: $light-color; // El texto del header sigue siendo claro
+    padding: 22px 28px;
+    position: relative;
+
+    .dialog-title {
+      display: flex;
+      align-items: center;
+      margin: 0;
+      font-size: 1.6rem;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+
+      .title-icon {
+        margin-right: 14px;
+        font-size: 30px;
+        width: 30px;
+        height: 30px;
+      }
+    }
+
+    .header-decoration {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.25);
+    }
+  }
+
+  .pedido-form {
+    padding: 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    overflow-y: auto;
+    flex: 1;
+    // Ajuste de scrollbar para el nuevo fondo oscuro
+    scrollbar-color: $primary-color rgba(255,255,255,0.1);
+
+    &::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background-color: $primary-color;
+      border-radius: 4px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: rgba(255,255,255,0.05); // Fondo de scrollbar más claro para contrastar
+    }
+  }
+}
+
+/* Campos del formulario mejorados */
+.form-field-animate {
+  width: 100%;
+  margin-bottom: 18px;
+  transition: all 0.3s ease;
+  animation: fadeIn 0.5s ease-out;
+
+  &:hover {
+    transform: translateY(-2px);
+  }
+
+  .mat-form-field-wrapper {
+    // **FONDO DE LOS CAMPOS MÁS OSCURO**
+    background: #3A3A3A; // Un gris oscuro sólido para el fondo del campo
+    border-radius: 6px;
+    padding: 8px 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); // Sombra más pronunciada
+  }
+
+  .mat-form-field-label {
+    // **COLOR DE LA ETIQUETA CLARO**
+    color: $accent-color; // Gris claro para la etiqueta
+    font-weight: 500;
+    font-size: $font-size-base;
+  }
+
+  .mat-input-element {
+    // **COLOR DEL TEXTO CLARO**
+    color: $light-color; // Texto del input claro
+    font-size: $font-size-lg;
+    font-weight: 500;
+    caret-color: $primary-color;
+  }
+
+  .mat-icon {
+    color: $primary-color;
+    opacity: 0.9;
+  }
+
+  .mat-form-field-underline {
+    background-color: rgba($primary-color, 0.4) !important; // Un poco más visible
+  }
+
+  .mat-form-field-ripple {
+    background-color: $primary-color !important;
+  }
+
+  .mat-error {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: $error-color; // Color de error adaptado
+    font-size: 0.9rem;
+    font-weight: 500;
+    margin-top: 6px;
+
+    .mat-icon {
+      color: $error-color;
+      font-size: 20px;
+    }
+  }
+}
+
+/* Materiales disponibles mejorado */
+.materiales-disponibles {
+  // **ADAPTACIÓN A FONDO OSCURO**
+  background: $card-gradient; // Usamos el nuevo degradado para las tarjetas
+  border-radius: 10px;
+  padding: 18px;
+  margin-bottom: 24px;
+  box-shadow: 0 5px 18px rgba(0, 0, 0, 0.3); // Sombra más profunda
+  border: 1px solid rgba($primary-color, 0.2);
+
+  .disponibles-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 14px;
+
+    h3 {
+      margin: 0;
+      color: $light-color; // Título de materiales claro
+      font-size: 1.2rem;
+      font-weight: 600;
+    }
+
+    .mat-icon {
+      color: $primary-light; // Icono ligeramente más claro
+      font-size: 26px;
+    }
+  }
+
+  .materiales-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+
+    .material-chip {
+      background: rgba($primary-color, 0.2); // Fondo del chip
+      color: $light-color; // Texto del chip claro
+      padding: 8px 14px;
+      border-radius: 18px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      border: 1px solid rgba($primary-color, 0.3);
+      transition: all 0.2s ease;
+
+      &:hover {
+        background: rgba($primary-color, 0.3);
+      }
+    }
+  }
+}
+
+/* Items del pedido mejorados */
+.items-container {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  max-height: 45vh;
+  overflow-y: auto;
+  padding-right: 10px;
+  margin-bottom: 10px;
+
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: rgba($primary-color, 0.6); // Scrollbar más visible
+    border-radius: 3px;
+  }
+}
+
+.item-card {
+  // **ADAPTACIÓN A FONDO OSCURO**
+  background: $card-gradient; // Degradado sutil para las tarjetas de ítems
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4); // Sombra más oscura
+  border-left: 5px solid $primary-color;
+  transition: all 0.3s ease;
+  position: relative;
+
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
+  }
+
+  .item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 1px dashed rgba($primary-color, 0.3); // Borde más visible
+
+    h4 {
+      margin: 0;
+      color: $light-color; // Título del ítem claro
+      font-size: 1.2rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    button {
+      transition: all 0.3s ease;
+      background: rgba($error-color, 0.2) !important; // Fondo para botón de eliminar
+
+      &:hover {
+        transform: scale(1.1);
+        background: rgba($error-color, 0.3) !important;
+      }
+
+      .mat-icon {
+        color: $error-color;
+      }
+    }
+  }
+
+  .item-fields {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 18px;
+
+    .mat-form-field {
+      .mat-form-field-label {
+        color: $text-light; // Etiqueta del campo claro
+      }
+
+      .mat-input-element {
+        color: $text-color; // Texto del input claro
+        font-weight: 500;
+      }
+    }
+
+    .color-field {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+
+      label {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        color: $text-light; // Etiqueta del color claro
+        font-weight: 500;
+        font-size: 0.95rem;
+
+        .mat-icon {
+          color: $primary-color;
+          font-size: 22px;
+        }
+      }
+
+      .color-input {
+        width: 100%;
+        height: 42px;
+        border: none;
+        cursor: pointer;
+        border-radius: 4px;
+        overflow: hidden;
+        border: 1px solid rgba(255,255,255,0.2); 
+      }
+
+      .color-preview {
+        width: 100%;
+        height: 24px;
+        border-radius: 4px;
+        border: 1px solid rgba(255, 255, 255, 0.25); 
+        box-shadow: inset 0 1px 3px rgba(0,0,0,0.2);
+      }
+    }
+  }
+}
+
+
+.add-button {
+  align-self: flex-start;
+  margin-top: 10px;
+  transition: all 0.3s ease;
+  padding: 0 24px;
+  height: 44px;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  font-size: 0.95rem;
+  background-color: $primary-color; 
+  color: $light-color; 
+
+  .mat-icon {
+    margin-right: 8px;
+  }
+
+  &:hover {
+    background-color: $primary-dark;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+  }
+}
+
+.dialog-actions {
+  padding: 18px 28px;
+  background: $dark-color;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  justify-content: flex-end;
+  gap: 16px;
+
+  .action-button {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0 24px;
+    height: 44px;
+    font-weight: 500;
+    letter-spacing: 0.3px;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+    border-radius: 6px;
+
+    .mat-icon {
+      font-size: 22px;
+    }
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2); 
+    }
+
+    &[color='warn'] {
+      border: 1px solid rgba($error-color, 0.5); 
+      color: $error-color; 
+      background-color: transparent; 
+
+      &:hover {
+        background: rgba($error-color, 0.1);
+      }
+    }
+
+    &[color='primary'] {
+      box-shadow: 0 2px 6px rgba($primary-color, 0.4);
+      background-color: $primary-color; 
+      color: $light-color; 
+
+      &:hover {
+        background: $primary-dark;
+        box-shadow: 0 4px 10px rgba($primary-color, 0.5); 
+      }
+    }
+  }
+}
+
+/* Mejoras responsive */
+@media (max-width: 768px) {
+  .dialog-content {
+    max-height: 90vh;
+    width: 95vw;
+
+    .dialog-header {
+      padding: 18px 20px;
+
+      .dialog-title {
+        font-size: 1.4rem;
+      }
+    }
+
+    .pedido-form {
+      padding: 18px;
+      gap: 18px;
+    }
+  }
+
+  .items-container {
+    max-height: 50vh;
+  }
+
+  .item-card {
+    padding: 16px;
+
+    .item-fields {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .dialog-actions {
+    flex-direction: row;
+    justify-content: center;
+    gap: 12px;
+    padding: 16px;
+
+    .action-button {
+      flex: 1;
+      justify-content: center;
+    }
+  }
+}
+
+.mat-form-field-appearance-fill.mat-form-field-disabled {
+
+  .mat-form-field-wrapper {
+    background: #4A4A4A !important; 
+    box-shadow: none !important; 
+    cursor: not-allowed;
+  }
+
+  .mat-form-field-label {
+    // La etiqueta del campo
+    color: rgba($light-color, 0.7) !important; 
+  }
+
+  .mat-input-element {
+    // El texto dentro del input
+    color: $light-color !important;
+    -webkit-text-fill-color: $light-color !important; 
+    opacity: 1 !important; 
+    font-weight: 500 !important;
+    font-size: ($font-size-lg + 2px) !important; 
+  }
+
+  .mat-form-field-underline {
+
+    background-color: rgba($primary-color, 0.4) !important; 
+  }
+
+  .mat-form-field-ripple {
+    background-color: transparent !important;
+  }
+
+  .mat-icon {
+ 
+    color: rgba($primary-light, 0.7) !important;
+  }
+
+
+  .mat-select-value {
+    color: $light-color !important; 
+    opacity: 1 !important;
+    font-weight: 500 !important;
+  }
+
+  .mat-select-arrow {
+    color: rgba($light-color, 0.7) !important;
+  }
+}
+
+.mat-button.mat-button-disabled,
+.mat-raised-button.mat-button-disabled,
+.mat-flat-button.mat-button-disabled,
+.mat-stroked-button.mat-button-disabled,
+.mat-icon-button.mat-button-disabled {
+  // Asegura que el fondo sea visible
+  background-color: #555555 !important; 
+  color: $light-color !important; 
+  opacity: 0.7 !important; 
+  cursor: not-allowed; 
+  pointer-events: none;
+  box-shadow: none !important; 
+
+  .mat-icon {
+    color: $light-color !important;
+  }
+}
+
+
+.item-card .item-header button[disabled] {
+  background: rgba($error-color, 0.3) !important;
+  color: $light-color !important; 
+  opacity: 0.8 !important;
+  border: 1px solid rgba($error-color, 0.5) !important; 
+
+  .mat-icon {
+    color: $light-color !important; 
+  }
+}
+
+.dialog-actions .action-button[color='primary'][disabled] {
+  background: #555555 !important; 
+  color: $light-color !important;
+  opacity: 0.7 !important;
+  box-shadow: none !important;
+  border: none !important;
+}
+
+
+.dialog-actions .action-button[color='warn'][disabled] {
+  background: #555555 !important;
+  color: $light-color !important;
+  opacity: 0.7 !important;
+  box-shadow: none !important;
+  border: none !important;
+}

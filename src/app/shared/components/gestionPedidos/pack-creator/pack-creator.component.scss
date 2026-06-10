@@ -1,0 +1,794 @@
+// Variables compartidas
+$color-primario: #FF6600;
+$color-secundario: #2A2A2A;
+$color-fondo-claro: #FFF8F5;
+$color-texto: #444;
+$color-borde: rgba($color-primario, 0.15);
+$transition-base: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+$shadow-base: 0 4px 12px rgba(0,0,0,0.08);
+$border-radius-lg: 16px;
+$border-radius-md: 12px;
+$border-radius-sm: 8px;
+
+.component-wrapper {
+  padding: 2rem;
+  background: linear-gradient(135deg, $color-fondo-claro 0%, #ffffff 100%);
+  min-height: 100vh;
+  
+  @media (max-width: 768px) {
+    padding: 1rem;
+  }
+}
+
+// Header moderno
+.page-header {
+  background: linear-gradient(135deg, $color-primario 0%, darken($color-primario, 10%) 100%);
+  color: white;
+  padding: 3rem 2rem 4rem;
+  position: relative;
+  overflow: hidden;
+  margin: -2rem -2rem 2rem -2rem;
+
+  .header-content {
+    position: relative;
+    z-index: 2;
+    max-width: 1200px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .page-title {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin: 0 0 0.5rem;
+    animation: slideInDown 0.6s ease-out;
+
+    .title-icon {
+      font-size: 2.8rem;
+      width: 2.8rem;
+      height: 2.8rem;
+    }
+  }
+
+  .page-subtitle {
+    font-size: 1.1rem;
+    opacity: 0.9;
+    margin: 0;
+    animation: slideInUp 0.6s ease-out 0.1s both;
+  }
+
+  .header-decoration {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 300px;
+    height: 100%;
+    background: url("data:image/svg+xml,%3Csvg width='200' height='200' viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill='%23ffffff' fill-opacity='0.05' d='M45,-45C58.4,-31.4,69.4,-15.7,69.4,0C69.4,15.7,58.4,31.4,45,45C31.4,58.4,15.7,69.4,0,69.4C-15.7,69.4,-31.4,58.4,-45,45C-58.4,31.4,-69.4,15.7,-69.4,0C-69.4,-15.7,-58.4,-31.4,-45,-45Z' transform='translate(100 100)' /%3E%3C/svg%3E");
+    animation: float 6s ease-in-out infinite;
+  }
+}
+
+mat-card {
+  background: white;
+  border-radius: $border-radius-lg;
+  box-shadow: $shadow-base;
+  border: 1px solid $color-borde;
+  overflow: hidden;
+  animation: scaleIn 0.5s ease-out;
+  max-width: 1200px;
+  margin: 0 auto;
+
+  mat-card-header {
+    padding: 2rem 2rem 1rem;
+    background: linear-gradient(135deg, rgba($color-primario, 0.05) 0%, rgba($color-primario, 0.02) 100%);
+    border-bottom: 1px solid $color-borde;
+
+    mat-card-title {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: $color-secundario;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      
+      &::before {
+        content: '';
+        display: block;
+        width: 4px;
+        height: 24px;
+        background: linear-gradient(135deg, $color-primario, darken($color-primario, 10%));
+        border-radius: 2px;
+      }
+    }
+
+    mat-card-subtitle {
+      color: rgba($color-texto, 0.7);
+      font-size: 1rem;
+      margin-top: 0.5rem;
+    }
+  }
+
+  mat-card-content {
+    padding: 2rem;
+  }
+
+  mat-card-actions {
+    padding: 1.5rem 2rem;
+    background: rgba($color-primario, 0.02);
+    border-top: 1px solid $color-borde;
+    margin: 0;
+  }
+}
+
+// Secciones del formulario
+.form-section {
+  margin-bottom: 3rem;
+  animation: slideInUp 0.6s ease-out;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+
+  h3 {
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: $color-secundario;
+    margin: 0 0 1rem 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+
+    &::before {
+      content: '';
+      display: block;
+      width: 3px;
+      height: 20px;
+      background: $color-primario;
+      border-radius: 2px;
+    }
+  }
+
+  p {
+    color: rgba($color-texto, 0.7);
+    margin: 0 0 1.5rem 0;
+    font-size: 0.95rem;
+    line-height: 1.5;
+  }
+}
+
+// ✨ SECCIÓN DE CONFIGURACIÓN DEL PACK MEJORADA
+.config-section {
+  background: linear-gradient(135deg, rgba($color-primario, 0.02) 0%, rgba($color-primario, 0.01) 100%);
+  border: 1px solid rgba($color-primario, 0.1);
+  border-radius: $border-radius-md;
+  padding: 2rem;
+  margin-top: 1.5rem;
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background: linear-gradient(135deg, $color-primario, darken($color-primario, 15%));
+  }
+
+  h3 {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: $color-secundario;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+
+    &::before {
+      content: '⚙️';
+      font-size: 1.2rem;
+    }
+  }
+}
+
+// Filas del formulario
+.form-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 1rem;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+}
+
+// ✨ FILAS DE TOGGLES MEJORADAS
+.toggles-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+}
+
+// ✨ TOGGLES ESTILIZADOS
+.config-toggle {
+  background: white;
+  border: 2px solid rgba($color-primario, 0.1);
+  border-radius: $border-radius-md;
+  padding: 1.5rem;
+  transition: all 0.3s $transition-base;
+  position: relative;
+  overflow: hidden;
+
+  &:hover {
+    border-color: rgba($color-primario, 0.3);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+
+  &.active {
+    border-color: $color-primario;
+    background: linear-gradient(135deg, rgba($color-primario, 0.05), rgba($color-primario, 0.02));
+    
+    &::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      background: linear-gradient(135deg, $color-primario, darken($color-primario, 15%));
+    }
+  }
+
+  &.disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    
+    .toggle-content {
+      opacity: 0.7;
+    }
+  }
+
+  .toggle-content {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+
+    .toggle-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba($color-primario, 0.1);
+      color: $color-primario;
+      font-size: 1.5rem;
+      transition: all 0.3s $transition-base;
+    }
+
+    .toggle-info {
+      flex: 1;
+
+      .toggle-label {
+        font-weight: 600;
+        color: $color-secundario;
+        margin-bottom: 0.25rem;
+        font-size: 1rem;
+      }
+
+      .toggle-description {
+        color: rgba($color-texto, 0.6);
+        font-size: 0.85rem;
+        line-height: 1.3;
+      }
+    }
+
+    .toggle-control {
+      margin-left: auto;
+    }
+  }
+
+  // Estados específicos para cada tipo de toggle
+  &.parte-superior {
+    .toggle-icon {
+      background: rgba(33, 150, 243, 0.1);
+      color: #2196F3;
+    }
+    
+    &.active {
+      border-color: #2196F3;
+      background: linear-gradient(135deg, rgba(33, 150, 243, 0.05), rgba(33, 150, 243, 0.02));
+    }
+  }
+
+  &.parte-inferior {
+    .toggle-icon {
+      background: rgba(76, 175, 80, 0.1);
+      color: #4CAF50;
+    }
+    
+    &.active {
+      border-color: #4CAF50;
+      background: linear-gradient(135deg, rgba(76, 175, 80, 0.05), rgba(76, 175, 80, 0.02));
+    }
+  }
+
+  &.sublimado-superior {
+    .toggle-icon {
+      background: rgba(156, 39, 176, 0.1);
+      color: #9C27B0;
+    }
+    
+    &.active {
+      border-color: #9C27B0;
+      background: linear-gradient(135deg, rgba(156, 39, 176, 0.05), rgba(156, 39, 176, 0.02));
+    }
+  }
+
+  &.sublimado-inferior {
+    .toggle-icon {
+      background: rgba(255, 152, 0, 0.1);
+      color: #FF9800;
+    }
+    
+    &.active {
+      border-color: #FF9800;
+      background: linear-gradient(135deg, rgba(255, 152, 0, 0.05), rgba(255, 152, 0, 0.02));
+    }
+  }
+}
+
+// ✨ RESUMEN DE CONFIGURACIÓN MEJORADO
+.config-summary {
+  background: white;
+  border: 1px solid rgba($color-primario, 0.1);
+  border-radius: $border-radius-md;
+  padding: 1.5rem;
+  margin-top: 1.5rem;
+  animation: slideInUp 0.4s ease-out;
+
+  p {
+    font-weight: 600;
+    color: $color-secundario;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+
+    &::before {
+      content: '📋';
+      font-size: 1.1rem;
+    }
+  }
+
+  ul {
+    margin: 0;
+    padding-left: 0;
+    list-style: none;
+  }
+
+  li {
+    padding: 0.75rem 1rem;
+    margin-bottom: 0.5rem;
+    background: rgba($color-primario, 0.05);
+    border-radius: $border-radius-sm;
+    border-left: 4px solid $color-primario;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    transition: all 0.3s $transition-base;
+
+    &:hover {
+      background: rgba($color-primario, 0.08);
+      transform: translateX(4px);
+    }
+
+    &::before {
+      content: '✓';
+      color: $color-primario;
+      font-weight: bold;
+      font-size: 1rem;
+    }
+
+    span {
+      background: rgba($color-primario, 0.1);
+      color: $color-primario;
+      padding: 0.25rem 0.5rem;
+      border-radius: 12px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      margin-left: auto;
+    }
+  }
+}
+
+// Campos de formulario modernos
+.flex-item {
+  mat-form-field {
+    width: 100%;
+    
+    &.mat-form-field-appearance-outline {
+      .mat-form-field-outline {
+        border-radius: $border-radius-sm;
+        color: rgba($color-primario, 0.2);
+      }
+
+      .mat-form-field-outline-thick {
+        color: $color-primario;
+      }
+
+      &.mat-focused {
+        .mat-form-field-outline-thick {
+          color: $color-primario;
+        }
+
+        .mat-form-field-label {
+          color: $color-primario;
+        }
+      }
+
+      .mat-form-field-wrapper {
+        padding-bottom: 0;
+      }
+
+      .mat-form-field-infix {
+        padding: 0.75em 0;
+        border-top: 0;
+      }
+
+      .mat-input-element {
+        color: $color-texto;
+        font-size: 1rem;
+        
+        &::placeholder {
+          color: rgba($color-texto, 0.4);
+        }
+      }
+
+      .mat-form-field-label {
+        color: rgba($color-texto, 0.6);
+        font-weight: 500;
+      }
+    }
+  }
+}
+
+// Galería de moldes moderna
+.moldes-gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+
+  @media (max-width: 768px) {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 1rem;
+  }
+
+  @media (max-width: 480px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.molde-item {
+  background: white;
+  border: 2px solid $color-borde;
+  border-radius: $border-radius-md;
+  padding: 1rem;
+  cursor: pointer;
+  transition: all 0.3s $transition-base;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  animation: scaleIn 0.5s ease-out;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: $shadow-base;
+    border-color: rgba($color-primario, 0.3);
+  }
+
+  &.selected {
+    border-color: $color-primario;
+    background: linear-gradient(135deg, rgba($color-primario, 0.05), rgba($color-primario, 0.02));
+    box-shadow: 0 8px 24px rgba($color-primario, 0.15);
+    
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(135deg, $color-primario, darken($color-primario, 10%));
+    }
+
+    &::after {
+      content: '✓';
+      position: absolute;
+      top: 0.5rem;
+      right: 0.5rem;
+      width: 24px;
+      height: 24px;
+      background: $color-primario;
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      font-weight: bold;
+      animation: bounceIn 0.3s ease-out;
+    }
+  }
+
+  img {
+    width: 100%;
+    height: 120px;
+    object-fit: cover;
+    border-radius: $border-radius-sm;
+    margin-bottom: 0.75rem;
+    transition: transform 0.3s $transition-base;
+    border: 1px solid rgba($color-primario, 0.1);
+  }
+
+  &:hover img {
+    transform: scale(1.05);
+  }
+
+  p {
+    margin: 0;
+    font-weight: 600;
+    color: $color-secundario;
+    font-size: 0.9rem;
+    line-height: 1.3;
+    transition: color 0.3s $transition-base;
+  }
+
+  &.selected p {
+    color: $color-primario;
+  }
+}
+
+// Botón de acción principal
+mat-card-actions {
+  button[mat-raised-button] {
+    background: linear-gradient(135deg, $color-primario, darken($color-primario, 10%));
+    color: white;
+    border-radius: $border-radius-sm;
+    padding: 0 2rem;
+    height: 48px;
+    font-weight: 600;
+    font-size: 1rem;
+    transition: all 0.3s $transition-base;
+    box-shadow: 0 4px 12px rgba($color-primario, 0.3);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+
+    &:hover:not([disabled]) {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba($color-primario, 0.4);
+    }
+
+    &:active {
+      transform: translateY(0);
+    }
+
+    &[disabled] {
+      background: rgba($color-texto, 0.3);
+      color: rgba(white, 0.7);
+      box-shadow: none;
+      transform: none;
+      cursor: not-allowed;
+    }
+
+    mat-icon {
+      font-size: 1.2rem;
+      width: 1.2rem;
+      height: 1.2rem;
+    }
+
+    .loading-state {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+
+      .spinner {
+        width: 16px;
+        height: 16px;
+        border: 2px solid transparent;
+        border-top: 2px solid currentColor;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+      }
+    }
+  }
+}
+
+// Animaciones
+@keyframes slideInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes bounceIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.1);
+  }
+  70% {
+    transform: scale(0.9);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+// Efectos de profundidad
+.elevation-1 {
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.elevation-2 {
+  box-shadow: 0 4px 8px rgba(0,0,0,0.12);
+}
+
+.elevation-3 {
+  box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+}
+
+// Utilidades responsive
+@media (max-width: 1024px) {
+  .moldes-gallery {
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  .page-header {
+    padding: 2rem 1rem 3rem;
+    margin: -1rem -1rem 2rem -1rem;
+
+    .page-title {
+      font-size: 2rem;
+
+      .title-icon {
+        font-size: 2.2rem;
+        width: 2.2rem;
+        height: 2.2rem;
+      }
+    }
+  }
+
+  mat-card {
+    mat-card-header {
+      padding: 1.5rem 1.5rem 1rem;
+    }
+
+    mat-card-content {
+      padding: 1.5rem;
+    }
+
+    mat-card-actions {
+      padding: 1rem 1.5rem;
+    }
+  }
+
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+
+  .config-section {
+    padding: 1.5rem;
+    
+    &::before {
+      width: 3px;
+    }
+  }
+
+  .toggles-row {
+    grid-template-columns: 1fr;
+  }
+
+  .config-toggle {
+    padding: 1rem;
+
+    .toggle-content {
+      gap: 0.75rem;
+
+      .toggle-icon {
+        width: 40px;
+        height: 40px;
+        font-size: 1.2rem;
+      }
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .moldes-gallery {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .molde-item {
+    padding: 0.75rem;
+
+    img {
+      height: 100px;
+    }
+  }
+
+  .config-toggle {
+    .toggle-content {
+      flex-direction: column;
+      text-align: center;
+
+      .toggle-control {
+        margin-left: 0;
+        margin-top: 0.5rem;
+      }
+    }
+  }
+}

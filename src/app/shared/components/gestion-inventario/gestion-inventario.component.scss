@@ -1,0 +1,409 @@
+// 🎨 Variables principales
+$color-primario: #FF6600;
+$color-secundario: #2A2A2A;
+$color-fondo-claro: #FFF8F5;
+$color-texto: #444;
+$color-borde: rgba($color-primario, 0.15);
+$transition-base: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+$shadow-base: 0 4px 12px rgba(0,0,0,0.08);
+$gap-categorias: 1.5rem;
+
+// === 🌍 Globales ===
+.catalogo-container {
+  padding: 1rem;
+  @media (max-width: 480px) {
+    padding: 0.5rem;
+  }
+}
+
+// === 🔹 Encabezado dinámico ===
+.header-acciones {
+  display: flex;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  margin-bottom: 1rem;
+
+  button {
+    min-width: 160px;
+    padding: 0.8rem 1.2rem;
+    border: 2px solid rgba($color-primario, 0.3);
+
+    &[color="primary"] {
+      background: linear-gradient(45deg, $color-primario, darken($color-primario, 8%));
+      color: white;
+
+      &:hover {
+        border-color: $color-primario;
+        box-shadow: $shadow-base;
+      }
+    }
+
+    .mat-icon {
+      transition: transform 0.2s ease;
+    }
+    &:hover .mat-icon {
+      transform: scale(1.1);
+    }
+  }
+
+  @media (max-width: 480px) {
+    justify-content: center;
+    button {
+      flex: 1 1 100%;
+      margin: 0.2rem!important;
+    }
+  }
+}
+
+// === 🔘 Categorías circulares ===
+.categoria-circular-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 2rem;
+  padding: 2rem 0;
+
+  .categoria-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+
+    .categoria-button {
+      width: 140px;
+      height: 140px;
+      border-radius: 50%;
+      overflow: hidden;
+      padding: 0;
+      border: 3px solid #f7c6a1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+      img {
+        width: 100%;
+        height: 100%;
+      }
+
+      &:hover {
+        transform: scale(1.1) rotate(3deg);
+        box-shadow: 0 0 25px rgba($color-primario, 0.4);
+      }
+    }
+
+    span {
+      margin-top: 0.8rem;
+      font-size: 1rem;
+      font-weight: 600;
+      text-align: center;
+    }
+  }
+}
+
+// === 🗂 Modal crear categoría ===
+.crear-categoria-modal {
+  animation: fadeInModal 0.4s ease;
+  border-radius: 14px;
+  overflow: hidden;
+  background: white;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+
+  .modal-header {
+    background: linear-gradient(135deg, $color-primario, darken($color-primario, 10%));
+    padding: 1rem 1.5rem;
+    display: flex;
+    align-items: center;
+    color: white;
+
+    h2 {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      font-size: 1.3rem;
+      font-weight: bold;
+
+      .material-icon {
+        margin-right: 0.6rem;
+        font-size: 1.8rem;
+      }
+    }
+
+    .close-button {
+      color: white;
+      &:hover {
+        background: rgba(255,255,255,0.1);
+      }
+    }
+  }
+
+  mat-dialog-content {
+    padding: 1.2rem;
+
+    .full-width {
+      width: 100%;
+      margin-bottom: 1rem;
+    }
+
+    .upload-area {
+      margin-top: 1rem;
+      padding: 1rem;
+      border: 2px dashed rgba($color-primario, 0.3);
+      border-radius: 10px;
+      text-align: center;
+      background: rgba($color-primario, 0.02);
+
+      .upload-label {
+        font-weight: 600;
+        margin-bottom: 0.6rem;
+        color: $color-secundario;
+      }
+
+      .upload-actions {
+        margin-bottom: 0.5rem;
+        .upload-button {
+          border-color: $color-primario;
+          color: $color-primario;
+        }
+      }
+
+      .file-name-display {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.4rem;
+        font-size: 0.9rem;
+        color: $color-texto;
+      }
+
+      .image-preview-container {
+        margin-top: 0.8rem;
+        position: relative;
+        display: inline-block;
+
+        img {
+          max-width: 200px;
+          max-height: 200px;
+          border-radius: 10px;
+          border: 2px solid rgba($color-primario, 0.4);
+        }
+
+        button {
+          position: absolute;
+          top: -10px;
+          right: -10px;
+          background: white;
+          border: 1px solid #ddd;
+          &:hover {
+            background: $color-primario;
+            color: white;
+          }
+        }
+      }
+    }
+  }
+
+  mat-dialog-actions {
+    padding: 1rem;
+    border-top: 1px solid rgba($color-primario, 0.2);
+  }
+}
+
+// === 📦 Modales generales ===
+.modal-container {
+  animation: fadeInModal 0.4s ease;
+  border-radius: 16px;
+  overflow: hidden;
+  border: 2px solid $color-primario;
+  max-width: 95vw;
+
+  .modal-header {
+    background: linear-gradient(45deg, $color-primario, darken($color-primario, 5%));
+    padding: 1rem 1.5rem;
+    display: flex;
+    align-items: center;
+    color: white;
+
+    h2 {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      font-size: 1.4rem;
+      font-weight: bold;
+
+      .material-icon {
+        margin-right: 0.5rem;
+        font-size: 1.8rem;
+        color: white;
+      }
+    }
+
+    button {
+      color: white;
+    }
+  }
+
+  .modal-content-grid {
+    padding: 1.5rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+
+    strong {
+      color: $color-primario;
+    }
+
+    .descripcion-text {
+      background: rgba($color-primario, 0.05);
+      padding: 0.8rem;
+      border-radius: 8px;
+      font-style: italic;
+    }
+
+    .color-preview {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      border: 2px solid $color-borde;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+  }
+
+  mat-dialog-actions {
+    padding: 1rem;
+    border-top: 1px solid rgba($color-primario, 0.2);
+  }
+}
+
+// === 🏷️ Galería inventario ===
+.galeria {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 1rem;
+  padding: 1rem;
+
+  .card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 0.8rem;
+    border: 1px solid rgba($color-primario, 0.2);
+    border-radius: 10px;
+    background: white;
+    font-size: 0.85rem;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: $shadow-base;
+    }
+          .item-header {
+        display: flex;
+        align-items: center; /* Esto alinea el texto y el círculo verticalmente */
+        gap: 0.8rem; /* Esto añade un espacio entre el círculo y el texto */
+        margin-bottom: 0.5rem; /* Opcional: Para mantener la separación con la descripción */
+      }
+    .info-material {
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+      margin-bottom: 0.5rem;
+
+      h3 {
+        font-size: 0.95rem;
+        font-weight: 600;
+        margin: 0;
+        color: $color-texto;
+      }
+
+      p {
+        margin: 0;
+        font-size: 0.8rem;
+        color: #666;
+      }
+
+      .color-preview {
+                width: 18px;
+                height: 18px;
+                border-radius: 50%;
+                border: 1px solid #ccc;
+                margin-top: 0.3rem;
+                
+            }
+    }
+
+    .acciones {
+      display: flex;
+      justify-content: space-between;
+      gap: 0.5rem;
+
+      button {
+        flex: 1;
+        padding: 0.3rem 0.5rem;
+        font-size: 0.75rem;
+        border-radius: 6px;
+      }
+    }
+  }
+}
+
+// === ✨ Animaciones ===
+@keyframes pulse-border {
+  0%   { box-shadow: 0 0 0 0 rgba($color-primario, 0.3); }
+  70%  { box-shadow: 0 0 0 12px rgba($color-primario, 0); }
+  100% { box-shadow: 0 0 0 0 rgba($color-primario, 0); }
+}
+
+@keyframes fadeInModal {
+  0%   { opacity: 0; transform: translateY(20px) scale(0.95); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+// === 📱 Responsivo ===
+@media (max-width: 1024px) {
+  .galeria { grid-template-columns: repeat(3, 1fr); }
+}
+
+@media (max-width: 600px) {
+  .galeria { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 480px) {
+  .categoria-circular-buttons {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+  }
+
+  .categoria-item {
+    .categoria-button {
+      width: 80px;
+      height: 80px;
+      min-width: 80px;
+    }
+    span { font-size: 0.8rem; }
+
+    .eliminar-btn {
+      top: -6px;
+      right: -6px;
+      width: 24px;
+      height: 24px;
+
+      .mat-icon { font-size: 16px; }
+    }
+  }
+
+  .modal-container {
+    width: 100vw;
+    margin: 0;
+    border-radius: 0;
+
+    .modal-content-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+}
+
+@media (max-width: 360px) {
+  .categoria-circular-buttons { grid-template-columns: repeat(2, 1fr); }
+}

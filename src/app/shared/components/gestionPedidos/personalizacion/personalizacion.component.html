@@ -1,0 +1,136 @@
+<div class="personalizacion-container">
+  <h1><mat-icon>palette</mat-icon> Personaliza tu Pedido</h1>
+
+  <div *ngIf="!datosBackend && !lienzos.length" class="loading-state">
+    <mat-spinner diameter="50"></mat-spinner>
+    <p>Cargando moldes...</p>
+  </div>
+
+  <div class="layout-designer" *ngIf="lienzos.length > 0">
+    
+    <div class="sidebar-tools">
+      <h3><mat-icon>upload_file</mat-icon> Cargar Logos</h3>
+      
+      <div class="upload-btn-wrapper">
+        <button mat-stroked-button color="primary" (click)="fileInput.click()" [disabled]="subiendoImagen">
+          <mat-icon>add_photo_alternate</mat-icon> Subir Imagen
+        </button>
+        <input #fileInput type="file" (change)="onFileSelected($event)" accept="image/*" class="file-input" style="display: none;">
+      </div>
+
+      <div *ngIf="subiendoImagen" class="upload-spinner">
+        <mat-spinner diameter="25"></mat-spinner>
+        <small>Subiendo a la nube...</small>
+      </div>
+      
+      <div class="logos-grid">
+        <div *ngFor="let logo of logosDisponibles" class="logo-thumbnail" cdkDrag>
+          <img [src]="logo">
+          
+          <div class="use-buttons">
+             <button mat-icon-button [matMenuTriggerFor]="menuLienzos" matTooltip="Usar en...">
+                <mat-icon>add_circle</mat-icon>
+             </button>
+             <mat-menu #menuLienzos="matMenu">
+               <button mat-menu-item *ngFor="let lienzo of lienzos" (click)="usarLogoEnMolde(logo, lienzo.idUnico)">
+                 {{ lienzo.nombre }}
+               </button>
+             </mat-menu>
+          </div>
+        </div>
+        
+        <div *ngIf="logosDisponibles.length === 0 && !subiendoImagen" class="empty-logos">
+          <small>Sube tus logos aquí.</small>
+        </div>
+      </div>
+    </div>
+
+    <div class="canvas-area">
+      
+      <div *ngFor="let lienzo of lienzos" class="molde-wrapper">
+        <h4>{{ lienzo.nombre }}</h4>
+        
+        <div class="molde-container" #moldeBoundary>
+  <img [src]="lienzo.urlImagen" class="bg-molde" alt="Molde">
+
+  <ng-container *ngFor="let logo of logosColocados">
+    <div *ngIf="logo.lienzoId === lienzo.idUnico"
+         class="logo-draggable"
+         
+         [style.top.%]="logo.y"   
+         [style.left.%]="logo.x"
+         
+         cdkDrag 
+         [cdkDragBoundary]="moldeBoundary"
+         (cdkDragEnded)="onDragEnded($event, lienzo.idUnico, logo.url)">
+      <img [src]="logo.url" class="logo-img">
+      <button class="btn-delete" (click)="eliminarLogoColocado(logo.id)">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+  </ng-container>
+</div>
+      </div>
+
+    </div>
+  </div>
+
+  <mat-divider class="my-4"></mat-divider>
+
+  <div class="nomina-section" *ngIf="jugadoresArray.length > 0">
+    <div class="section-header">
+      <h2><mat-icon>groups</mat-icon> Nómina de Jugadores</h2>
+      <p>Detalla el nombre y número para cada prenda.</p>
+    </div>
+
+    <form [formGroup]="planillaForm">
+      <div class="table-responsive">
+        <table class="nomina-table">
+          <thead>
+            <tr>
+              <th style="width: 50px;">#</th>
+              <th style="width: 80px;">Talla</th>
+              <th>Nombre en la Espalda</th>
+              <th style="width: 100px;">Número</th>
+            </tr>
+          </thead>
+          <tbody formArrayName="jugadores">
+            <tr *ngFor="let row of jugadoresArray.controls; let i = index" [formGroupName]="i">
+              <td>{{ i + 1 }}</td>
+              <td>
+                <span class="talla-badge">{{ row.get('talla')?.value }}</span>
+              </td>
+              <td>
+                <mat-form-field appearance="outline" class="dense-field">
+                  <mat-label>Nombre</mat-label>
+                  <input matInput formControlName="nombre" placeholder="Ej: ROJAS" style="text-transform: uppercase;">
+                  <mat-error *ngIf="row.get('nombre')?.invalid">Requerido</mat-error>
+                </mat-form-field>
+              </td>
+              <td>
+                <mat-form-field appearance="outline" class="dense-field">
+                  <mat-label>Nro</mat-label>
+                  <input matInput formControlName="numero" type="text" placeholder="10">
+                  <mat-error *ngIf="row.get('numero')?.invalid">Requerido</mat-error>
+                </mat-form-field>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </form>
+  </div>
+
+  <div class="actions-final">
+    <button mat-raised-button color="primary" class="btn-finalizar" (click)="guardarPedido()" [disabled]="enviando || subiendoImagen">
+      <ng-container *ngIf="!enviando">
+        <mat-icon>save_alt</mat-icon> FINALIZAR Y ENVIAR PEDIDO
+      </ng-container>
+      <ng-container *ngIf="enviando">
+        <mat-spinner diameter="24" color="accent" style="display:inline-block; margin-right: 8px; vertical-align: middle;"></mat-spinner>
+        Guardando...
+      </ng-container>
+    </button>
+  </div>
+
+</div>

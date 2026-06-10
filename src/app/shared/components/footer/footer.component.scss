@@ -1,0 +1,303 @@
+/* footer.component.scss */
+/* Variables de color para tema deportivo */
+$primary-sport: #FF6600;
+$dark-text: #222222;
+$light-text: #FFFFFF;
+$grey-background: #F8F8F8;
+$dark-footer-background: #1A1A1A;
+$link-color: #BBBBBB;
+$hover-link-color: $primary-sport;
+
+// Colores oficiales de redes sociales
+$whatsapp-color: #25D366;
+$tiktok-color: #000000;
+$instagram-color: #E1306C;
+$facebook-color: #1877F2;
+
+:host {
+  display: block;
+  width: 100%;
+}
+
+.app-footer {
+  background-color: $dark-footer-background;
+  color: $light-text;
+  padding: 40px 20px;
+  font-family: 'Roboto', sans-serif;
+  border-top: 1px solid rgba($light-text, 0.1);
+
+  .footer-content-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    max-width: 1200px;
+    margin: 0 auto;
+    gap: 30px;
+  }
+
+  .footer-column {
+    flex: 1 1 200px;
+    margin: 10px 0;
+    text-align: left;
+
+    &.branding-column {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      flex: 1 1 250px;
+    }
+
+    .footer-heading {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: $primary-sport;
+      margin-bottom: 20px;
+      position: relative;
+      padding-bottom: 10px;
+
+      &::after {
+        content: '';
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        width: 40px;
+        height: 3px;
+        background-color: $primary-sport;
+        border-radius: 2px;
+      }
+    }
+
+    &.branding-column .footer-heading::after {
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .footer-link {
+      display: block;
+      color: $link-color;
+      text-decoration: none;
+      margin-bottom: 10px;
+      font-size: 0.95rem;
+      transition: color 0.3s ease, transform 0.2s ease;
+
+      &:hover {
+        color: $hover-link-color;
+        transform: translateX(5px);
+      }
+    }
+
+    .footer-logo {
+      max-width: 120px;
+      height: auto;
+      margin-bottom: 15px;
+    }
+
+    .slogan {
+      font-size: 1rem;
+      color: rgba($light-text, 0.7);
+      margin-bottom: 25px;
+      font-style: italic;
+    }
+  }
+
+  /* ESTILOS MEJORADOS PARA ICONOS SOCIALES */
+  .social-icons {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 20px;
+
+    a {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: rgba($primary-sport, 0.1);
+      color: $primary-sport;
+      text-decoration: none;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s ease;
+
+      i {
+        font-size: 24px;
+        transition: all 0.3s ease;
+        z-index: 2;
+        position: relative;
+      }
+
+      /* Efecto de fondo en hover */
+      &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: $primary-sport;
+        border-radius: 50%;
+        transform: scale(0);
+        transition: transform 0.5s ease;
+        z-index: 1;
+      }
+
+      /* Animaciones comunes a todos los iconos */
+      &:hover {
+        transform: translateY(-5px);
+      }
+
+      &:hover::before {
+        transform: scale(1);
+      }
+
+      &:hover i {
+        color: $light-text;
+        transform: scale(1.2);
+      }
+    }
+
+    /* Animación de pulso para WhatsApp con su color oficial */
+    a[aria-label="WhatsApp"]:hover {
+      animation: pulse-whatsapp 1s infinite;
+    }
+
+    @keyframes pulse-whatsapp {
+      0% { box-shadow: 0 0 0 0 rgba($whatsapp-color, 0.7); }
+      70% { box-shadow: 0 0 0 10px rgba($whatsapp-color, 0); }
+      100% { box-shadow: 0 0 0 0 rgba($whatsapp-color, 0); }
+    }
+
+    /* Animación de pulso para TikTok con su color oficial */
+    a[aria-label="TikTok"]:hover {
+      animation: pulse-tiktok 1s infinite;
+    }
+
+    @keyframes pulse-tiktok {
+      0% { box-shadow: 0 0 0 0 rgba($tiktok-color, 0.7); }
+      70% { box-shadow: 0 0 0 10px rgba($tiktok-color, 0); }
+      100% { box-shadow: 0 0 0 0 rgba($tiktok-color, 0); }
+    }
+
+    /* Animación de pulso para Instagram con su color oficial */
+    a[aria-label="Instagram"]:hover {
+      animation: pulse-instagram 1s infinite;
+    }
+
+    @keyframes pulse-instagram {
+      0% { box-shadow: 0 0 0 0 rgba($instagram-color, 0.7); }
+      70% { box-shadow: 0 0 0 10px rgba($instagram-color, 0); }
+      100% { box-shadow: 0 0 0 0 rgba($instagram-color, 0); }
+    }
+
+    /* Animación de pulso para Facebook con su color oficial */
+    a[aria-label="Facebook"]:hover {
+      animation: pulse-facebook 1s infinite;
+    }
+
+    @keyframes pulse-facebook {
+      0% { box-shadow: 0 0 0 0 rgba($facebook-color, 0.7); }
+      70% { box-shadow: 0 0 0 10px rgba($facebook-color, 0); }
+      100% { box-shadow: 0 0 0 0 rgba($facebook-color, 0); }
+    }
+
+    /* Establecer colores de fondo específicos para cada red social al hacer hover */
+    a[aria-label="WhatsApp"]:hover::before {
+      background: $whatsapp-color;
+    }
+
+    a[aria-label="TikTok"]:hover::before {
+      background: $tiktok-color;
+    }
+
+    a[aria-label="Instagram"]:hover::before {
+      background: $instagram-color;
+    }
+
+    a[aria-label="Facebook"]:hover::before {
+      background: $facebook-color;
+    }
+  }
+
+  .footer-bottom {
+    text-align: center;
+    margin-top: 40px;
+    padding-top: 20px;
+    border-top: 1px solid rgba($light-text, 0.08);
+    font-size: 0.85rem;
+    color: rgba($light-text, 0.6);
+
+    p {
+      margin: 5px 0;
+    }
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .app-footer {
+    padding: 30px 15px;
+
+    .footer-content-wrapper {
+      flex-direction: column;
+      align-items: center;
+      gap: 25px;
+    }
+
+    .footer-column {
+      text-align: center;
+      width: 100%;
+      margin: 0;
+
+      .footer-heading {
+        &::after {
+          left: 50%;
+          transform: translateX(-50%);
+        }
+      }
+
+      .footer-link {
+        margin-bottom: 8px;
+        &:hover {
+          transform: translateX(0);
+        }
+      }
+    }
+
+    .social-icons {
+      gap: 15px;
+      
+      a {
+        width: 45px;
+        height: 45px;
+        
+        i {
+          font-size: 20px;
+        }
+      }
+    }
+
+    .footer-bottom {
+      margin-top: 30px;
+      padding-top: 15px;
+      font-size: 0.8rem;
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .app-footer {
+    padding: 20px 10px;
+  }
+  
+  .social-icons a {
+    width: 40px;
+    height: 40px;
+    
+    i {
+      font-size: 18px;
+    }
+  }
+}

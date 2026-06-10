@@ -1,0 +1,270 @@
+<!-- Toolbar superior -->
+<mat-toolbar color="primary" class="custom-toolbar mat-elevation-z6">
+  <div class="toolbar-content">
+    <img src="assets/logo.png" alt="Logo" class="logo" />
+    <!--<span class="app-name">MiAplicación</span>
+    <span class="spacer"></span>
+    <button mat-button class="about-btn">
+      <mat-icon>info</mat-icon> Acerca de
+    </button>-->
+  </div>
+</mat-toolbar>
+
+<!-- Fondo animado con ondas -->
+<div class="wave-background"></div>
+
+<!-- Contenedor principal -->
+<div class="auth-container">
+  <!-- Tarjeta de login -->
+  <div class="auth-card animate__animated animate__fadeInUp">
+    <!-- Barra de carga -->
+    <mat-progress-bar *ngIf="loading" mode="indeterminate" color="accent"></mat-progress-bar>
+    
+    <div class="card-header">
+      <div class="avatar-container">
+        <mat-icon class="avatar-icon">account_circle</mat-icon>
+      </div>
+      <h2>Ingresar a tu cuenta</h2>
+    </div>
+    
+    <div class="card-body">
+      <form>
+        <!-- Campo email -->
+        <mat-form-field appearance="fill" class="full-field">
+          <mat-label>Email</mat-label>
+          <mat-icon matPrefix>email</mat-icon>
+          <input matInput [(ngModel)]="email" name="email" required email #emailCtrl="ngModel" />
+          <mat-error *ngIf="emailCtrl.errors?.['required'] && emailCtrl.touched" class="error-animation">
+            <mat-icon>warning</mat-icon> Email requerido
+          </mat-error>
+          <mat-error *ngIf="emailCtrl.errors?.['email'] && emailCtrl.touched" class="error-animation">
+            <mat-icon>warning</mat-icon> Email inválido
+          </mat-error>
+        </mat-form-field>
+
+        <!-- Campo contraseña -->
+        <mat-form-field appearance="fill" class="full-field">
+          <mat-label>Contraseña</mat-label>
+          <mat-icon matPrefix>lock</mat-icon>
+          <input matInput [type]="hidePassword ? 'password' : 'text'" [(ngModel)]="password" name="password"
+            required minlength="6" #passwordCtrl="ngModel" />
+          <button mat-icon-button matSuffix (click)="hidePassword = !hidePassword" type="button">
+            <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+          </button>
+          <mat-error *ngIf="passwordCtrl.errors?.['required'] && passwordCtrl.touched" class="error-animation">
+            <mat-icon>warning</mat-icon> Contraseña requerida
+          </mat-error>
+          <mat-error *ngIf="passwordCtrl.errors?.['minlength'] && passwordCtrl.touched" class="error-animation">
+            <mat-icon>warning</mat-icon> Mínimo 6 caracteres
+          </mat-error>
+        </mat-form-field>
+
+        <!-- Recordar contraseña -->
+        <div class="remember-forgot">
+          <mat-checkbox color="primary">Recordar sesión</mat-checkbox>
+          <a class="forgot-password">¿Olvidaste tu contraseña?</a>
+        </div>
+
+        <!-- Mensaje de error -->
+        <div *ngIf="mensajeError" class="error-message animate__animated animate__shakeX">
+          <mat-icon color="warn">error</mat-icon> {{ mensajeError }}
+        </div>
+
+        <!-- Botón ingresar -->
+        <div class="button-container">
+          <button mat-raised-button color="primary" class="login-btn" (click)="login()">
+            <mat-icon>login</mat-icon> Ingresar
+          </button>
+        </div>
+      </form>
+
+      <!-- Divisor -->
+      <div class="divider">
+        <span>o continuar con</span>
+      </div>
+
+      <!-- Opciones adicionales -->
+      <div class="auth-options">
+        <div class="button-container">
+          <div id="googleButton"></div>
+        </div>
+        <div class="button-container">
+          <button mat-stroked-button color="accent" class="register-btn" (click)="abrirModalRegistro()">
+            <mat-icon>person_add</mat-icon> Crear cuenta
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Footer -->
+  <div class="footer animate__animated animate__fadeIn">
+    <p>© 2023 MiAplicación. Todos los derechos reservados.</p>
+    <div class="footer-links">
+      <a>Términos de servicio</a>
+      <a>Política de privacidad</a>
+      <a>Ayuda</a>
+    </div>
+  </div>
+</div>
+
+<!-- Modal de Registro -->
+<ng-template #modalRegistro>
+  <div class="modal-container">
+    <div class="modal-header">
+      <h2 mat-dialog-title class="modal-title">
+        <mat-icon class="icon-primary">person_add</mat-icon> 
+        <span class="title-text">Registro de Cliente</span>
+      </h2>
+      <button mat-icon-button class="close-btn" mat-dialog-close>
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+    
+    <mat-dialog-content>
+      <form class="registro-form" #registroForm="ngForm" (ngSubmit)="registrarCliente()">
+        <!-- Sección 1: Información Personal -->
+        <div class="form-section">
+          <h3 class="section-title">
+            <mat-icon>person</mat-icon>
+            Información Personal
+          </h3>
+          
+          <div class="form-grid">
+            <!-- Nombre -->
+            <mat-form-field appearance="outline">
+              <mat-label>Nombre</mat-label>
+              <mat-icon matPrefix>person</mat-icon>
+              <input matInput [(ngModel)]="nombre" name="nombre" required #nombreCtrl="ngModel">
+              <mat-error *ngIf="nombreCtrl.invalid && nombreCtrl.touched" class="error-animation">
+                <mat-icon>warning</mat-icon> Nombre requerido
+              </mat-error>
+            </mat-form-field>
+
+            <!-- Apellido Paterno -->
+            <mat-form-field appearance="outline">
+              <mat-label>Apellido Paterno</mat-label>
+              <mat-icon matPrefix>people</mat-icon>
+              <input matInput [(ngModel)]="apellidoPaterno" name="apellidoPaterno" #apellidoPaternoCtrl="ngModel">
+            </mat-form-field>
+
+            <!-- Apellido Materno -->
+            <mat-form-field appearance="outline">
+              <mat-label>Apellido Materno</mat-label>
+              <mat-icon matPrefix>people_outline</mat-icon>
+              <input matInput [(ngModel)]="apellidoMaterno" name="apellidoMaterno" #apellidoMaternoCtrl="ngModel">
+              <mat-error *ngIf="!apellidoPaternoCtrl.value?.trim() && !apellidoMaternoCtrl.value?.trim() && (apellidoPaternoCtrl.touched || apellidoMaternoCtrl.touched)" class="error-animation">
+                <mat-icon>warning</mat-icon> Ingrese al menos un apellido
+              </mat-error>
+            </mat-form-field>
+
+            <!-- Dirección -->
+            <mat-form-field appearance="outline">
+              <mat-label>Dirección</mat-label>
+              <mat-icon matPrefix>home</mat-icon>
+              <input matInput [(ngModel)]="direccion" name="direccion" required #direccionCtrl="ngModel">
+              <mat-error *ngIf="direccionCtrl.invalid && direccionCtrl.touched" class="error-animation">
+                <mat-icon>warning</mat-icon> Dirección requerida
+              </mat-error>
+            </mat-form-field>
+
+            <!-- Celular -->
+            <mat-form-field appearance="outline">
+              <mat-label>Celular</mat-label>
+              <mat-icon matPrefix>phone</mat-icon>
+              <input matInput type="tel" [(ngModel)]="celular" name="celular" required pattern="^\+?\d{7,15}$" #celularCtrl="ngModel">
+              <mat-error *ngIf="celularCtrl.errors?.['required'] && celularCtrl.touched" class="error-animation">
+                <mat-icon>warning</mat-icon> Celular requerido
+              </mat-error>
+              <mat-error *ngIf="celularCtrl.errors?.['pattern'] && celularCtrl.touched" class="error-animation">
+                <mat-icon>warning</mat-icon> Número inválido
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <!-- Sección 2: Credenciales -->
+        <div class="form-section">
+          <h3 class="section-title">
+            <mat-icon>lock</mat-icon>
+            Credenciales de Acceso
+          </h3>
+          
+          <div class="form-grid">
+            <!-- Email -->
+            <mat-form-field appearance="outline">
+              <mat-label>Email</mat-label>
+              <mat-icon matPrefix>alternate_email</mat-icon>
+              <input matInput [(ngModel)]="emailReg" name="emailReg" required email #emailRegCtrl="ngModel">
+              <mat-error *ngIf="emailRegCtrl.errors?.['required'] && emailRegCtrl.touched" class="error-animation">
+                <mat-icon>warning</mat-icon> Email requerido
+              </mat-error>
+              <mat-error *ngIf="emailRegCtrl.errors?.['email'] && emailRegCtrl.touched" class="error-animation">
+                <mat-icon>warning</mat-icon> Email inválido
+              </mat-error>
+            </mat-form-field>
+
+            <!-- Contraseña -->
+            <mat-form-field appearance="outline" class="password-field">
+              <mat-label>Contraseña</mat-label>
+              <mat-icon matPrefix>vpn_key</mat-icon>
+              <input matInput [type]="hideRegPassword ? 'password' : 'text'" [(ngModel)]="passwordReg" name="passwordReg"
+                required minlength="8" pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$" #passwordRegCtrl="ngModel">
+              <button mat-icon-button matSuffix (click)="hideRegPassword = !hideRegPassword" type="button">
+                <mat-icon>{{ hideRegPassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+              </button>
+              <mat-hint>Mínimo 8 caracteres con mayúscula, minúscula, número y símbolo (&#64;$!%*?&)</mat-hint>
+              <mat-error *ngIf="passwordRegCtrl.errors?.['required'] && passwordRegCtrl.touched" class="error-animation">
+                <mat-icon>warning</mat-icon> Contraseña requerida
+              </mat-error>
+              <mat-error *ngIf="passwordRegCtrl.errors?.['minlength'] && passwordRegCtrl.touched" class="error-animation">
+                <mat-icon>warning</mat-icon> Mínimo 8 caracteres
+              </mat-error>
+              <mat-error *ngIf="passwordRegCtrl.errors?.['pattern'] && passwordRegCtrl.touched" class="error-animation">
+                <mat-icon>warning</mat-icon> Formato inválido
+              </mat-error>
+            </mat-form-field>
+
+            <!-- Repetir Contraseña -->
+            <mat-form-field appearance="outline">
+              <mat-label>Repetir Contraseña</mat-label>
+              <mat-icon matPrefix>repeat</mat-icon>
+              <input matInput [type]="hideRegPassword ? 'password' : 'text'" [(ngModel)]="passwordRepeat"
+                name="passwordRepeat" required #passwordRepeatCtrl="ngModel">
+              <mat-error *ngIf="passwordRepeatCtrl.errors?.['required'] && passwordRepeatCtrl.touched" class="error-animation">
+                <mat-icon>warning</mat-icon> Campo requerido
+              </mat-error>
+              <mat-error *ngIf="passwordRepeat !== passwordReg && passwordRepeatCtrl.touched" class="error-animation">
+                <mat-icon>warning</mat-icon> Las contraseñas no coinciden
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <!-- Términos y Condiciones -->
+        <div class="terms-section">
+          <mat-checkbox [(ngModel)]="acceptTerms" name="terms" required #termsCtrl="ngModel" color="primary">
+            Acepto los <a href="#" class="terms-link">Términos y Condiciones</a> y la <a href="#" class="terms-link">Política de Privacidad</a>
+          </mat-checkbox>
+          <mat-error *ngIf="termsCtrl.invalid && termsCtrl.touched" class="terms-error">
+            <mat-icon>warning</mat-icon> Debes aceptar los términos y condiciones
+          </mat-error>
+        </div>
+
+        <!-- Mensaje de error general -->
+        <div class="error-message animate__animated animate__shakeX" *ngIf="mensajeRegistroError">
+          <mat-icon color="warn">error</mat-icon> {{ mensajeRegistroError }}
+        </div>
+      </form>
+    </mat-dialog-content>
+    
+    <mat-dialog-actions align="center" class="modal-actions">
+      <button mat-button mat-dialog-close class="cancel-btn">
+        <mat-icon>cancel</mat-icon> Cancelar
+      </button>
+      <button mat-raised-button color="primary" [disabled]="registroForm.invalid" class="submit-btn" (click)="registrarCliente()">
+        <mat-icon>how_to_reg</mat-icon> Registrarse
+      </button>
+    </mat-dialog-actions>
+  </div>
+</ng-template>

@@ -1,0 +1,329 @@
+// --- Importar variables globales si las tienes ---
+:host {
+  --color-primario: #FF6600;
+  --color-acento: #4CAF50;
+  --color-fondo: #FFF8F5;
+  --color-borde: rgba(255, 102, 0, 0.15);
+  --color-secundario: #2A2A2A;
+  --color-texto: #444444;
+  --sombra-tarjeta: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --radio-borde: 16px;
+}
+
+.detalle-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 2rem;
+  background: linear-gradient(135deg, var(--color-fondo) 0%, #ffffff 100%);
+  min-height: 100vh;
+}
+
+h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--color-secundario);
+  text-align: center;
+  margin: 0 0 2rem 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.section-card {
+  background: white;
+  border-radius: var(--radio-borde);
+  box-shadow: var(--sombra-tarjeta);
+  border: 1px solid var(--color-borde);
+  overflow: hidden;
+  margin-bottom: 2rem;
+
+  mat-card-header {
+    background: linear-gradient(135deg, rgba(255, 102, 0, 0.05) 0%, rgba(255, 102, 0, 0.02) 100%);
+    padding: 1.5rem 2rem;
+    border-bottom: 1px solid var(--color-borde);
+  }
+
+  mat-card-title {
+    font-size: 1.4rem;
+    font-weight: 600;
+  }
+
+  mat-card-content {
+    padding: 2rem;
+  }
+}
+
+// Grid de detalles (Pack, Telas, Adicionales)
+.detalle-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2.5rem;
+}
+
+.detalle-col {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+h4.detalle-subtitle {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--color-secundario);
+  margin: 0;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid var(--color-borde);
+}
+
+.detalle-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+
+  .detalle-label {
+    font-size: 0.85rem;
+    color: rgba(68, 68, 68, 0.7);
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+  .detalle-value {
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--color-secundario);
+  }
+  
+  .precio-tag {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--color-acento);
+    margin-left: 8px;
+  }
+  
+  .sponsor-list {
+    padding-left: 20px;
+    margin: 0;
+    font-size: 0.95rem;
+    li {
+      margin-bottom: 4px;
+    }
+  }
+}
+
+// Tabla de desglose
+.tabla-container {
+  padding: 0 !important;
+  overflow-x: auto;
+}
+
+table.mat-table {
+  width: 100%;
+  border-radius: var(--radio-borde);
+  overflow: hidden;
+
+  th.mat-header-cell {
+    background: #fafafa;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--color-secundario);
+  }
+
+  td.mat-cell, td.mat-footer-cell {
+    font-size: 1rem;
+    color: var(--color-texto);
+  }
+  
+  td.mat-footer-cell {
+    font-weight: bold;
+  }
+  
+  .total-footer {
+    background: #f5f5f5;
+    font-weight: bold;
+
+    .total-final-monto {
+      font-size: 1.25rem;
+      color: var(--color-acento);
+    }
+  }
+}
+
+// Acciones finales
+.detalle-actions {
+  display: flex;
+  justify-content: space-between;
+  gap: 1.5rem;
+  margin-top: 2rem;
+  padding: 1.5rem;
+  background: white;
+  border-radius: var(--radio-borde);
+  box-shadow: var(--sombra-tarjeta);
+
+  button {
+    flex: 1;
+    height: 52px;
+    font-size: 1rem;
+    font-weight: 600;
+  }
+  
+  mat-progress-spinner {
+    display: inline-block;
+    margin-right: 8px;
+  }
+}
+
+// Estado vacío (si se recarga la página)
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding: 3rem 2rem;
+  text-align: center;
+  
+  mat-icon {
+    font-size: 4rem;
+    width: 4rem;
+    height: 4rem;
+    color: var(--color-primario);
+  }
+  span {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-top: 1rem;
+  }
+  p {
+    font-size: 1rem;
+    color: var(--color-texto);
+  }
+}
+
+// ==========================================
+// ✅ NUEVOS ESTILOS PARA EL MODAL DE ÉXITO
+// ==========================================
+.modal-success-container {
+  text-align: center;
+  padding: 1rem;
+
+  .success-icon {
+    margin-bottom: 1rem;
+    mat-icon {
+      font-size: 80px;
+      width: 80px;
+      height: 80px;
+      color: var(--color-acento); // Usa tu variable de verde
+    }
+  }
+
+  .success-title {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--color-secundario);
+    margin-bottom: 0.5rem;
+  }
+
+  .success-message {
+    color: #666;
+    font-size: 1rem;
+    margin-bottom: 1.5rem;
+    strong {
+      color: #333;
+    }
+  }
+
+  // Caja del Código
+  .code-box {
+    background-color: #f5f5f5;
+    border: 2px dashed var(--color-primario); // Borde naranja discontinuo
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+
+    .label {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #888;
+      font-weight: 600;
+    }
+
+    .code {
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: var(--color-primario);
+      letter-spacing: 2px;
+      font-family: 'Courier New', monospace; // Fuente tipo máquina de escribir
+    }
+  }
+
+  .info-note {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    font-size: 0.85rem;
+    color: #888;
+    margin-top: 1rem;
+
+    mat-icon {
+      font-size: 18px;
+      width: 18px;
+      height: 18px;
+    }
+  }
+
+  .btn-success {
+    width: 100%;
+    padding: 0.5rem 2rem;
+    font-size: 1.1rem;
+  }
+}
+
+// --- Responsive ---
+@media (max-width: 768px) {
+  .detalle-container {
+    padding: 1rem;
+  }
+  h1 {
+    font-size: 2rem;
+  }
+  .section-card {
+    mat-card-content {
+      padding: 1.5rem;
+    }
+  }
+  .detalle-grid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+  .detalle-actions {
+    flex-direction: column-reverse; // Poner el botón principal abajo
+  }
+}.modal-actions-column {
+  display: flex;
+  flex-direction: column; // Botones en columna
+  gap: 10px;
+  padding-bottom: 1.5rem;
+  
+  .btn-action {
+    width: 100%;
+    max-width: 300px;
+    padding: 0.5rem;
+    font-size: 1rem;
+  }
+
+  .btn-personalizar {
+    background: linear-gradient(135deg, var(--color-primario), #ff8c00);
+    color: white;
+    font-weight: bold;
+    height: 48px;
+    
+    mat-icon {
+      margin-right: 8px;
+    }
+  }
+}

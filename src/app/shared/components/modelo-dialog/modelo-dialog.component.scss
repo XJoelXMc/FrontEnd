@@ -1,0 +1,136 @@
+.full-width {
+  width: 100%;
+  margin-bottom: 16px;
+
+mat-form-field {
+  width: 100%;
+  font-size: 1rem;
+
+  input {
+    font-size: 1rem;
+    color: white;
+  }
+
+  .mat-form-field-label {
+    color: #ccc !important;
+  }
+
+  .mat-form-field-underline,
+  .mat-form-field-ripple {
+    background-color: #00e676 !important;
+  }
+
+  mat-error {
+    font-size: 0.75rem;
+    line-height: 1.2rem;
+    margin-top: 0.3rem;
+    color: #ff5252 !important;
+  }
+}
+
+
+}
+
+mat-dialog-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 2rem;
+  max-width: 100%;
+  box-sizing: border-box;
+  border-radius: 12px;
+  background: linear-gradient(to bottom, #1f1f1f, #2c2c2c); // degrade oscuro elegante
+  color: white;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+}
+.full-width {
+  width: 100%;
+}
+
+mat-dialog-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: flex-end;
+  padding: 1rem;
+
+  button {
+    min-width: 100px;
+  }
+}
+
+button[mat-button], button[mat-flat-button] {
+  min-width: 100px;
+}
+
+@media (max-width: 600px) {
+  mat-dialog-content {
+    padding: 1rem;
+  }
+
+  mat-form-field {
+    font-size: 0.9rem;
+  }
+
+  mat-dialog-actions {
+    flex-direction: column;
+    align-items: stretch;
+    button {
+      width: 100%;
+    }
+  }
+}
+
+
+button[mat-button], button[mat-flat-button] {
+  min-width: 100px;
+}
+button[mat-flat-button] {
+  animation: pulseButton 2s infinite;
+  transition: background-color 0.3s ease;
+  background: linear-gradient(to right, #ff8a00, #e52e71);
+  color: white;
+  border-radius: 4px;
+}
+.mat-form-field-wrapper {
+  padding-bottom: 2.2em;
+}
+ 
+mat-error {
+  font-size: 0.8rem;
+  color: #f44336;
+  padding-top: 0.3rem;
+}
+dark-theme mat-form-field {
+  background: #1e1e1e;
+  color: #fff;
+}
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulseButton {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+@media (max-width: 600px) {
+  mat-dialog-content {
+  margin-bottom: 1rem;
+}
+
+  mat-form-field {
+    font-size: 0.9rem;
+  }
+
+  mat-dialog-actions {
+    flex-direction: column;
+    align-items: stretch;
+    button {
+      width: 100%;
+    }
+  }
+}
+
+
+

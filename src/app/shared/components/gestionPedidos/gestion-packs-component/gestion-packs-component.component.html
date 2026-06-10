@@ -1,0 +1,79 @@
+<div class="container">
+  <h1>Panel de Configuración de Packs y Moldes</h1>
+  <p>Sigue los pasos en orden para configurar nuevos productos para cotización.</p>
+  
+  <!-- Indicador de progreso opcional -->
+  <div class="progress-indicator">
+    <div class="progress-step" [class.active]="true" [class.completed]="true">
+      <div class="step-circle">1</div>
+      <span class="step-label">Gamas y Telas</span>
+    </div>
+    <div class="step-connector"></div>
+    <div class="progress-step" [class.active]="false" [class.completed]="false">
+      <div class="step-circle">2</div>
+      <span class="step-label">Moldes</span>
+    </div>
+     <div class="progress-step" [class.active]="false" [class.completed]="false">
+      <div class="step-circle">3</div>
+      <span class="step-label">Moldes Para Cuellos</span>
+    </div>
+    <div class="step-connector"></div>
+    <div class="progress-step" [class.active]="false" [class.completed]="false">
+      <div class="step-circle">4</div>
+      <span class="step-label">Packs</span>
+    </div>
+  </div>
+
+  <mat-tab-group animationDuration="0ms">
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <div class="tab-label-content">
+          <div class="step-badge">1</div>
+          <mat-icon class="tab-icon">widgets</mat-icon>
+          <span class="tab-text">Paso 1: Gamas y Telas</span>
+        </div>
+      </ng-template>
+      <ng-template matTabContent>
+        <app-gama-manager></app-gama-manager>
+      </ng-template>
+    </mat-tab>
+    
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <div class="tab-label-content">
+          <div class="step-badge">2</div>
+          <mat-icon class="tab-icon">content_cut</mat-icon>
+          <span class="tab-text">Paso 2: Moldes</span>
+        </div>
+      </ng-template>
+      <ng-template matTabContent>
+        <app-molde-manager></app-molde-manager>
+      </ng-template>
+    </mat-tab>
+    
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <div class="tab-label-content">
+          <div class="step-badge">3</div>
+          <mat-icon class="tab-icon">inventory_2</mat-icon>
+          <span class="tab-text">Paso 3: Moldes Para Cuellos</span>
+        </div>
+      </ng-template>
+      <ng-template matTabContent>
+        <app-molde-cuellos></app-molde-cuellos>
+      </ng-template>
+    </mat-tab>
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <div class="tab-label-content">
+          <div class="step-badge">4</div>
+          <mat-icon class="tab-icon">inventory_2</mat-icon>
+          <span class="tab-text">Paso 4: Creador de Packs</span>
+        </div>
+      </ng-template>
+      <ng-template matTabContent>
+        <app-pack-creator></app-pack-creator>
+      </ng-template>
+    </mat-tab>
+  </mat-tab-group>
+</div>

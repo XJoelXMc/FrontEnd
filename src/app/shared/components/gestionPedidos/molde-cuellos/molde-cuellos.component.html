@@ -1,0 +1,135 @@
+<div class="container-cuellos">
+  <div class="header-container">
+    <div class="header-content">
+      <h1 class="main-title">
+        <mat-icon class="title-icon">style</mat-icon>
+        Gestión de Tipos de Cuello
+      </h1>
+      <p class="page-subtitle">Administra los diferentes tipos de cuello disponibles en el sistema</p>
+    </div>
+    <button mat-fab color="primary" (click)="abrirModal()" matTooltip="Añadir nuevo cuello" class="floating-btn">
+      <mat-icon>add</mat-icon>
+    </button>
+    <div class="header-decoration"></div>
+  </div>
+
+  <div class="content-wrapper">
+    <div class="table-panel mat-elevation-z8">
+      <div class="panel-header">
+        <div class="header-icon">
+          <mat-icon>view_list</mat-icon>
+        </div>
+        <div>
+          <h2 class="panel-title">Lista de Tipos de Cuello</h2>
+          <p class="panel-subtitle">Gestiona los tipos de cuello y sus precios</p>
+        </div>
+      </div>
+      
+      <div class="panel-content">
+        <div class="table-wrapper">
+          <table mat-table [dataSource]="dataSource" class="animated-table">
+
+            <!-- Columna Nombre -->
+            <ng-container matColumnDef="nombre">
+              <th mat-header-cell *matHeaderCellDef class="table-header"> 
+                <div class="header-content">
+                  <mat-icon>label</mat-icon>
+                  Nombre 
+                </div>
+              </th>
+              <td mat-cell *matCellDef="let cuello" class="table-cell"> 
+                <div class="cell-content">
+                  <span class="cell-text">{{cuello.nombre}}</span>
+                </div>
+              </td>
+            </ng-container>
+
+            <!-- Columna Precio -->
+            <ng-container matColumnDef="precio">
+              <th mat-header-cell *matHeaderCellDef class="table-header">
+                <div class="header-content">
+                  <mat-icon>attach_money</mat-icon>
+                  Precio 
+                </div>
+              </th>
+              <td mat-cell *matCellDef="let cuello" class="table-cell">
+                <div class="cell-content">
+                  <span class="price-tag">{{cuello.precio | currency:'Bs. '}}</span>
+                </div>
+              </td>
+            </ng-container>
+
+            <!-- Columna Imágenes -->
+            <ng-container matColumnDef="imagenes">
+              <th mat-header-cell *matHeaderCellDef class="table-header">
+                <div class="header-content">
+                  <mat-icon>photo_library</mat-icon>
+                  Vistas Previas 
+                </div>
+              </th>
+              <td mat-cell *matCellDef="let cuello" class="table-cell">
+                <div class="image-preview-container">
+                  <div class="image-stack">
+                    <img *ngFor="let url of cuello.urlsImagenes | slice:0:3; let i = index" 
+                         [src]="url" 
+                         alt="Imagen de {{cuello.nombre}}" 
+                         class="preview-img"
+                         [style.z-index]="3 - i">
+                    <span *ngIf="cuello.urlsImagenes.length > 3" class="more-images-indicator">
+                      +{{cuello.urlsImagenes.length - 3}}
+                    </span>
+                  </div>
+                </div>
+              </td>
+            </ng-container>
+
+            <!-- Columna Acciones -->
+            <ng-container matColumnDef="acciones">
+              <th mat-header-cell *matHeaderCellDef class="table-header">
+                <div class="header-content">
+                  <mat-icon>settings</mat-icon>
+                  Acciones 
+                </div>
+              </th>
+              <td mat-cell *matCellDef="let cuello" class="table-cell">
+                <div class="actions-container">
+                  <button mat-mini-fab color="accent" (click)="abrirModal(cuello)" 
+                          matTooltip="Editar cuello" class="action-btn edit-btn">
+                    <mat-icon>edit</mat-icon>
+                  </button>
+                  <button mat-mini-fab color="warn" (click)="eliminarCuello(cuello.id)" 
+                          matTooltip="Eliminar cuello" class="action-btn delete-btn">
+                    <mat-icon>delete</mat-icon>
+                  </button>
+                </div>
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns" class="table-header-row"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;" 
+                class="table-row animate-in"></tr>
+          </table>
+          
+          <!-- Estado de carga -->
+          <div *ngIf="isLoading" class="loading-state">
+            <div class="spinner-container">
+              <mat-spinner diameter="40"></mat-spinner>
+            </div>
+            <p>Cargando tipos de cuello...</p>
+          </div>
+          
+          <!-- Estado vacío -->
+          <div *ngIf="!isLoading && dataSource.data.length === 0" class="empty-state">
+            <mat-icon class="empty-icon">inventory_2</mat-icon>
+            <h3 class="empty-title">No hay tipos de cuello registrados</h3>
+            <p class="empty-subtitle">Comienza agregando el primer tipo de cuello al sistema</p>
+            <button mat-raised-button color="primary" (click)="abrirModal()" class="empty-action-btn">
+              <mat-icon>add</mat-icon>
+              Agregar Primer Cuello
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

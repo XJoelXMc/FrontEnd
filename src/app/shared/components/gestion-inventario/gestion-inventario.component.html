@@ -1,0 +1,211 @@
+<div class="catalogo-container">
+
+  <!-- Botones de acciones, ahora dinámicos -->
+  <div class="header-acciones">
+  <button mat-raised-button color="primary" 
+          (click)="volverACategoriasPrincipales()">
+    <mat-icon>arrow_back</mat-icon> Volver
+  </button>
+
+  <button mat-raised-button color="primary" 
+          (click)="abrirCrearCategoria()"
+          *ngIf="!categoriaPadreSeleccionada">
+    <mat-icon>add_circle_outline</mat-icon> Nueva Categoría
+  </button>
+
+  <button mat-raised-button color="accent"
+          (click)="abrirCrearSubcategoria()"
+          *ngIf="categoriaPadreSeleccionada">
+    <mat-icon>playlist_add</mat-icon> Nueva Subcategoría
+  </button>
+</div>
+    <!-- Título dinámico para el nivel actual -->
+  <h2 class="titulo-categoria">
+    {{ categoriaPadreSeleccionada?.nombre || 'Categorías Principales' }}
+  </h2>
+<div class="categoria-circular-buttons">
+    <!-- CORRECCIÓN: Usa 'categorias' si categoriaPadreSeleccionada es nulo, de lo contrario 'subcategorias'. -->
+    <div *ngFor="let categoria of categoriaPadreSeleccionada ? subcategorias : categorias" class="categoria-item">
+      <button mat-raised-button
+              class="categoria-button"
+              [class.activa]="categoriaSeleccionada?.id === categoria.id"
+              (click)="seleccionarCategoria(categoria)">
+        <img [src]="categoria.imagen" [alt]="categoria.nombre">
+      </button>
+      <span>{{ categoria.nombre }}</span>
+      <button mat-icon-button color="warn" (click)="eliminarCategoria(categoria)" class="eliminar-btn">
+        <mat-icon>delete</mat-icon>
+      </button>
+    </div>
+  </div>
+
+<!-- La descripción de la categoría seleccionada y la galería de inventario se mantienen iguales, pero se muestran cuando se selecciona una subcategoría o categoría final -->
+  <div *ngIf="categoriaSeleccionada" class="categoria-seleccionada-descripcion">
+    <p>{{ categoriaSeleccionada.descripcion || 'Sin descripción' }}</p>
+  </div>
+  <!-- Inventario de la categoría seleccionada -->
+  <section *ngIf="categoriaSeleccionada">
+    <h2 class="titulo-categoria">{{ categoriaSeleccionada.nombre }}</h2>
+
+   <div class="galeria">
+    <mat-card *ngFor="let item of inventarioFiltrado" class="card" [@fadeIn]>
+        <mat-card-content>
+            <div class="item-header">
+                <!-- Círculo de color al lado de la información del material -->
+                <div class="color-preview"
+                     *ngIf="item.color"
+                     [style.background-color]="item.color"
+                     [title]="item.color">
+                </div>
+                <div class="info-material">
+                    <!-- ✨ nombreMaterial -->
+                    <h3>tipo de material: {{ item.nombreMaterial }}</h3>
+                    <p class="cantidad">
+                        Cantidad Disponible:
+                        {{ item.cantidadDisponible }} {{ item.unidad }}
+                    </p>
+                </div>
+            </div>
+
+            <p class="descripcion">{{ item.descripcion || 'Sin descripción' }}</p>
+
+            <div class="acciones">
+                <button mat-raised-button color="primary" (click)="abrirDetalles(item)">
+                    <mat-icon>visibility</mat-icon> Ver
+                </button>
+                <button mat-raised-button color="accent" (click)="abrirAjuste(item)">
+                    <mat-icon>edit</mat-icon> Ajuste
+                </button>
+            </div>
+        </mat-card-content>
+    </mat-card>
+</div>
+
+  </section>
+
+
+  <!-- Modal: Detalles -->
+ <ng-template #detallesModal let-data>
+  <div class="modal-container">
+    <div class="modal-header">
+      <h2 mat-dialog-title>
+        <mat-icon class="material-icon">info</mat-icon> Detalles del Material
+      </h2>
+      <button mat-icon-button mat-dialog-close>
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+    <mat-dialog-content>
+      <div class="modal-content-grid">
+        <div>
+          <p><strong>Nombre:</strong> {{ data.nombre }}</p>
+          <p><strong>Tipo:</strong> {{ data.tipo }}</p>
+          <p><strong>Tipo de material:</strong> {{ data.tipoMaterial }}</p>
+          <p><strong>Cantidad:</strong> {{ data.cantidadDisponible }} {{ data.unidad }}</p>
+        </div>
+        <div>
+          <p><strong>Color:</strong> {{ data.color || 'No especificado' }}</p>
+          <div class="color-preview" *ngIf="data.color" [style.background-color]="data.color"></div>
+          <p><strong>Descripción:</strong></p>
+          <p class="descripcion-text">{{ data.descripcion || 'Sin descripción' }}</p>
+        </div>
+      </div>
+    </mat-dialog-content>
+    <mat-dialog-actions align="end">
+      <button mat-flat-button mat-dialog-close class="btn-cerrar">Cerrar</button>
+    </mat-dialog-actions>
+  </div>
+</ng-template>
+
+  <!-- Modal: Ajuste -->
+  <ng-template #ajusteModal let-data>
+  <div class="modal-container">
+    <div class="modal-header">
+      <h2 mat-dialog-title>
+        <mat-icon class="material-icon">build</mat-icon> Ajuste de Inventario
+      </h2>
+      <button mat-icon-button mat-dialog-close>
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+    <mat-dialog-content>
+      <div class="material-info-header">
+        <p><strong>{{ data.nombre }}</strong> - {{ data.tipoMaterial }} ({{ data.color || 'Sin color' }})</p>
+      </div>
+      <mat-form-field appearance="fill" class="full-width">
+        <mat-label>Cantidad</mat-label>
+        <input matInput type="number" [(ngModel)]="cantidadAjuste" />
+      </mat-form-field>
+      <mat-button-toggle-group name="tipoAjuste" [(ngModel)]="tipoAjuste" exclusive class="toggle-group-full">
+        <mat-button-toggle value="salida" class="toggle-salida">
+          <mat-icon>remove</mat-icon> Salida
+        </mat-button-toggle>
+      </mat-button-toggle-group>
+    </mat-dialog-content>
+    <mat-dialog-actions align="end">
+      <button mat-flat-button (click)="confirmarAjuste(data)" class="btn-guardar">
+        <mat-icon>save</mat-icon> Guardar
+      </button>
+      <button mat-button mat-dialog-close class="btn-cancelar">Cancelar</button>
+    </mat-dialog-actions>
+  </div>
+</ng-template>
+
+
+<!-- Modal de creación (simplificado para subcategorías) -->
+<ng-template #crearCategoriaModal>
+  <div class="crear-categoria-modal">
+    <div class="modal-header">
+      <h2 mat-dialog-title>
+        <mat-icon class="material-icon">folder_open</mat-icon>
+        {{ nuevaCategoria.parent_id? 'Nueva Subcategoría' : 'Nueva Categoría' }}
+      </h2>
+      <button mat-icon-button mat-dialog-close class="close-button">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+    
+    <mat-dialog-content>
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Nombre</mat-label>
+        <input matInput [(ngModel)]="nuevaCategoria.nombre" required>
+      </mat-form-field>
+      
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Descripción</mat-label>
+        <textarea matInput rows="3" [(ngModel)]="nuevaCategoria.descripcion"></textarea>
+      </mat-form-field>
+      
+      <!-- Se ha eliminado la condición *ngIf="!nuevaCategoria.parentId" -->
+      <div class="upload-area">
+        <p class="upload-label">Imagen de la categoría (Obligatoria)</p>
+        <div class="upload-actions">
+          <button mat-stroked-button (click)="fileInput.click()" class="upload-button">
+            <mat-icon>cloud_upload</mat-icon> Seleccionar Imagen
+          </button>
+          <input type="file" #fileInput style="display: none;" 
+              (change)="onFileSelected($event)" accept="image/*">
+        </div>
+        <div *ngIf="imagenSeleccionada" class="file-name-display">
+          <mat-icon>insert_drive_file</mat-icon> {{ imagenSeleccionada.name }}
+        </div>
+        <div *ngIf="imagenPreview" class="image-preview-container">
+          <img [src]="imagenPreview" alt="Vista previa">
+          <button mat-icon-button (click)="imagenPreview = null; imagenSeleccionada = null">
+            <mat-icon>close</mat-icon>
+          </button>
+        </div>
+      </div>
+    </mat-dialog-content>
+    
+    <mat-dialog-actions align="end">
+      <button mat-button mat-dialog-close>Cancelar</button>
+      <button mat-raised-button color="primary" 
+              (click)="guardarCategoria()"
+              [disabled]="!nuevaCategoria.nombre || !imagenSeleccionada">
+        <mat-icon>save</mat-icon> Guardar
+      </button>
+    </mat-dialog-actions>
+  </div>
+</ng-template>
+</div>

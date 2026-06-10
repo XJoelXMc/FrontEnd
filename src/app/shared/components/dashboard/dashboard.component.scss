@@ -1,0 +1,304 @@
+// =========================================
+// 🎨 PALETA DE COLORES & VARIABLES
+// =========================================
+$bg-deep: #0f172a;        // Azul muy oscuro (Fondo principal)
+$bg-card: rgba(30, 41, 59, 0.7); // Azul grisáceo translúcido (Vidrio)
+$border-glass: rgba(255, 255, 255, 0.08);
+
+$text-main: #f8fafc;
+$text-sec: #94a3b8;
+
+$primary: #FF6600;        // Naranja Activa Sports
+$primary-glow: rgba(255, 102, 0, 0.25);
+
+$success: #10b981;        // Verde Esmeralda moderno
+$danger: #ef4444;         // Rojo vibrante
+$warning: #f59e0b;        // Ámbar
+
+// =========================================
+// 🛠️ MIXINS & BASES
+// =========================================
+@mixin glass-effect {
+  background: $bg-card;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid $border-glass;
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+}
+
+// Scrollbar moderno
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { 
+  background: rgba(255,255,255,0.1); 
+  border-radius: 10px; 
+  &:hover { background: rgba(255,255,255,0.2); }
+}
+
+// =========================================
+// 🧩 LAYOUT PRINCIPAL (SIN SCROLL HORIZONTAL)
+// =========================================
+.dashboard-wrapper {
+  background: radial-gradient(circle at top right, #1e293b, $bg-deep);
+  min-height: 100vh;
+  padding: 2rem;
+  color: $text-main;
+  font-family: 'Inter', 'Roboto', sans-serif;
+  
+  // ✅ CORRECCIÓN CLAVE: Bloquea el desbordamiento horizontal
+  overflow-x: hidden; 
+  width: 100%;
+  box-sizing: border-box; 
+}
+
+// =========================================
+// 🏷️ HEADER
+// =========================================
+.dashboard-header {
+  margin-bottom: 2.5rem;
+  h1 {
+    display: flex; align-items: center; gap: 12px;
+    font-size: 2.2rem; font-weight: 600; letter-spacing: -0.5px;
+    text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+    
+    mat-icon { 
+      color: $primary; 
+      filter: drop-shadow(0 0 8px $primary); 
+    }
+  }
+  p { color: $text-sec; margin-top: 5px; font-size: 1rem; }
+}
+
+// =========================================
+// 📊 KPIS (TARJETAS SUPERIORES)
+// =========================================
+.kpi-section {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+  // Asegura que la grilla no fuerce el ancho
+  max-width: 100%;
+}
+
+.kpi-card {
+  @include glass-effect;
+  padding: 1.5rem;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+
+  // Hover vertical (seguro)
+  &:hover { transform: translateY(-5px); }
+
+  .kpi-icon {
+    width: 60px; height: 60px;
+    border-radius: 16px;
+    display: flex; align-items: center; justify-content: center;
+    background: rgba(255,255,255,0.1);
+    mat-icon { font-size: 30px; width: 30px; height: 30px; }
+  }
+
+  .kpi-data {
+    h2 { font-size: 2.8rem; margin: 0; font-weight: 700; line-height: 1; }
+    span { font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px; opacity: 0.8; }
+  }
+
+  &.success-gradient {
+    border-bottom: 4px solid $success;
+    .kpi-icon { color: $success; background: rgba($success, 0.1); }
+    h2 { color: $success; text-shadow: 0 0 20px rgba($success, 0.4); }
+  }
+
+  &.danger-gradient {
+    border-bottom: 4px solid $danger;
+    .kpi-icon { color: $danger; background: rgba($danger, 0.1); }
+    h2 { color: $danger; text-shadow: 0 0 20px rgba($danger, 0.4); }
+  }
+}
+
+// =========================================
+// 📈 SECCIÓN DE GRÁFICOS
+// =========================================
+.charts-section {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  gap: 1.5rem;
+  max-width: 100%; // Seguridad extra
+  
+  @media (max-width: 1100px) { grid-template-columns: 1fr; }
+}
+
+.dark-card {
+  @include glass-effect;
+  border-radius: 20px;
+  padding: 0; 
+  display: flex; flex-direction: column;
+  transition: all 0.3s ease;
+  overflow: hidden; // Mantiene el contenido dentro de los bordes redondeados
+
+  h3, .card-header {
+    padding: 1.5rem;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: $text-main;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+
+  .chart-container {
+    padding: 1.5rem;
+    height: 350px;
+    width: 100%;
+    position: relative;
+  }
+
+  &.hover-effect:hover {
+    box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+    border-color: rgba($primary, 0.3);
+  }
+}
+
+// =========================================
+// 📦 MONITOR DE STOCK (FIX ANIMACIONES)
+// =========================================
+.stock-monitor-card {
+  height: 450px;
+
+  .filter-tabs {
+    display: flex; gap: 8px; background: rgba(0,0,0,0.2); padding: 4px; border-radius: 30px;
+    
+    button {
+      background: transparent; border: none; color: $text-sec;
+      padding: 6px 16px; border-radius: 20px; font-size: 0.85rem; font-weight: 500;
+      cursor: pointer; transition: all 0.3s ease;
+
+      &.active {
+        background: $primary; color: white; box-shadow: 0 4px 15px $primary-glow;
+        &.danger { background: $danger; box-shadow: 0 4px 15px rgba($danger, 0.4); }
+        &.success { background: $success; box-shadow: 0 4px 15px rgba($success, 0.4); color: #000; }
+      }
+    }
+  }
+
+  .stock-list-container {
+    padding: 1rem; 
+    overflow-y: auto; 
+    flex: 1;
+    // ✅ CORRECCIÓN: Evita scroll horizontal interno
+    overflow-x: hidden; 
+    width: 100%;
+    box-sizing: border-box;
+
+    .stock-item {
+      display: flex; align-items: center; gap: 1rem; padding: 12px 16px;
+      margin-bottom: 8px; border-radius: 12px;
+      background: rgba(255,255,255,0.02); border: 1px solid transparent;
+      cursor: pointer; 
+      
+      // ✅ SUAVIZADO: Animación controlada
+      transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+      
+      // ✅ LÍMITES: Asegura que no crezca más que el contenedor
+      max-width: 100%; 
+      box-sizing: border-box;
+
+      &:hover {
+        background: rgba(255,255,255,0.05);
+        border-color: rgba(255,255,255,0.1);
+        // ✅ MOVIMIENTO SEGURO: Solo 4px para evitar que salga de pantalla
+        transform: translateX(4px); 
+      }
+
+      .item-info {
+        width: 35%; display: flex; flex-direction: column;
+        .item-name { 
+          font-weight: 500; color: $text-main; font-size: 0.95rem; 
+          white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        }
+        .item-qty { font-size: 0.8rem; color: $text-sec; margin-top: 2px; }
+      }
+
+      .progress-track {
+        flex: 1; height: 6px; background: rgba(255,255,255,0.1); border-radius: 10px; overflow: hidden;
+        .progress-fill {
+          height: 100%; border-radius: 10px;
+          &.low { background: linear-gradient(90deg, $danger, #ff7e5f); box-shadow: 0 0 10px rgba($danger, 0.5); }
+          &.good { background: linear-gradient(90deg, $success, #a8ff78); }
+        }
+      }
+
+      .item-status {
+        width: 90px; display: flex; justify-content: flex-end;
+        .badge {
+          font-size: 0.7rem; padding: 4px 10px; border-radius: 6px; font-weight: 700; letter-spacing: 0.5px;
+          &.badge-low { 
+            background: rgba($danger, 0.2); color: $danger; border: 1px solid rgba($danger, 0.3);
+            animation: pulse-red 2s infinite; 
+          }
+          &.badge-ok { background: rgba($success, 0.2); color: $success; border: 1px solid rgba($success, 0.3); }
+        }
+      }
+    }
+  }
+}
+
+::ng-deep .mat-mdc-dialog-container {
+  --mdc-dialog-container-color: #1e293b !important;
+  --mdc-dialog-subhead-color: #f8fafc !important;
+}
+
+.modal-content-wrapper { color: $text-main; }
+
+.simple-table {
+  width: 100%; border-collapse: separate; border-spacing: 0 8px;
+  th { 
+    text-align: left; padding: 12px; color: $text-sec; font-weight: 500; font-size: 0.85rem; text-transform: uppercase; 
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+  }
+  td { 
+    background: rgba(255,255,255,0.03); padding: 12px; 
+    &:first-child { border-top-left-radius: 8px; border-bottom-left-radius: 8px; }
+    &:last-child { border-top-right-radius: 8px; border-bottom-right-radius: 8px; }
+  }
+  .badge { padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; background: rgba(255,255,255,0.1); }
+}
+
+.material-info-card {
+  text-align: center; padding: 2rem; background: rgba(0,0,0,0.2); border-radius: 16px; border: 1px solid rgba(255,255,255,0.05);
+
+  .icon-header {
+    width: 80px; height: 80px; margin: 0 auto 1.5rem; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 2rem;
+    background: rgba($success, 0.1); color: $success; box-shadow: 0 0 30px rgba($success, 0.2);
+    
+    &.low { background: rgba($danger, 0.1); color: $danger; box-shadow: 0 0 30px rgba($danger, 0.2); }
+  }
+
+  h3 { font-size: 1.5rem; margin-bottom: 1.5rem; color: white; }
+
+  .stats-row {
+    display: flex; gap: 1rem; margin-bottom: 2rem;
+    .stat {
+      flex: 1; background: rgba(255,255,255,0.05); padding: 1rem; border-radius: 12px;
+      .label { display: block; font-size: 0.8rem; color: $text-sec; margin-bottom: 5px; }
+      .value { font-size: 1.2rem; font-weight: bold; color: $text-main; }
+    }
+  }
+}
+
+@keyframes pulse-red {
+  0% { box-shadow: 0 0 0 0 rgba($danger, 0.4); }
+  70% { box-shadow: 0 0 0 6px rgba($danger, 0); }
+  100% { box-shadow: 0 0 0 0 rgba($danger, 0); }
+}
+
+.loading-container { 
+  height: 60vh; display: flex; align-items: center; justify-content: center; 
+}

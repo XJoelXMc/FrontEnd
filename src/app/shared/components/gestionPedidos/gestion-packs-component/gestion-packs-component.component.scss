@@ -1,0 +1,588 @@
+// Usando las mismas variables del sistema
+$color-primario: #FF6600;
+$color-secundario: #2A2A2A;
+$color-fondo-claro: #FFF8F5;
+$color-texto: #444;
+$color-borde: rgba($color-primario, 0.15);
+$transition-base: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+$shadow-base: 0 4px 12px rgba(0,0,0,0.08);
+$border-radius-lg: 16px;
+$border-radius-md: 12px;
+$border-radius-sm: 8px;
+
+.container {
+  padding: 2rem;
+  background: linear-gradient(135deg, $color-fondo-claro 0%, #ffffff 100%);
+  min-height: 100vh;
+  
+  @media (max-width: 768px) {
+    padding: 1rem;
+  }
+}
+
+// Header animado
+h1 {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: $color-secundario;
+  margin: 0 0 0.5rem 0;
+  background: linear-gradient(135deg, $color-primario, darken($color-primario, 15%));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: slideInDown 0.8s ease-out;
+  position: relative;
+  display: inline-block;
+  
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: linear-gradient(90deg, $color-primario, transparent);
+    border-radius: 2px;
+    animation: widthGrow 1s ease-out 0.5s both;
+  }
+}
+
+p {
+  font-size: 1.1rem;
+  color: rgba($color-texto, 0.8);
+  margin: 0 0 2rem 0;
+  animation: slideInUp 0.8s ease-out 0.2s both;
+  line-height: 1.5;
+  max-width: 600px;
+}
+
+// Tabs animados y modernizados
+::ng-deep {
+  .mat-tab-group {
+    border-radius: $border-radius-lg;
+    overflow: hidden;
+    box-shadow: $shadow-base;
+    animation: scaleIn 0.6s ease-out 0.4s both;
+    
+    // Header de tabs
+    .mat-tab-header {
+      background: linear-gradient(135deg, rgba($color-primario, 0.05) 0%, rgba($color-primario, 0.02) 100%);
+      border-bottom: 1px solid $color-borde;
+      
+      .mat-tab-label-container {
+        padding: 0 1rem;
+      }
+      
+      .mat-tab-list {
+        .mat-tab-labels {
+          .mat-tab-label {
+            height: 64px;
+            min-width: 160px;
+            padding: 0 2rem;
+            opacity: 1;
+            color: rgba($color-texto, 0.7);
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: all 0.3s $transition-base;
+            position: relative;
+            overflow: hidden;
+            
+            &::before {
+              content: '';
+              position: absolute;
+              top: 0;
+              left: -100%;
+              width: 100%;
+              height: 100%;
+              background: linear-gradient(90deg, transparent, rgba($color-primario, 0.1), transparent);
+              transition: left 0.6s ease;
+            }
+            
+            &:hover {
+              color: $color-primario;
+              background: rgba($color-primario, 0.05);
+              
+              &::before {
+                left: 100%;
+              }
+              
+              .tab-label-content {
+                transform: translateY(-1px);
+                
+                .tab-icon {
+                  transform: scale(1.1);
+                  color: $color-primario;
+                }
+                
+                .step-badge {
+                  background: $color-primario;
+                  transform: scale(1.1);
+                }
+              }
+            }
+            
+            &.mat-tab-label-active {
+              color: $color-primario;
+              background: rgba($color-primario, 0.08);
+              
+              .tab-label-content {
+                .step-badge {
+                  background: linear-gradient(135deg, $color-primario, darken($color-primario, 10%));
+                  transform: scale(1.1);
+                  box-shadow: 0 4px 12px rgba($color-primario, 0.3);
+                }
+                
+                .tab-icon {
+                  color: $color-primario;
+                  transform: scale(1.1);
+                }
+              }
+            }
+            
+            .mat-tab-label-content {
+              display: flex;
+              align-items: center;
+              gap: 0.75rem;
+              transition: all 0.3s $transition-base;
+              
+              .step-badge {
+                width: 24px;
+                height: 24px;
+                border-radius: 50%;
+                background: rgba($color-texto, 0.3);
+                color: white;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 0.8rem;
+                font-weight: 600;
+                transition: all 0.3s $transition-base;
+              }
+              
+              .tab-icon {
+                font-size: 1.2rem;
+                width: 1.2rem;
+                height: 1.2rem;
+                transition: all 0.3s $transition-base;
+                color: rgba($color-texto, 0.6);
+              }
+              
+              .tab-text {
+                font-weight: 600;
+                letter-spacing: 0.5px;
+              }
+            }
+          }
+        }
+      }
+      
+      // Indicador animado
+      .mat-ink-bar {
+        background: linear-gradient(90deg, $color-primario, darken($color-primario, 10%));
+        height: 3px;
+        border-radius: 2px 2px 0 0;
+        animation: inkBarSlide 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+    }
+    
+    // Contenido de los tabs
+    .mat-tab-body {
+      background: white;
+      
+      .mat-tab-body-content {
+        padding: 0;
+        overflow: hidden;
+        animation: fadeInUp 0.6s ease-out;
+        
+        // Asegurar que los componentes hijos ocupen todo el espacio
+        app-gama-manager,
+        app-molde-manager,
+        app-pack-creator {
+          display: block;
+          height: 100%;
+          animation: slideInUp 0.6s ease-out;
+        }
+      }
+    }
+    
+    // Animación cuando cambia el tab
+    &.mat-tab-group-dynamic-height .mat-tab-body.mat-tab-body-active {
+      animation: fadeInUp 0.5s ease-out;
+    }
+  }
+  
+  // Efecto de carga para contenido
+  .mat-tab-body-wrapper {
+    position: relative;
+    
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, $color-primario, transparent);
+      z-index: 10;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    
+    &.loading::before {
+      opacity: 1;
+      animation: loadingBar 1.5s ease-in-out infinite;
+    }
+  }
+}
+
+// Estados vacíos mejorados
+.empty-state {
+  text-align: center;
+  padding: 4rem 2rem;
+  color: rgba($color-texto, 0.6);
+  
+  .empty-icon {
+    font-size: 4rem;
+    width: 4rem;
+    height: 4rem;
+    margin: 0 auto 1rem;
+    color: rgba($color-primario, 0.3);
+    animation: bounce 2s ease-in-out infinite;
+  }
+  
+  .empty-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin: 0 0 0.5rem;
+    color: rgba($color-texto, 0.8);
+  }
+  
+  .empty-subtitle {
+    margin: 0;
+    font-size: 1rem;
+    max-width: 400px;
+    margin: 0 auto;
+  }
+}
+
+// Animaciones
+@keyframes slideInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes widthGrow {
+  from {
+    width: 0%;
+  }
+  to {
+    width: 100%;
+  }
+}
+
+@keyframes inkBarSlide {
+  from {
+    transform: scaleX(0);
+    opacity: 0;
+  }
+  to {
+    transform: scaleX(1);
+    opacity: 1;
+  }
+}
+
+@keyframes loadingBar {
+  0% {
+    left: -100%;
+  }
+  50% {
+    left: 100%;
+  }
+  100% {
+    left: 100%;
+  }
+}
+
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-10px);
+  }
+  60% {
+    transform: translateY(-5px);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.05);
+    opacity: 0.8;
+  }
+}
+
+// Efectos de profundidad
+.elevation-1 {
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.elevation-2 {
+  box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+}
+
+.elevation-3 {
+  box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+}
+
+// Indicador de progreso
+.progress-indicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin: 2rem 0;
+  animation: slideInUp 0.6s ease-out 0.6s both;
+  
+  .progress-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    
+    .step-circle {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: rgba($color-primario, 0.1);
+      border: 2px solid rgba($color-primario, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      color: $color-primario;
+      transition: all 0.3s $transition-base;
+      position: relative;
+      
+      &.active {
+        background: $color-primario;
+        color: white;
+        border-color: $color-primario;
+        transform: scale(1.1);
+        box-shadow: 0 4px 12px rgba($color-primario, 0.3);
+      }
+      
+      &.completed {
+        background: linear-gradient(135deg, $color-primario, darken($color-primario, 10%));
+        color: white;
+        border-color: $color-primario;
+        
+        &::after {
+          content: '✓';
+          font-weight: bold;
+        }
+      }
+    }
+    
+    .step-label {
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: rgba($color-texto, 0.7);
+      text-align: center;
+      transition: all 0.3s $transition-base;
+      
+      .active & {
+        color: $color-primario;
+        font-weight: 600;
+      }
+    }
+    
+    .step-connector {
+      width: 60px;
+      height: 2px;
+      background: rgba($color-primario, 0.2);
+      margin: 0 0.5rem;
+      position: relative;
+      overflow: hidden;
+      
+      &::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, $color-primario, darken($color-primario, 10%));
+        transition: left 0.5s ease;
+      }
+      
+      .completed + &::after {
+        left: 0;
+      }
+    }
+  }
+}
+
+// Responsive
+@media (max-width: 1024px) {
+  h1 {
+    font-size: 2.2rem;
+  }
+  
+  ::ng-deep {
+    .mat-tab-group .mat-tab-header .mat-tab-list .mat-tab-label {
+      min-width: 140px;
+      padding: 0 1.5rem;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 1rem;
+  }
+  
+  h1 {
+    font-size: 2rem;
+    text-align: center;
+    
+    &::after {
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80%;
+    }
+  }
+  
+  p {
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  ::ng-deep {
+    .mat-tab-group {
+      .mat-tab-header {
+        .mat-tab-label-container {
+          padding: 0 0.5rem;
+        }
+        
+        .mat-tab-list .mat-tab-label {
+          height: 56px;
+          min-width: auto;
+          padding: 0 1rem;
+          flex: 1;
+          
+          .mat-tab-label-content {
+            gap: 0.5rem;
+            
+            .tab-text {
+              font-size: 0.85rem;
+            }
+            
+            .tab-icon {
+              font-size: 1rem;
+              width: 1rem;
+              height: 1rem;
+            }
+            
+            .step-badge {
+              width: 20px;
+              height: 20px;
+              font-size: 0.7rem;
+            }
+          }
+        }
+      }
+    }
+  }
+  
+  .progress-indicator {
+    gap: 0.5rem;
+    
+    .progress-step {
+      .step-circle {
+        width: 32px;
+        height: 32px;
+        font-size: 0.8rem;
+      }
+      
+      .step-connector {
+        width: 40px;
+      }
+      
+      .step-label {
+        font-size: 0.7rem;
+      }
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  h1 {
+    font-size: 1.8rem;
+  }
+  
+  p {
+    font-size: 1rem;
+  }
+  
+  ::ng-deep {
+    .mat-tab-group .mat-tab-header .mat-tab-list .mat-tab-label {
+      padding: 0 0.75rem;
+      
+      .mat-tab-label-content {
+        .tab-text {
+          display: none;
+        }
+        
+        .step-badge {
+          width: 24px;
+          height: 24px;
+        }
+      }
+    }
+  }
+}

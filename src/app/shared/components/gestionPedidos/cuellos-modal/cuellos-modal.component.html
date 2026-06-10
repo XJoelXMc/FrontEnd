@@ -1,0 +1,110 @@
+<div class="modal-container" [class.loading]="isLoading">
+  <div class="modal-header">
+    <h2 mat-dialog-title class="modal-title">
+      <mat-icon class="title-icon">{{ modoEdicion ? 'edit' : 'add_circle' }}</mat-icon>
+      {{ modoEdicion ? 'Editar' : 'Nuevo' }} Cuello
+    </h2>
+    <button mat-icon-button class="close-btn" (click)="cancelar()" matTooltip="Cerrar">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <mat-dialog-content [formGroup]="form" class="modal-content">
+    <!-- Campo Nombre -->
+    <mat-form-field appearance="outline" class="full-width animated-field">
+      <mat-label class="field-label">
+        <mat-icon class="field-icon">label</mat-icon>
+        Nombre del Cuello
+      </mat-label>
+      <input matInput formControlName="nombre" required class="field-input">
+      <mat-icon matSuffix class="suffix-icon">style</mat-icon>
+      <mat-error *ngIf="form.get('nombre')?.hasError('required')" class="error-message">
+        <mat-icon>error</mat-icon>
+        El nombre es obligatorio
+      </mat-error>
+    </mat-form-field>
+
+    <!-- Campo Precio -->
+    <mat-form-field appearance="outline" class="full-width animated-field">
+      <mat-label class="field-label">
+        <mat-icon class="field-icon">attach_money</mat-icon>
+        Precio
+      </mat-label>
+      <input matInput type="number" formControlName="precio" required class="field-input">
+      <span matTextPrefix class="prefix-text">Bs.&nbsp;</span>
+      <mat-icon matSuffix class="suffix-icon">payments</mat-icon>
+      <mat-error *ngIf="form.get('precio')?.hasError('required')" class="error-message">
+        <mat-icon>error</mat-icon>
+        El precio es obligatorio
+      </mat-error>
+    </mat-form-field>
+
+    <!-- Sección de Upload -->
+    <div class="upload-section animated-section">
+      <div class="upload-header">
+        <mat-icon class="upload-icon">photo_library</mat-icon>
+        <label class="upload-label">Imágenes de Referencia</label>
+      </div>
+      <p class="upload-subtitle">Agrega imágenes que muestren diferentes vistas del tipo de cuello</p>
+      
+      <button type="button" mat-stroked-button color="primary" 
+              (click)="fileInput.click()" class="upload-btn">
+        <mat-icon>add_photo_alternate</mat-icon>
+        Añadir Imágenes
+      </button>
+      <input hidden type="file" #fileInput multiple (change)="onFileSelected($event)" accept="image/*">
+    </div>
+
+    <!-- Grid de Previews -->
+    <div class="preview-container" *ngIf="previews.length > 0">
+      <h4 class="preview-title">
+        <mat-icon>collections</mat-icon>
+        Vista Previa ({{ previews.length }})
+      </h4>
+      <div class="preview-grid">
+        <div *ngFor="let preview of previews; let i = index" 
+             class="preview-item animated-preview"
+             [style.animation-delay]="(i * 0.1) + 's'">
+          <div class="preview-image-container">
+            <img [src]="preview" alt="Vista previa" class="preview-img">
+            <div class="preview-overlay">
+              <button mat-icon-button class="view-btn" matTooltip="Ver imagen">
+                <mat-icon>zoom_in</mat-icon>
+              </button>
+            </div>
+          </div>
+          <button mat-icon-button class="remove-btn" (click)="removerPreview(i)" matTooltip="Eliminar imagen">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Estado vacío -->
+    <div *ngIf="previews.length === 0" class="empty-preview">
+      <mat-icon class="empty-icon">photo_camera</mat-icon>
+      <p class="empty-text">No hay imágenes seleccionadas</p>
+    </div>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end" class="modal-actions">
+    <button mat-button (click)="cancelar()" class="cancel-btn">
+      <mat-icon>cancel</mat-icon>
+      Cancelar
+    </button>
+    <button mat-raised-button color="primary" (click)="guardar()" 
+            [disabled]="form.invalid || isLoading" class="save-btn">
+      <mat-icon *ngIf="!isLoading">{{ modoEdicion ? 'update' : 'save' }}</mat-icon>
+      <mat-spinner *ngIf="isLoading" diameter="20"></mat-spinner>
+      {{ isLoading ? 'Guardando...' : (modoEdicion ? 'Actualizar' : 'Guardar') }}
+    </button>
+  </mat-dialog-actions>
+
+  <!-- Efecto de carga -->
+  <div *ngIf="isLoading" class="loading-overlay">
+    <div class="loading-content">
+      <mat-spinner diameter="50"></mat-spinner>
+      <p>Procesando información...</p>
+    </div>
+  </div>
+</div>

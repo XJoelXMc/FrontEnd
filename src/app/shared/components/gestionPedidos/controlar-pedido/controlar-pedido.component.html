@@ -1,0 +1,131 @@
+<div class="control-container">
+
+  <div class="header-page">
+    <h1>
+      <mat-icon>manage_search</mat-icon> 
+      {{ esAdmin ? 'Gestión de Pedidos' : 'Mi Pedido' }}
+    </h1>
+    <p class="subtitle" *ngIf="!esAdmin">Ingresa tu código para ver el estado, modificar tallas o personalizar tu diseño.</p>
+  </div>
+
+  <div *ngIf="!esAdmin" class="cliente-view">
+    
+    <div class="search-box">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Código de Cotización (ej: COT-X1Y2)</mat-label>
+        <input matInput [formControl]="codigoControl" placeholder="Ingresa el código" style="text-transform: uppercase;">
+        <button mat-icon-button matSuffix (click)="buscarPedido()" [disabled]="buscando || codigoControl.invalid">
+          <mat-icon *ngIf="!buscando">search</mat-icon>
+          <mat-spinner *ngIf="buscando" diameter="20"></mat-spinner>
+        </button>
+      </mat-form-field>
+    </div>
+
+    <div *ngIf="resultadoBusqueda" class="result-dashboard @fadeIn">
+      
+      <mat-card class="dashboard-card">
+        <mat-card-header>
+          <div mat-card-avatar class="avatar-icon money"><mat-icon>receipt</mat-icon></div>
+          <mat-card-title>Cotización #{{ resultadoBusqueda.codigo }}</mat-card-title>
+          <mat-card-subtitle>Pack: {{ resultadoBusqueda.packNombre }}</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="info-row">
+            <span>Estado:</span>
+            <span class="badge" [class.success]="resultadoBusqueda.estado === 'COMPLETADA'">
+              {{ resultadoBusqueda.estado }}
+            </span>
+          </div>
+          <div class="info-row total">
+            <span>Total Estimado:</span>
+            <strong>{{ resultadoBusqueda.total | currency:'Bs. ' }}</strong>
+          </div>
+        </mat-card-content>
+        <mat-card-actions>
+          <button mat-stroked-button color="primary" (click)="irAModificarCotizacion(resultadoBusqueda.cotizacionId)">
+            <mat-icon>edit</mat-icon> Modificar Cantidades
+          </button>
+        </mat-card-actions>
+      </mat-card>
+
+      <mat-card class="dashboard-card highlight">
+        <mat-card-header>
+          <div mat-card-avatar class="avatar-icon design"><mat-icon>palette</mat-icon></div>
+          <mat-card-title>Diseño y Jugadores</mat-card-title>
+          <mat-card-subtitle>Personalización de prendas</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+          <p *ngIf="resultadoBusqueda.tienePersonalizacion" class="status-text ok">
+            <mat-icon>check_circle</mat-icon> Diseño Guardado
+          </p>
+          <p *ngIf="!resultadoBusqueda.tienePersonalizacion" class="status-text pending">
+            <mat-icon>pending</mat-icon> Pendiente de Diseño
+          </p>
+          <p class="desc">Gestiona los logos, nombres y números de las camisetas.</p>
+        </mat-card-content>
+        <mat-card-actions>
+          <button mat-raised-button color="accent" (click)="irAPersonalizacion(resultadoBusqueda.cotizacionId)">
+            <mat-icon>{{ resultadoBusqueda.tienePersonalizacion ? 'edit' : 'add_circle' }}</mat-icon>
+            {{ resultadoBusqueda.tienePersonalizacion ? 'Modificar Diseño' : 'Personalizar Ahora' }}
+          </button>
+        </mat-card-actions>
+      </mat-card>
+
+    </div>
+  </div>
+
+  <div *ngIf="esAdmin" class="admin-view">
+    
+    <table mat-table [dataSource]="listaPedidos" class="mat-elevation-z8 admin-table">
+
+      <ng-container matColumnDef="codigo">
+        <th mat-header-cell *matHeaderCellDef> Código </th>
+        <td mat-cell *matCellDef="let element"> <strong>{{element.codigo}}</strong> </td>
+      </ng-container>
+
+      <ng-container matColumnDef="cliente">
+        <th mat-header-cell *matHeaderCellDef> Cliente </th>
+        <td mat-cell *matCellDef="let element"> {{element.clienteNombre}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="pack">
+        <th mat-header-cell *matHeaderCellDef> Pack </th>
+        <td mat-cell *matCellDef="let element"> {{element.packNombre}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="total">
+        <th mat-header-cell *matHeaderCellDef> Total </th>
+        <td mat-cell *matCellDef="let element"> {{element.total | currency:'Bs. '}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="estado">
+        <th mat-header-cell *matHeaderCellDef> Estado </th>
+        <td mat-cell *matCellDef="let element">
+          <span class="badge" [class.success]="element.tienePersonalizacion">
+            {{ element.tienePersonalizacion ? 'PEDIDO COMPLETO' : 'SOLO COTIZACIÓN' }}
+          </span>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="acciones">
+        <th mat-header-cell *matHeaderCellDef> Acciones </th>
+        <td mat-cell *matCellDef="let element">
+          <button mat-icon-button color="primary" matTooltip="Ver Cotización" (click)="irAModificarCotizacion(element.cotizacionId)">
+            <mat-icon>visibility</mat-icon>
+          </button>
+          <button mat-icon-button color="accent" matTooltip="Ver Diseño" [disabled]="!element.tienePersonalizacion" (click)="irAPersonalizacion(element.cotizacionId)">
+            <mat-icon>palette</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="columnasTabla"></tr>
+      <tr mat-row *matRowDef="let row; columns: columnasTabla;"></tr>
+    </table>
+
+    <div *ngIf="listaPedidos.length === 0" class="empty-state">
+      <p>No hay pedidos registrados.</p>
+    </div>
+  </div>
+
+</div>

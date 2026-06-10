@@ -1,0 +1,500 @@
+/* Variables de color - Unificadas y Optimizadas */
+$primary-color: #FF6600; // Tu naranja principal
+$primary-light: lighten($primary-color, 15%); // Naranja más claro para degradados
+$primary-dark: darken($primary-color, 10%); // Naranja más oscuro para degradados
+$accent-color: #4A4A4A; // Gris oscuro para etiquetas y detalles
+$light-color: #ffffff; // Blanco puro (generalmente para texto sobre fondos oscuros)
+$dark-color: #333333; // Negro suave para textos principales
+$black: #222222; // Negro más oscuro, usado por ejemplo en scrollbar track
+$white: #ffffff; // Blanco puro (usado explícitamente en card background)
+$background-color-light: #f9f9f9; // Fondo general claro (para el contenido del modal)
+$background-color-dark: #1a1a1a; // Un negro muy oscuro para el inicio del degrade
+$card-gradient: linear-gradient(135deg, rgba(255,255,255,0.95), rgba(245,245,245,0.95)); // Degradado sutil para "cards"
+$error-color: #d32f2f; // Color de error
+$text-on-primary: $light-color; // Color de texto sobre fondos naranjas
+$text-on-dark: $light-color; // Color de texto sobre fondos oscuros
+$success: #4CAF50; // Variable para los mensajes de éxito
+$light-grey-hover: #f0f0f0; // Nuevo color para el hover de las filas
+
+/* Animaciones */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+@keyframes slideIn {
+  from { transform: translateX(-20px); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+/* Estructura principal */
+.container {
+  padding: 2rem;
+  display: flex;
+  justify-content: center;
+  background: linear-gradient(135deg, #f3f4f6, #ffffff);
+  min-height: 100vh;
+  position: relative;
+}
+
+/* Tarjeta principal */
+.proveedor-card {
+  width: 100%;
+  max-width: 1200px; /* Más ancho para mejor visualización */
+  border-radius: 24px;
+  background: $white;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  animation: fadeIn 0.5s ease-out forwards;
+  transition: all 0.3s ease;
+  
+  &:hover {
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+  }
+}
+
+/* Header con efecto de gradiente */
+.header-centrado {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 2rem;
+  background: linear-gradient(135deg, $primary-color, $primary-dark);
+  color: $white;
+  
+  mat-card-title {
+    font-size: 2rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+  }
+  
+  mat-card-subtitle {
+    font-size: 1.1rem;
+    opacity: 0.9;
+  }
+  
+  .proveedor-avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background-color: rgba($white, 0.2); /* Keep the background color for when image might not be fully opaque */
+  border: 3px solid rgba($white, 0.3);
+  margin-bottom: 1rem;
+  overflow: hidden; /* Clip the image to the circle */
+  display: flex; /* Center the image */
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+
+  &:hover {
+    transform: rotate(15deg) scale(1.1);
+  }
+
+  img {
+    display: block;
+    max-width: 100%; 
+    max-height: 100%; 
+    object-fit: contain; 
+  }
+}
+}
+
+/* Título de la lista */
+.lista-titulo {
+  font-weight: 600;
+  margin: 2rem 0 1.5rem;
+  font-size: 1.5rem;
+  color: $primary-dark;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.8rem;
+  padding: 0 2rem;
+  
+  mat-icon {
+    font-size: 32px;
+    width: 32px;
+    height: 32px;
+    color: $primary-color;
+    animation: pulse 2s infinite;
+  }
+}
+
+/* Tabla moderna con animaciones */
+.tabla-responsive {
+  overflow-x: auto;
+  margin: 0 2rem;
+  border-radius: 16px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+  
+  /* Scrollbar personalizada */
+  &::-webkit-scrollbar {
+    height: 8px;
+  }
+  
+  &::-webkit-scrollbar-thumb {
+    background: rgba($primary-color, 0.4);
+    border-radius: 4px;
+  }
+  
+  &::-webkit-scrollbar-track {
+    background: rgba($black, 0.05);
+  }
+}
+
+.tabla-proveedores {
+  width: 100%;
+  min-width: 800px; /* Ancho mínimo para evitar compresión */
+  border-collapse: separate;
+  border-spacing: 0;
+  animation: slideIn 0.5s ease-out forwards;
+  
+  th {
+    background: linear-gradient(135deg, $primary-color, $primary-light);
+    color: $white;
+    font-weight: 500;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    letter-spacing: 0.5px;
+    padding: 16px 24px;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    
+    &:first-child {
+      border-radius: 12px 0 0 0;
+    }
+    
+    &:last-child {
+      border-radius: 0 12px 0 0;
+    }
+  }
+  
+  td {
+    color: $black;
+    padding: 14px 24px;
+    border-bottom: 1px solid rgba($primary-color, 0.1);
+    background: $white; /* Todas las filas de celdas son blancas por defecto */
+    transition: all 0.3s ease;
+  }
+  
+  tr {
+    &:nth-child(even) td {
+      background: $white; /* Asegura que las filas pares también sean blancas */
+    }
+    
+    &:hover td {
+      background: $light-grey-hover; /* Color plomo claro en el hover */
+      transform: scale(1.01);
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+    }
+    
+    &:last-child td {
+      border-bottom: none;
+      
+      &:first-child {
+        border-radius: 0 0 0 12px;
+      }
+      
+      &:last-child {
+        border-radius: 0 0 12px 0;
+      }
+    }
+  }
+  
+  mat-icon {
+    transition: all 0.3s ease;
+    color: $primary-color;
+  }
+  
+  button {
+    transition: all 0.3s ease;
+    margin: 0 4px;
+    
+    &:hover {
+      transform: translateY(-2px);
+      
+      mat-icon {
+        color: $primary-dark;
+      }
+    }
+    
+    &[color="warn"]:hover mat-icon {
+      color: $error-color;
+    }
+  }
+}
+
+/* --- */
+/* Custom Paginator Styles */
+.custom-paginator {
+  display: flex;
+  justify-content: space-between; /* Pushes info to one side, controls to the other */
+  align-items: center;
+  padding: 1rem 2rem; /* Consistent padding with other sections */
+  background: transparent; /* Allows container below to set color if desired */
+  border-top: 1px solid rgba($primary-color, 0.1); /* Subtle top border */
+  border-radius: 0 0 16px 16px; /* Match card bottom border radius */
+  box-shadow: 0 -5px 10px rgba(0, 0, 0, 0.03); /* Subtle shadow on top edge */
+  font-size: 0.9rem;
+  color: $dark-color; /* Default text color */
+
+  .paginator-info {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Space between elements in info group */
+
+    .page-size-select {
+      padding: 6px 10px;
+      border: 1px solid rgba($primary-color, 0.3);
+      border-radius: 8px;
+      background-color: $white;
+      color: $primary-color;
+      font-weight: 500;
+      cursor: pointer;
+      outline: none;
+      transition: all 0.2s ease;
+
+      &:hover {
+        border-color: $primary-color;
+      }
+      &:focus {
+        box-shadow: 0 0 0 3px rgba($primary-color, 0.2);
+      }
+    }
+
+    .range-label {
+      font-weight: 500;
+      color: $dark-color;
+    }
+  }
+
+  .paginator-controls {
+    display: flex;
+    align-items: center;
+    gap: 8px; /* Space between control buttons */
+
+    .paginator-button {
+      background: rgba($primary-color, 0.1); /* Light primary tint */
+      border: none;
+      border-radius: 50%; /* Circular buttons */
+      width: 38px; /* Fixed size */
+      height: 38px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05); /* Subtle shadow for depth */
+
+      &:hover:not([disabled]) {
+        background: rgba($primary-color, 0.2); /* Darker on hover */
+        transform: translateY(-1px); /* Slight lift effect */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+
+      &:active:not([disabled]) {
+        background: rgba($primary-color, 0.3); /* Even darker on click */
+        transform: translateY(0);
+      }
+
+      &:disabled {
+        background: rgba($accent-color, 0.05); /* Faded for disabled */
+        cursor: not-allowed;
+        box-shadow: none;
+      }
+
+      mat-icon {
+        font-size: 22px; /* Icon size */
+        width: 22px;
+        height: 22px;
+        color: $primary-color; /* Primary color for icons */
+        transition: color 0.2s ease;
+      }
+
+      &:disabled mat-icon {
+        color: rgba($accent-color, 0.4); /* Faded color for disabled icon */
+      }
+    }
+  }
+}
+
+/* Specific styling for the FAB button inside the card content */
+.add-fab-container {
+  position: relative; /* Establish positioning context for absolute children */
+  height: 0; /* Consume no vertical space */
+  pointer-events: none; /* Allows clicks to pass through this container to elements below if not for the button */
+}
+
+.fab-table-add {
+  position: absolute; /* Position relative to the nearest positioned ancestor (.mat-card-content, or .add-fab-container) */
+  top: -20px; /* Adjust as needed, negative value moves it up out of flow */
+  right: 2rem; /* Position from the right edge */
+  z-index: 20; /* Ensure it's above other elements */
+
+  background: linear-gradient(135deg, $primary-color, $primary-dark);
+  color: $white;
+  width: 50px; /* Slightly smaller for better fit in content */
+  height: 50px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 10px rgba($primary-color, 0.3);
+  transition: all 0.3s ease;
+  pointer-events: all; /* Make the button clickable */
+
+  &:hover {
+    transform: scale(1.1) rotate(90deg); /* Retain animation */
+    box-shadow: 0 6px 15px rgba($primary-color, 0.4);
+  }
+
+  mat-icon {
+    font-size: 28px; /* Adjust icon size */
+  }
+}
+
+
+/* Botones y FAB (This section for the "Pedidos a Proveedores" button remains) */
+.boton-pedidos-container {
+  display: flex;
+  justify-content: center;
+  margin: 2.5rem 0;
+  
+  .boton-pedidos {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 500;
+    background: linear-gradient(135deg, $primary-color, $primary-dark);
+    color: $white;
+    padding: 12px 28px;
+    border-radius: 50px;
+    box-shadow: 0 4px 12px rgba($primary-color, 0.3);
+    transition: all 0.3s ease;
+    
+    &:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 16px rgba($primary-color, 0.4);
+    }
+    
+    &:active {
+      animation: pulse 0.3s ease;
+    }
+    
+    mat-icon {
+      font-size: 24px;
+    }
+  }
+}
+.mat-mdc-dialog-container .mdc-dialog__surface {
+  background: linear-gradient(135deg, #ffffff, #f9f9f9);
+  border-radius: 16px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  padding: 24px;
+}
+
+.mat-mdc-dialog-title {
+  color: #FF6600; /* Naranja principal */
+  font-weight: 600;
+  font-size: 1.5rem;
+  margin-bottom: 16px;
+  border-bottom: 2px solid rgba(#FF6600, 0.1);
+  padding-bottom: 12px;
+}
+
+.mat-mdc-dialog-content {
+  color: #333333; /* Negro suave */
+  font-size: 1rem;
+  line-height: 1.5;
+  margin-bottom: 24px;
+}
+
+.mat-mdc-dialog-actions {
+  padding-top: 16px;
+  
+  .mat-mdc-button, .mat-mdc-raised-button {
+    border-radius: 8px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+  }
+
+  .mat-mdc-button {
+    color: #4A4A4A; /* Gris oscuro para el botón de cancelar */
+    
+    &:hover {
+      background-color: #f0f0f0;
+    }
+  }
+
+  .mat-mdc-raised-button[color="warn"] {
+    background: #d32f2f; /* Color de error */
+    color: #ffffff; /* Blanco para el texto */
+    box-shadow: 0 4px 10px rgba(#d32f2f, 0.3);
+    
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 15px rgba(#d32f2f, 0.4);
+    }
+  }
+}
+
+
+/* Responsive */
+@media (max-width: 768px) {
+  .container {
+    padding: 1rem;
+  }
+  
+  .header-centrado {
+    padding: 1.5rem 1rem;
+    
+    mat-card-title {
+      font-size: 1.5rem;
+    }
+  }
+  
+  .lista-titulo {
+    margin: 1.5rem 0 1rem;
+    padding: 0 1rem;
+  }
+  
+  .tabla-responsive {
+    margin: 0 1rem;
+  }
+  
+  .custom-paginator {
+    margin: 0 1rem; /* Adjust margin for mobile */
+    flex-direction: column; /* Stack elements vertically on small screens */
+    align-items: stretch; /* Stretch to fill width */
+    gap: 1rem; /* Space between info and controls */
+    padding: 1rem;
+
+    .paginator-info {
+      justify-content: center; /* Center info elements */
+    }
+
+    .paginator-controls {
+      justify-content: center; /* Center control buttons */
+    }
+  }
+  
+  .add-fab-container {
+    .fab-table-add {
+      top: -15px; /* Adjust for smaller screens */
+      right: 1.5rem; /* Adjust for smaller screens */
+      width: 45px;
+      height: 45px;
+      mat-icon {
+        font-size: 24px;
+      }
+    }
+  }
+}

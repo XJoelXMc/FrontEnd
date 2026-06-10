@@ -1,0 +1,1301 @@
+// ==================================
+//  1. Variables de Tema y Globales
+// ==================================
+:host {
+  // Variables para un fácil mantenimiento
+  --color-primario: #FF6600;
+  --color-acento: #4CAF50;
+  --color-fondo: #FFF8F5;
+  --color-borde: rgba(255, 102, 0, 0.15);
+  --color-secundario: #2A2A2A;
+  --color-texto: #444444;
+  --sombra-tarjeta: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --sombra-tarjeta-hover: 0 8px 24px rgba(255, 102, 0, 0.15);
+  --radio-borde: 16px;
+  --radio-borde-sm: 8px;
+  --transition-base: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+// ==================================
+//  2. Animaciones Keyframes
+// ==================================
+@keyframes slideInDown {
+  from { opacity: 0; transform: translateY(-30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideInUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes bounceIn {
+  0% { opacity: 0; transform: scale(0.3); }
+  50% { opacity: 1; transform: scale(1.1); }
+  70% { transform: scale(0.9); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+// ==================================
+//  3. Layout Base y Estilos de Formulario
+// ==================================
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+  background: linear-gradient(135deg, var(--color-fondo) 0%, #ffffff 100%);
+  min-height: 100vh;
+}
+
+h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--color-secundario);
+  text-align: center;
+  margin: 0 0 2rem 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  animation: slideInDown 0.6s ease-out;
+
+  &::before {
+    content: '';
+    display: block;
+    width: 4px;
+    height: 40px;
+    background: linear-gradient(135deg, var(--color-primario), darken(#FF6600, 10%));
+    border-radius: 2px;
+  }
+}
+
+// Estilo base para todas las tarjetas de pasos
+.section-card {
+  background: white;
+  border-radius: var(--radio-borde);
+  box-shadow: var(--sombra-tarjeta);
+  border: 1px solid var(--color-borde);
+  transition: all var(--transition-base);
+  overflow: hidden;
+  animation: slideInUp 0.5s ease-out;
+  margin-bottom: 2rem;
+
+  &:hover {
+    box-shadow: var(--sombra-tarjeta-hover);
+    transform: translateY(-2px);
+  }
+
+  mat-card-header {
+    background: linear-gradient(135deg, rgba(255, 102, 0, 0.05) 0%, rgba(255, 102, 0, 0.02) 100%);
+    padding: 1.5rem 2rem;
+    border-bottom: 1px solid var(--color-borde);
+  }
+
+  mat-card-title {
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: var(--color-secundario);
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+
+    mat-icon {
+      color: var(--color-primario);
+      font-size: 1.5rem;
+      width: 1.5rem;
+      height: 1.5rem;
+    }
+  }
+
+  mat-card-content {
+    padding: 2rem;
+  }
+}
+
+// Filas de formulario genéricas
+.form-row, .talla-row, .sponsor-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  align-items: start;
+
+  &.talla-row, &.sponsor-row {
+    grid-template-columns: 1fr 1fr auto;
+    gap: 1rem;
+  }
+}
+
+.full-width {
+  width: 100%;
+}
+
+// Estilos de Campos de Formulario (Material)
+mat-form-field {
+  &.mat-form-field-appearance-outline {
+    .mat-form-field-outline {
+      border-radius: var(--radio-borde-sm);
+      color: rgba(255, 102, 0, 0.2);
+    }
+
+    .mat-form-field-outline-thick {
+      color: var(--color-primario);
+    }
+
+    &.mat-focused {
+      .mat-form-field-outline-thick {
+        color: var(--color-primario);
+      }
+      .mat-form-field-label {
+        color: var(--color-primario);
+      }
+    }
+
+    .mat-form-field-wrapper {
+      padding-bottom: 0;
+    }
+
+    .mat-form-field-infix {
+      padding: 0.75em 0;
+      border-top: 0;
+    }
+
+    .mat-input-element {
+      color: var(--color-texto);
+      font-size: 1rem;
+      &::placeholder {
+        color: rgba(68, 68, 68, 0.4);
+      }
+    }
+
+    .mat-form-field-label {
+      color: rgba(68, 68, 68, 0.6);
+      font-weight: 500;
+    }
+  }
+}
+
+// Botones generales
+button {
+  &.mat-stroked-button {
+    border-radius: var(--radio-borde-sm);
+    border-color: rgba(255, 102, 0, 0.3);
+    color: var(--color-primario);
+    font-weight: 500;
+    transition: all var(--transition-base);
+
+    &:hover {
+      border-color: var(--color-primario);
+      background: rgba(255, 102, 0, 0.05);
+      transform: translateY(-1px);
+    }
+
+    mat-icon {
+      margin-right: 0.5rem;
+    }
+  }
+
+  &.mat-icon-button {
+    border-radius: var(--radio-borde-sm);
+    transition: all var(--transition-base);
+
+    &:hover {
+      transform: scale(1.1);
+    }
+  }
+
+  &.mat-raised-button {
+    border-radius: var(--radio-borde-sm);
+    padding: 0 2rem;
+    height: 48px;
+    font-weight: 600;
+    font-size: 1rem;
+    transition: all var(--transition-base);
+
+    &.color-accent {
+      background: linear-gradient(135deg, var(--color-acento), darken(#4CAF50, 10%));
+      box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+
+      &:hover:not([disabled]) {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4);
+      }
+    }
+
+    &.color-primary {
+      background: linear-gradient(135deg, var(--color-primario), darken(#FF6600, 10%));
+      box-shadow: 0 4px 12px rgba(255, 102, 0, 0.3);
+
+      &:hover:not([disabled]) {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(255, 102, 0, 0.4);
+      }
+    }
+
+    &[disabled] {
+      background: rgba(68, 68, 68, 0.3);
+      color: rgba(255, 255, 255, 0.7);
+      box-shadow: none;
+      transform: none;
+      cursor: not-allowed;
+    }
+  }
+}
+
+// Estado vacío genérico (para galerías)
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding: 3rem 2rem;
+  color: rgba(68, 68, 68, 0.6);
+  text-align: center;
+  grid-column: 1 / -1; // Ocupa todo el ancho en un grid
+
+  mat-icon {
+    font-size: 3rem;
+    width: 3rem;
+    height: 3rem;
+    color: rgba(255, 102, 0, 0.3);
+  }
+
+  span {
+    font-size: 1.1rem;
+  }
+}
+
+// ==================================
+//  4. PASO 1: Selección de Pack
+// ==================================
+.pack-gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 2rem;
+  margin-top: 1.5rem;
+}
+
+.pack-card {
+  background: white;
+  border: 2px solid var(--color-borde);
+  border-radius: var(--radio-borde);
+  overflow: hidden;
+  cursor: pointer;
+  transition: all var(--transition-base);
+  box-shadow: var(--sombra-tarjeta);
+  position: relative;
+  animation: scaleIn 0.5s ease-out;
+
+  &:hover {
+    box-shadow: var(--sombra-tarjeta-hover);
+    transform: translateY(-8px);
+    border-color: rgba(255, 102, 0, 0.3);
+
+    .pack-image-gallery img {
+      transform: scale(1.05);
+    }
+
+    .pack-detail-button {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  // Estilo cuando el pack está seleccionado
+  &.selected {
+    border-color: var(--color-primario);
+    background: linear-gradient(135deg, rgba(255, 102, 0, 0.05), rgba(255, 102, 0, 0.02));
+    box-shadow: 0 8px 32px rgba(255, 102, 0, 0.2);
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(135deg, var(--color-primario), darken(#FF6600, 15%));
+      z-index: 2;
+    }
+
+    &::after {
+      content: '✓';
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      width: 32px;
+      height: 32px;
+      background: var(--color-primario);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      font-weight: bold;
+      z-index: 3;
+      animation: bounceIn 0.3s ease-out;
+    }
+  }
+}
+
+// Botón de detalle del pack (lupa)
+.pack-detail-button {
+  position: absolute;
+  top: 0.75rem;
+  left: 0.75rem; // Movido a la izquierda para no chocar con el '✓'
+  z-index: 10;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border-radius: var(--radio-borde-sm);
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: all var(--transition-base);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+
+  &:hover {
+    background: white;
+    transform: scale(1.1);
+  }
+
+  mat-icon {
+    color: var(--color-primario);
+    font-size: 1.25rem;
+    width: 1.25rem;
+    height: 1.25rem;
+  }
+}
+
+// Galería de 3 imágenes del pack
+.pack-image-gallery {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 160px 80px;
+  gap: 2px;
+  height: 242px; // 160px + 80px + 2px gap
+  background: #f8f9fa;
+  position: relative;
+
+  .pack-image-item {
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(135deg, #f5f5f5, #e9ecef);
+
+    &:first-child {
+      grid-column: 1 / 3;
+      grid-row: 1 / 2;
+    }
+    &:nth-child(2) {
+      grid-column: 1 / 2;
+      grid-row: 2 / 3;
+    }
+    &:nth-child(3) {
+      grid-column: 2 / 3;
+      grid-row: 2 / 3;
+    }
+    &:nth-child(4) {
+      display: none; // Ocultamos el cuarto elemento
+    }
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: all var(--transition-base);
+      background: white;
+    }
+
+    .image-overlay {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: linear-gradient(transparent, rgba(42, 42, 42, 0.8));
+      color: white;
+      padding: 0.5rem;
+      font-size: 0.75rem;
+      font-weight: 500;
+      transform: translateY(100%);
+      transition: transform var(--transition-base);
+      backdrop-filter: blur(5px);
+    }
+
+    &:hover {
+      .image-overlay {
+        transform: translateY(0);
+      }
+      img {
+        transform: scale(1.08);
+      }
+    }
+  }
+
+  // Placeholder para cuando no hay imágenes
+  .placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, rgba(255, 102, 0, 0.1), rgba(255, 102, 0, 0.05));
+    grid-column: 1 / 3; // Ocupa todo el espacio
+    grid-row: 1 / 3;
+
+    mat-icon {
+      font-size: 3rem;
+      width: 3rem;
+      height: 3rem;
+      color: rgba(255, 102, 0, 0.3);
+    }
+  }
+}
+
+// Info de la tarjeta del pack
+.pack-info {
+  padding: 1.5rem;
+  background: white;
+
+  h3 {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--color-secundario);
+    margin: 0 0 0.75rem 0;
+    line-height: 1.3;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  p {
+    font-size: 0.95rem;
+    color: var(--color-texto);
+    margin: 0 0 1rem 0;
+    line-height: 1.5;
+    opacity: 0.8;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  }
+
+  .pack-price {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--color-acento);
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+
+    .price-unit {
+      font-size: 0.9rem;
+      font-weight: 400;
+      color: rgba(68, 68, 68, 0.6);
+    }
+  }
+
+
+// ==================================
+//  5. PASO 2: Selección de Telas
+// ==================================
+.parte-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--color-secundario);
+  margin: 0 0 1.5rem 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid rgba(255, 102, 0, 0.1);
+
+  &::before {
+    content: '';
+    display: block;
+    width: 3px;
+    height: 20px;
+    background: var(--color-primario);
+    border-radius: 2px;
+  }
+}
+
+// Estilos para la lista de opciones de tela
+.tela-option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 0;
+  width: 100%;
+
+  .tela-info {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex: 1;
+  }
+
+  .tela-color-swatch {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    border: 2px solid rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    flex-shrink: 0;
+    transition: all var(--transition-base);
+  }
+
+  .tela-details {
+    flex: 1;
+    .tela-name {
+      font-weight: 600;
+      color: var(--color-secundario);
+      font-size: 0.95rem;
+      line-height: 1.2;
+      margin-bottom: 0.1rem;
+    }
+    .tela-color {
+      font-size: 0.8rem;
+      color: rgba(68, 68, 68, 0.7);
+      line-height: 1.2;
+    }
+  }
+}
+
+// Estilos para el panel desplegable de Mat-Select
+.mat-select-panel {
+  .mat-option {
+    &.mat-selected {
+      .tela-color-swatch {
+        border-color: var(--color-primario);
+        box-shadow: 0 0 0 2px rgba(255, 102, 0, 0.2);
+      }
+      .tela-name {
+        color: var(--color-primario);
+        font-weight: 700;
+      }
+    }
+
+    &:hover:not(.mat-option-disabled) {
+      background: rgba(255, 102, 0, 0.05);
+      .tela-color-swatch {
+        transform: scale(1.05);
+      }
+    }
+  }
+}
+
+// Estilos para el valor seleccionado en Mat-Select
+.mat-select-value-text {
+  .selected-tela {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+
+    .tela-color-swatch {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      border: 1px solid rgba(0, 0, 0, 0.1);
+    }
+    .selected-tela-name {
+      font-weight: 500;
+    }
+  }
+}
+
+// ==================================
+//  6. PASO 3: Selección de Cuello
+// ==================================
+.cuello-gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 16px;
+  padding-top: 8px;
+}
+
+.cuello-card {
+  width: 100%; // Se adapta al grid
+  border: 2px solid var(--color-borde);
+  border-radius: var(--radio-borde);
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--sombra-tarjeta-hover);
+  }
+
+  &.selected {
+    border-color: var(--color-primario);
+    box-shadow: 0 4px 12px rgba(255, 102, 0, 0.3);
+  }
+}
+
+.cuello-image-wrapper {
+  width: 100%;
+  height: 130px;
+  background-color: #f9f9f9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .cuello-image {
+    width: 100%;
+    height: 100%;
+    object-fit: contain; // 'contain' es mejor para cuellos
+  }
+}
+
+.cuello-info {
+  padding: 12px;
+  text-align: center;
+  background-color: #ffffff;
+
+  .cuello-name {
+    font-size: 1rem;
+    font-weight: 500;
+    margin: 0 0 4px 0;
+    color: var(--color-secundario);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .cuello-price {
+    font-size: 0.9rem;
+    font-weight: bold;
+    margin: 0;
+    color: var(--color-acento); // Precio en verde
+  }
+}
+
+// ==================================
+//  7. PASO 4: Opciones Adicionales
+// ==================================
+.options-row {
+  display: flex;
+  gap: 2rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+
+mat-checkbox {
+  &.mat-checkbox-checked {
+    .mat-checkbox-background {
+      background-color: var(--color-primario);
+    }
+  }
+}
+
+mat-divider {
+  margin: 1.5rem 0;
+  border-top-color: var(--color-borde);
+}
+
+.sponsors-list {
+  h4 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--color-secundario);
+    margin: 0 0 1.5rem 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+
+    &::before {
+      content: '🏆';
+      font-size: 1.1rem;
+    }
+  }
+}
+
+// ==================================
+//  8. PASO 5: Tallas y Cantidades
+// ==================================
+// (Estilos ya cubiertos por .talla-row en la sección 3)
+
+
+// ==================================
+//  9. Acción Final
+// ==================================
+.actions {
+  display: flex;
+  justify-content: center;
+  margin-top: 2rem;
+  animation: slideInUp 0.6s ease-out 0.2s both;
+
+  button {
+    min-width: 200px;
+  }
+}
+
+// ==================================
+//  10. Estilos de Modales
+// ==================================
+
+// Títulos de modales
+.mat-dialog-title {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 0;
+  padding: 1.5rem 2rem;
+  background: linear-gradient(135deg, rgba(255, 102, 0, 0.05) 0%, rgba(255, 102, 0, 0.02) 100%);
+  border-bottom: 1px solid var(--color-borde);
+
+  mat-icon {
+    color: var(--color-primario);
+  }
+}
+
+// Acciones de modales
+.mat-dialog-actions {
+  padding: 1.5rem 2rem;
+  background: rgba(255, 102, 0, 0.02);
+  border-top: 1px solid var(--color-borde);
+  margin: 0;
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+
+  button {
+    min-width: 120px;
+  }
+}
+
+// Contenido Modal: Detalle de Imagen
+.imagen-detalle-content {
+  padding: 1rem 0;
+  text-align: center;
+
+  .imagen-modal-grande {
+    max-width: 100%;
+    max-height: 60vh;
+    width: auto;
+    height: auto;
+    border-radius: var(--radio-borde-sm);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+    object-fit: contain;
+  }
+}
+
+// Contenido Modal: Detalle de Pack
+.pack-detalle-content {
+  max-height: 70vh;
+  overflow-y: auto;
+  padding: 1rem 0; // Padding se maneja en el contenido
+
+  h3 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--color-secundario);
+    margin: 1.5rem 2rem 1rem 2rem; // Padding horizontal
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+
+    &::before {
+      content: '';
+      display: block;
+      width: 3px;
+      height: 18px;
+      background: var(--color-primario);
+      border-radius: 2px;
+    }
+  }
+
+  .molde-list-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-top: 1rem;
+    padding: 0 2rem 1rem 2rem; // Padding horizontal
+  }
+
+  .molde-list-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem;
+    background: rgba(255, 102, 0, 0.05);
+    border-radius: var(--radio-borde-sm);
+    border: 1px solid var(--color-borde);
+    transition: all var(--transition-base);
+    cursor: pointer;
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--sombra-tarjeta);
+      border-color: rgba(255, 102, 0, 0.3);
+    }
+
+    .molde-list-imagen {
+      width: 100%;
+      height: 120px;
+      object-fit: cover;
+      border-radius: var(--radio-borde-sm);
+      background: white;
+    }
+
+    .molde-list-nombre {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--color-secundario);
+      text-align: center;
+      line-height: 1.3;
+    }
+  }
+}
+
+// Contenido Modal: Resumen
+.resumen-dialog {
+  .mat-dialog-container {
+    border-radius: var(--radio-borde);
+    padding: 0;
+    overflow: hidden;
+  }
+}
+
+.resumen-content {
+  padding: 2rem;
+  max-height: 70vh;
+  overflow-y: auto;
+
+  h4 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--color-secundario);
+    margin: 1.5rem 0 1rem 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+
+    &::before {
+      content: '';
+      display: block;
+      width: 3px;
+      height: 18px;
+      background: var(--color-primario);
+      border-radius: 2px;
+    }
+    &:first-child {
+      margin-top: 0;
+    }
+  }
+
+  .resumen-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+
+    li {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.75rem 0;
+      border-bottom: 1px solid rgba(255, 102, 0, 0.1);
+      transition: all var(--transition-base);
+
+      &:hover {
+        background: rgba(255, 102, 0, 0.02);
+        padding-left: 0.5rem;
+      }
+      &:last-child {
+        border-bottom: none;
+      }
+    }
+
+    .ajuste-item, .adicional-item {
+      color: var(--color-texto);
+      font-size: 0.9rem;
+      .descripcion {
+        padding-left: 1rem;
+        opacity: 0.8;
+      }
+      .monto {
+        font-weight: 600;
+        color: var(--color-acento);
+      }
+    }
+  }
+
+  .total-final {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: linear-gradient(135deg, rgba(255, 102, 0, 0.05), rgba(255, 102, 0, 0.02));
+    padding: 1.5rem;
+    border-radius: var(--radio-borde-sm);
+    margin: 1.5rem 0;
+    border: 1px solid rgba(255, 102, 0, 0.1);
+
+    h3 {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--color-acento);
+      margin: 0;
+    }
+  }
+
+  .nota-final {
+    font-size: 0.85rem;
+    color: rgba(68, 68, 68, 0.6);
+    text-align: center;
+    margin-top: 1.5rem;
+    padding: 1rem;
+    background: rgba(255, 102, 0, 0.05);
+    border-radius: var(--radio-borde-sm);
+    border-left: 4px solid var(--color-primario);
+  }
+}
+
+// Estado vacío (usado en modales)
+.empty-state-modal {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding: 3rem 2rem;
+  color: rgba(68, 68, 68, 0.6);
+  text-align: center;
+  background: rgba(255, 102, 0, 0.05);
+  border-radius: var(--radio-borde-sm);
+  border: 1px dashed var(--color-borde);
+
+  mat-icon {
+    font-size: 3rem;
+    width: 3rem;
+    height: 3rem;
+    color: rgba(255, 102, 0, 0.3);
+  }
+
+  span {
+    font-size: 1rem;
+    font-weight: 500;
+  }
+}
+
+// ==================================
+//  11. Estilos Pantalla Inicio (NUEVO)
+// ==================================
+.inicio-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  text-align: center;
+
+  .subtitle {
+    font-size: 1.2rem;
+    color: rgba(68, 68, 68, 0.6);
+    margin-bottom: 3rem;
+  }
+}
+
+.opciones-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  width: 100%;
+  max-width: 800px;
+}
+
+.opcion-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 3rem 2rem;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 2px solid transparent;
+
+  &:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 12px 30px rgba(255, 102, 0, 0.15);
+    border-color: rgba(255, 102, 0, 0.3);
+
+    .icon-circle {
+      transform: scale(1.1) rotate(5deg);
+    }
+  }
+
+  // Estilo específico para la tarjeta de Carga
+  &.load {
+    cursor: default; // Porque el click principal es en el input
+    &:hover { transform: none; } // Desactivar hover global si interactúa con input
+  }
+
+  .icon-circle {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+    transition: transform 0.4s ease;
+
+    mat-icon {
+      font-size: 40px;
+      width: 40px;
+      height: 40px;
+    }
+
+    &.new {
+      background: rgba(76, 175, 80, 0.1);
+      color: #4CAF50;
+    }
+
+    &.search {
+      background: rgba(255, 102, 0, 0.1);
+      color: var(--color-primario);
+    }
+  }
+
+  h3 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    color: var(--color-secundario);
+  }
+
+  p {
+    color: var(--color-texto);
+    margin-bottom: 2rem;
+    opacity: 0.8;
+  }
+}
+
+.search-box {
+  width: 100%;
+
+  mat-form-field {
+    width: 100%;
+  }
+}
+
+// ==================================
+//  12. Ajustes Header Formulario (NUEVO)
+// ==================================
+.form-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 2rem;
+
+  button {
+    margin-right: 1rem;
+    background: white;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  }
+
+  h1 {
+    margin: 0; // Resetear margen del h1 global
+    font-size: 2rem;
+  }
+
+  .spacer { flex: 1; }
+}
+
+// ==================================
+//  13. MEDIA QUERIES (Globales)
+// ==================================
+
+// --- Responsive para Layout Base ---
+@media (max-width: 768px) {
+  .container {
+    padding: 1rem;
+  }
+
+  h1 {
+    font-size: 2rem;
+    flex-direction: column;
+    gap: 0.5rem;
+
+    &::before {
+      height: 3px;
+      width: 60px;
+    }
+  }
+
+  .section-card {
+    mat-card-header {
+      padding: 1rem 1.5rem;
+    }
+    mat-card-content {
+      padding: 1.5rem;
+    }
+  }
+
+  .form-row, .talla-row, .sponsor-row {
+    grid-template-columns: 1fr;
+
+    &.talla-row, &.sponsor-row {
+      grid-template-columns: 1fr auto;
+    }
+  }
+
+  // Ajustes Header Formulario
+  .form-header {
+    flex-direction: column;
+    gap: 1rem;
+    align-items: flex-start;
+
+    h1 {
+      font-size: 1.8rem;
+    }
+    .spacer { display: none; }
+  }
+
+  // Ajustes Inicio
+  .opciones-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+// --- Responsive para Paso 1 (Pack) ---
+@media (max-width: 1024px) {
+  .pack-gallery {
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .pack-gallery {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  .pack-image-gallery {
+    grid-template-rows: 140px 70px;
+    height: 212px;
+  }
+  .pack-info {
+    padding: 1.25rem;
+    h3 { font-size: 1.2rem; }
+    .pack-price { font-size: 1.1rem; }
+  }
+  .pack-detail-button {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 480px) {
+  .pack-image-gallery {
+    grid-template-rows: 120px 60px;
+    height: 182px;
+  }
+  .pack-info {
+    padding: 1rem;
+    h3 { font-size: 1.1rem; }
+    p { font-size: 0.9rem; }
+  }
+}
+
+// --- Responsive para Paso 2 (Telas) ---
+@media (max-width: 768px) {
+  .tela-option {
+    .tela-info {
+      gap: 0.5rem;
+    }
+    .tela-color-swatch {
+      width: 20px;
+      height: 20px;
+    }
+    .tela-details {
+      .tela-name {
+        font-size: 0.9rem;
+      }
+      .tela-color {
+        font-size: 0.75rem;
+      }
+    }
+  }
+}
+
+// --- Responsive para Paso 3 (Cuellos) ---
+@media (max-width: 480px) {
+  .cuello-gallery {
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+    gap: 12px;
+  }
+
+  .cuello-card {
+    border-radius: var(--radio-borde-sm);
+  }
+
+  .cuello-image-wrapper {
+    height: 100px;
+  }
+
+  .cuello-info {
+    padding: 8px;
+    .cuello-name {
+      font-size: 0.9rem;
+    }
+    .cuello-price {
+      font-size: 0.85rem;
+    }
+  }
+}
+
+// --- Responsive para Paso 4 (Opciones) ---
+@media (max-width: 768px) {
+  .options-row {
+    flex-direction: column;
+    gap: 1rem;
+  }
+}
+
+// --- Responsive para Modales ---
+@media (max-width: 768px) {
+  .mat-dialog-actions {
+    flex-direction: column;
+    button {
+      width: 100%;
+    }
+  }
+
+  .pack-detalle-content {
+    h3 {
+      margin-left: 1.5rem;
+      margin-right: 1.5rem;
+    }
+    .molde-list-container {
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      padding: 0 1.5rem 1rem 1.5rem;
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .resumen-content {
+    padding: 1rem;
+  }
+
+  .total-final {
+    flex-direction: column;
+    gap: 0.5rem;
+    text-align: center;
+  }
+
+  .molde-list-container {
+    grid-template-columns: 1fr !important;
+  }
+}

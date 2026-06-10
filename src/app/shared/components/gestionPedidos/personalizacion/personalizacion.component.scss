@@ -1,0 +1,377 @@
+// ==========================================
+// 1. LAYOUT GENERAL
+// ==========================================
+.personalizacion-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.layout-designer {
+  display: grid;
+  grid-template-columns: 280px 1fr; // Panel lateral un poco más ancho
+  gap: 2rem;
+  margin-top: 2rem;
+  align-items: start;
+}
+
+// Estado de Carga
+.loading-state {
+  text-align: center;
+  padding: 3rem;
+  background: #f5f5f5;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  color: #666;
+}
+
+// ==========================================
+// 2. BARRA LATERAL (HERRAMIENTAS)
+// ==========================================
+.sidebar-tools {
+  background: #fff;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  border: 1px solid #eee;
+  position: sticky;
+  top: 20px; // Se queda fija al hacer scroll
+
+  h3 {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 0;
+    font-size: 1.1rem;
+    color: #333;
+  }
+
+  .upload-btn-wrapper {
+    margin: 1rem 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    button { width: 100%; }
+  }
+
+  .upload-spinner {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+    background: #e3f2fd;
+    border-radius: 4px;
+    color: #1565c0;
+    margin-bottom: 10px;
+  }
+
+  .logos-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: 1rem;
+    max-height: 400px;
+    overflow-y: auto;
+    padding-right: 5px; // Espacio para scrollbar
+
+    .logo-thumbnail {
+      position: relative;
+      width: 100%;
+      height: 90px;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      background: #f9f9f9;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: grab;
+      transition: all 0.2s;
+      overflow: hidden;
+      padding: 5px;
+
+      &:hover {
+        border-color: #FF6600;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        
+        .use-buttons { opacity: 1; }
+      }
+
+      &:active { cursor: grabbing; }
+
+      img {
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: contain;
+        pointer-events: none;
+      }
+
+      // Botón flotante sobre el logo
+      .use-buttons {
+        position: absolute;
+        top: 0;
+        right: 0;
+        left: 0;
+        bottom: 0;
+        background: rgba(255, 255, 255, 0.8);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0; // Oculto por defecto
+        transition: opacity 0.2s;
+      }
+    }
+
+    .empty-logos {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 2rem 0;
+      color: #999;
+      font-size: 0.9rem;
+      border: 2px dashed #e0e0e0;
+      border-radius: 8px;
+    }
+  }
+}
+
+// ==========================================
+// 3. ÁREA CENTRAL (LIENZO / MOLDES)
+// ==========================================
+.canvas-area {
+  display: flex;
+  gap: 3rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.molde-wrapper {
+  text-align: center;
+  width: 100%;
+  max-width: 500px; // Ancho máximo del lienzo
+
+  h4 {
+    margin-bottom: 1rem;
+    color: #555;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+}
+
+// ✅ CAMBIO CRÍTICO PARA RESPONSIVE Y COORDENADAS %
+.molde-container {
+  position: relative;
+  width: 100%;          // Ocupa el ancho disponible del wrapper
+  height: auto;         // La altura la define la imagen
+  border: 2px dashed #ccc;
+  background: #ffffff;
+  border-radius: 8px;
+  overflow: hidden;     // Recorta logos que se salgan
+  transition: border-color 0.3s;
+
+  &:hover {
+    border-color: #FF6600;
+  }
+
+  // Imagen de fondo (Camiseta)
+  .bg-molde {
+    width: 100%;
+    height: auto;       // Mantiene aspect ratio
+    display: block;     // Evita espacio blanco abajo
+    pointer-events: none;
+    user-select: none;
+  }
+
+  // Logo arrastrable
+  .logo-draggable {
+    position: absolute;
+    width: 25%;         // ✅ Tamaño relativo al ancho de la camiseta
+    max-width: 150px;   // Tope máximo
+    min-width: 40px;    // Tope mínimo
+    cursor: move;
+    z-index: 10;
+    // border: 1px dashed rgba(0, 0, 255, 0.3); // Útil para debug
+
+    img {
+      width: 100%;
+      display: block;
+      pointer-events: none; // Clave para que el drag funcione bien
+    }
+
+    // Botón eliminar (X)
+    .btn-delete {
+      position: absolute;
+      top: -12px;
+      right: -12px;
+      background: #ff4444;
+      color: white;
+      border-radius: 50%;
+      border: 2px solid white;
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+      opacity: 0;
+      transition: opacity 0.2s, transform 0.2s;
+      z-index: 20;
+
+      mat-icon {
+        font-size: 16px;
+        width: 16px;
+        height: 16px;
+      }
+
+      &:hover {
+        transform: scale(1.1);
+        background: #cc0000;
+      }
+    }
+
+    // Mostrar botón eliminar al pasar el mouse sobre el logo
+    &:hover {
+      z-index: 15; // Traer al frente
+      .btn-delete { opacity: 1; }
+      outline: 2px dashed #4CAF50; // Resaltar selección
+    }
+
+    &:active {
+      cursor: grabbing;
+    }
+  }
+}
+
+// ==========================================
+// 4. NÓMINA DE JUGADORES
+// ==========================================
+.nomina-section {
+  margin-top: 3rem;
+  background: white;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+  border: 1px solid #eee;
+
+  .section-header {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+
+    h2 {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 0;
+      font-size: 1.5rem;
+      color: #2A2A2A;
+    }
+    p { margin: 0; color: #666; }
+  }
+
+  .table-responsive {
+    overflow-x: auto;
+  }
+
+  .nomina-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 8px; // Espacio entre filas
+
+    th {
+      text-align: left;
+      padding: 1rem;
+      background: #f5f5f5;
+      color: #555;
+      font-weight: 600;
+      
+      &:first-child { border-top-left-radius: 8px; border-bottom-left-radius: 8px; }
+      &:last-child { border-top-right-radius: 8px; border-bottom-right-radius: 8px; }
+    }
+
+    td {
+      padding: 0.5rem 1rem;
+      background: white;
+      border-top: 1px solid #eee;
+      border-bottom: 1px solid #eee;
+      
+      &:first-child { border-left: 1px solid #eee; border-top-left-radius: 8px; border-bottom-left-radius: 8px; }
+      &:last-child { border-right: 1px solid #eee; border-top-right-radius: 8px; border-bottom-right-radius: 8px; }
+    }
+
+    .talla-badge {
+      background: #2A2A2A;
+      color: white;
+      padding: 4px 10px;
+      border-radius: 4px;
+      font-weight: bold;
+      font-size: 0.9rem;
+      display: inline-block;
+      min-width: 30px;
+      text-align: center;
+    }
+
+    .dense-field {
+      width: 100%;
+      font-size: 0.95rem;
+      
+      // Quitar padding extra de Material para tablas
+      ::ng-deep .mat-mdc-form-field-subscript-wrapper {
+        display: none; // Ocultar espacio de error si no es crítico para ahorrar espacio
+      }
+      &.ng-invalid.ng-touched ::ng-deep .mat-mdc-form-field-subscript-wrapper {
+        display: block; // Mostrar solo si hay error
+      }
+    }
+  }
+}
+
+// ==========================================
+// 5. BOTÓN FINAL
+// ==========================================
+.actions-final {
+  margin-top: 2rem;
+  display: flex;
+  justify-content: flex-end;
+  padding-bottom: 2rem;
+
+  .btn-finalizar {
+    padding: 0.8rem 3rem;
+    font-size: 1.1rem;
+    background: linear-gradient(135deg, #FF6600, #ff8c00);
+    box-shadow: 0 4px 15px rgba(255, 102, 0, 0.3);
+    transition: transform 0.2s;
+
+    &:hover:not([disabled]) {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(255, 102, 0, 0.4);
+    }
+  }
+}
+
+// ==========================================
+// 6. RESPONSIVE (MÓVIL)
+// ==========================================
+@media (max-width: 900px) {
+  .layout-designer {
+    grid-template-columns: 1fr; // Una sola columna
+  }
+
+  .sidebar-tools {
+    position: static; // Ya no fijo
+    margin-bottom: 2rem;
+  }
+
+  .canvas-area {
+    gap: 2rem;
+  }
+  
+  .molde-container {
+    max-width: 100%; // Ocupar todo el ancho en móvil
+  }
+}

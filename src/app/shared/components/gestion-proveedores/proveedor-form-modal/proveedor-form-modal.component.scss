@@ -1,0 +1,350 @@
+/* Variables de color */
+$primary: #ff6600;
+$primary-light: lighten($primary, 12%);
+$primary-dark: darken($primary, 10%);
+$white: #ffffff;
+$black: #222222;
+// Adjusting grays to ensure better contrast or removing if not strictly necessary
+$gray-light: #f5f5f5; // Still useful for section backgrounds
+$gray-medium: #cccccc; // Lighter gray for borders, less intrusive than original
+$gray-dark: #444444; // Darker gray, closer to black for better contrast on white
+$text-dark: $black; // Ensuring main text is black for maximum contrast
+$error: #d32f2f;
+
+/* Animaciones */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* Estructura del modal */
+.mat-dialog-container {
+  padding: 0 !important;
+  border-radius: 12px !important;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2) !important;
+  animation: fadeIn 0.3s ease-out forwards;
+}
+
+/* Encabezado con icono */
+.mat-dialog-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  padding: 20px 24px;
+  margin: 0;
+  background: linear-gradient(135deg, $primary, $primary-dark);
+  color: $white !important; // Ensure title is white
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  mat-icon {
+    font-size: 28px;
+    width: 28px;
+    height: 28px;
+    color: $white; // Icon in title is white
+  }
+
+  &::after {
+    content: '';
+    display: block;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: rgba($white, 0.2);
+  }
+}
+
+/* Contenido del formulario */
+.formulario {
+  padding: 24px;
+  background: $white; // Background is white
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  max-height: 65vh;
+  overflow-y: auto;
+
+  /* Scrollbar personalizada */
+  &::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: rgba($primary, 0.6); // Use primary color for scrollbar
+    border-radius: 4px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: rgba($black, 0.05);
+  }
+}
+
+/* Campos del formulario con iconos */
+.mat-form-field {
+  width: 100%;
+  margin-bottom: 0.5rem;
+
+  /* Iconos de los campos */
+  .mat-form-field-prefix,
+  .mat-form-field-suffix {
+    mat-icon {
+      color: $primary; // Icons are primary color
+      margin-right: 8px;
+      font-size: 22px;
+    }
+  }
+
+  &.mat-form-field-appearance-outline {
+    .mat-form-field-outline {
+      color: rgba($black, 0.2); // Outline a bit more visible
+    }
+
+    .mat-form-field-outline-thick {
+      color: $primary; // Focus outline is primary color
+    }
+
+    .mat-form-field-label {
+      color: $black; // Labels are black for clear visibility
+      font-weight: 500;
+    }
+
+    .mat-input-element {
+      color: $black; // Input text is black for maximum contrast
+      font-weight: 500;
+      caret-color: $primary;
+    }
+
+    &.mat-focused {
+      .mat-form-field-label {
+        color: $primary; // Focused label is primary color
+      }
+    }
+  }
+
+  .mat-error {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.85rem;
+    color: $error;
+    margin-top: 5px;
+
+    mat-icon {
+      font-size: 18px;
+    }
+  }
+}
+
+/* Sección de materiales mejorada */
+.materiales-section {
+  margin-top: 1rem;
+  background: $gray-light; // Still use a light gray for background
+  padding: 20px;
+  border-radius: 10px;
+  border: 1px solid rgba($primary, 0.2); // Border slightly more visible
+
+  .mat-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: $primary-dark; // Label for section is dark primary
+    font-weight: 600;
+    font-size: 1.1rem;
+    margin-bottom: 16px;
+
+    mat-icon {
+      color: $primary; // Icon within section label is primary
+      font-size: 24px;
+    }
+  }
+
+  .lista-materiales {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 16px 0;
+    max-height: 200px;
+    overflow-y: auto;
+
+    .material-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: $white; // Item background white
+      padding: 12px 16px;
+      margin-bottom: 10px;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+      transition: all 0.3s ease;
+
+      &:hover {
+        transform: translateX(5px);
+        box-shadow: 0 4px 8px rgba($primary, 0.1);
+      }
+
+      .material-nombre {
+        font-weight: 500;
+        color: $black; // Material name is black
+      }
+
+      button {
+        transition: all 0.3s ease;
+
+        &:hover {
+          transform: scale(1.2);
+          background: rgba($error, 0.1) !important;
+        }
+
+        mat-icon {
+          color: $error;
+        }
+      }
+    }
+  }
+
+  .material-input {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    mat-form-field {
+      flex: 1;
+    }
+
+    button[mat-stroked-button] {
+      border-color: $primary; // Border is primary
+      color: $primary; // Text is primary
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.3s ease;
+
+      &:hover {
+        background: rgba($primary, 0.08); // Subtle hover effect
+        transform: translateY(-2px);
+      }
+
+      mat-icon {
+        color: $primary; // Icon is primary
+      }
+    }
+  }
+}
+
+/* Acciones del diálogo con iconos */
+.mat-dialog-actions {
+  padding: 16px 24px;
+  background: $white; // Actions background is white
+  border-top: 1px solid $gray-medium; // Border is a lighter gray
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+
+  button {
+    min-width: 100px;
+    padding: 0 24px;
+    height: 44px;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+
+    &[mat-button] {
+      color: $black; // Cancel button text is black
+      border: 1px solid $black; // Cancel button border is black
+
+      mat-icon {
+        color: $black; // Cancel icon is black
+      }
+
+      &:hover {
+        background: rgba($black, 0.08); // Darker hover for black button
+        color: $black;
+      }
+    }
+
+    &[mat-flat-button] {
+      background: $primary; // Primary button is primary color
+      color: $white; // Primary button text is white
+      box-shadow: 0 2px 8px rgba($primary, 0.3);
+
+      mat-icon {
+        color: $white; // Primary button icon is white
+      }
+
+      &:hover {
+        background: $primary-dark; // Darken on hover
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba($primary, 0.4);
+      }
+
+      &:active {
+        animation: pulse 0.3s ease;
+      }
+    }
+  }
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .mat-dialog-container {
+    max-width: 95vw !important;
+    width: 95vw !important;
+  }
+
+  .mat-dialog-title {
+    padding: 16px;
+    font-size: 1.3rem;
+  }
+
+  .formulario {
+    padding: 16px;
+    gap: 1.2rem;
+  }
+
+  .materiales-section {
+    padding: 16px;
+
+    .material-input {
+      flex-direction: column;
+
+      button[mat-stroked-button] {
+        width: 100%;
+      }
+    }
+  }
+
+  .mat-dialog-actions {
+    flex-direction: column-reverse;
+    gap: 8px;
+
+    button {
+      width: 100%;
+    }
+  }
+}

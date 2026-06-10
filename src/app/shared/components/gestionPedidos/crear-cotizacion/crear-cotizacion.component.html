@@ -1,0 +1,333 @@
+<div class="container">
+
+  <div *ngIf="mostrarOpcionesInicio" class="inicio-container" @fadeIn>
+    <h1>
+      <mat-icon>shopping_bag</mat-icon>
+      Bienvenido al Cotizador
+    </h1>
+    <p class="subtitle">Comienza a diseñar tu pedido ahora mismo.</p>
+
+    <div class="opciones-grid" style="justify-content: center;">
+      <mat-card class="opcion-card" (click)="iniciarNuevaCotizacion()">
+        <div class="icon-circle new">
+          <mat-icon>add_circle_outline</mat-icon>
+        </div>
+        <h3>Nueva Cotización</h3>
+        <p>Explora nuestros packs y crea un diseño desde cero.</p>
+        <button mat-raised-button color="primary">Comenzar</button>
+      </mat-card>
+    </div>
+  </div>
+
+  <div *ngIf="!mostrarOpcionesInicio" [formGroup]="cotizacionForm" @fadeIn>
+
+    <div class="form-header">
+      <button mat-icon-button (click)="volverAlInicio()" matTooltip="Volver al inicio">
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+      <h1>
+        <mat-icon>{{ modoEdicion ? 'edit_note' : 'request_quote' }}</mat-icon>
+        {{ modoEdicion ? 'Modificar Cotización' : 'Solicitar Cotización' }}
+      </h1>
+      <div class="spacer"></div>
+    </div>
+
+    <mat-card class="section-card" formGroupName="clienteInfo">
+      <mat-card-header>
+        <mat-card-title>
+          <mat-icon>account_circle</mat-icon>
+          {{ esAdmin ? 'Datos del Cliente (Tienda)' : 'Mis Datos' }}
+        </mat-card-title>
+      </mat-card-header>
+      
+      <mat-card-content>
+        <div class="form-row">
+          <mat-form-field appearance="outline">
+            <mat-label>Nombre</mat-label>
+            <input matInput formControlName="nombre">
+            <mat-error *ngIf="cotizacionForm.get('clienteInfo.nombre')?.hasError('required')">Requerido</mat-error>
+          </mat-form-field>
+          
+          <mat-form-field appearance="outline">
+            <mat-label>Apellido</mat-label>
+            <input matInput formControlName="apellido">
+            <mat-error *ngIf="cotizacionForm.get('clienteInfo.apellido')?.hasError('required')">Requerido</mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="form-row">
+          <mat-form-field appearance="outline">
+            <mat-label>Email (para enviar código)</mat-label>
+            <input matInput formControlName="email" type="email">
+            <mat-error *ngIf="cotizacionForm.get('clienteInfo.email')?.hasError('email')">Email inválido</mat-error>
+            <mat-error *ngIf="cotizacionForm.get('clienteInfo.email')?.hasError('required')">Requerido</mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Celular</mat-label>
+            <input matInput formControlName="celular" type="tel">
+            <mat-error *ngIf="cotizacionForm.get('clienteInfo.celular')?.hasError('required')">Requerido</mat-error>
+          </mat-form-field>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="section-card">
+      <mat-card-header>
+        <mat-card-title>Paso 1: Selecciona un Pack</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="pack-gallery">
+
+          <div *ngFor="let pack of packs"
+               class="pack-card"
+               [class.selected]="packSeleccionado?.id === pack.id"
+               (click)="onPackSeleccionado(pack.id)">
+
+            <button mat-icon-button color="accent"
+                    class="pack-detail-button"
+                    (click)="abrirDetallePack(pack, $event)"
+                    matTooltip="Ver detalles del pack">
+              <mat-icon>zoom_in</mat-icon>
+            </button>
+
+            <div class="pack-image-gallery">
+              <div *ngFor="let comp of pack.componentes.slice(0, 4)" class="pack-image-item">
+                <img [src]="comp.imagenes[0] || 'https://placehold.co/150x150/EFEFEF/AAAAAA&text=Molde'"
+                     [alt]="comp.nombre"
+                     class="miniatura-molde"
+                     (click)="abrirDetalleImagen(comp, $event)">
+                <div class="image-overlay">
+                  {{ comp.nombre }}
+                </div>
+              </div>
+              <div *ngIf="!pack.componentes.length" class="pack-image-item placeholder">
+                <mat-icon>inventory_2</mat-icon>
+              </div>
+            </div>
+
+            <div class="pack-info">
+              <h3>{{ pack.nombre }}</h3>
+              <p *ngIf="pack.descripcion">
+                {{ pack.descripcion | slice:0:100 }}{{ (pack.descripcion.length || 0) > 100 ? '...' : '' }}
+              </p>
+              <p class="pack-price">{{ pack.precio | currency:'Bs. ' }}</p>
+            </div>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <ng-container *ngIf="packSeleccionado">
+
+      <mat-card class="section-card" formGroupName="seleccionTelas" @fadeIn>
+        <mat-card-header>
+          <mat-card-title>Paso 2: Selecciona las Telas</mat-card-title>
+        </mat-card-header>
+
+        <mat-card-content>
+          <div *ngIf="packSeleccionado.incluyeParteSuperior" formGroupName="superior">
+            <h4 class="parte-title">Parte Superior</h4>
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Tela para Parte Superior</mat-label>
+              <mat-select formControlName="telaSeleccionada">
+                <mat-option *ngFor="let tela of telasDisponibles.superior" [value]="tela.id">
+                  <div class="tela-option">
+                    <div class="tela-info">
+                      <div class="tela-color-swatch" [style.background-color]="tela.color || '#cccccc'"></div>
+                      <div class="tela-details">
+                        <div class="tela-name">{{ tela.nombreMaterial }}</div>
+                        <div class="tela-color">{{ tela.color }}</div>
+                      </div>
+                    </div>
+                  </div>
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+
+          <div *ngIf="packSeleccionado.incluyeParteInferior" formGroupName="inferior">
+            <h4 class="parte-title">Parte Inferior</h4>
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Tela para Parte Inferior</mat-label>
+              <mat-select formControlName="telaSeleccionada">
+                <mat-option *ngFor="let tela of telasDisponibles.inferior" [value]="tela.id">
+                  <div class="tela-option">
+                    <div class="tela-info">
+                      <div class="tela-color-swatch" [style.background-color]="tela.color || '#cccccc'"></div>
+                      <div class="tela-details">
+                        <div class="tela-name">{{ tela.nombreMaterial }}</div>
+                        <div class="tela-color">{{ tela.color }}</div>
+                      </div>
+                    </div>
+                  </div>
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <ng-container *ngIf="packSeleccionado.incluyeParteSuperior">
+        <mat-card class="section-card" @fadeIn>
+          <mat-card-header>
+            <mat-card-title>Paso 3: Selecciona un Cuello</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <div class="cuello-gallery">
+              <div *ngFor="let cuello of cuellosDisponibles"
+                   class="cuello-card"
+                   [class.selected]="cotizacionForm.get('cuelloId')?.value === cuello.id"
+                   (click)="cotizacionForm.get('cuelloId')?.setValue(cuello.id)">
+
+                <div class="cuello-image-wrapper">
+                  <img [src]="cuello.urlsImagenes[0] || 'https://placehold.co/150x150/EFEFEF/AAAAAA&text=Cuello'"
+                       [alt]="cuello.nombre"
+                       class="cuello-image">
+                </div>
+
+                <div class="cuello-info">
+                  <h4 class="cuello-name">{{ cuello.nombre }}</h4>
+                  <p class="cuello-price">
+                    {{ cuello.precio > 0 ? (cuello.precio | currency:'Bs. ') : 'Gratis' }}
+                  </p>
+                </div>
+              </div>
+
+              <div *ngIf="!cuellosDisponibles.length" class="empty-state">
+                <mat-icon>style_off</mat-icon>
+                <span>No hay cuellos disponibles...</span>
+              </div>
+            </div>
+            <mat-error *ngIf="cotizacionForm.get('cuelloId')?.invalid && cotizacionForm.get('cuelloId')?.touched" class="mat-body-2" style="padding-top: 10px;">
+              Por favor, selecciona un tipo de cuello.
+            </mat-error>
+          </mat-card-content>
+        </mat-card>
+      </ng-container>
+
+      <mat-card class="section-card" formGroupName="configuraciones" @fadeIn>
+        <mat-card-header>
+          <mat-card-title>Paso 4: Opciones Adicionales y Sponsors</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="options-row">
+            <mat-checkbox formControlName="conMangasLargas" color="primary">Mangas Largas (+Bs. 15)</mat-checkbox>
+            <mat-checkbox formControlName="conBolsillos" color="primary">Añadir Bolsillos (+Bs. 5)</mat-checkbox>
+          </div>
+          <mat-divider></mat-divider>
+
+          <div formArrayName="sponsors" class="sponsors-list">
+            <h4>Sponsors</h4>
+            <div *ngFor="let sponsor of sponsorsArray.controls; let i = index" [formGroupName]="i" class="form-row sponsor-row">
+              <mat-form-field appearance="outline">
+                <mat-label>Técnica</mat-label>
+                <mat-select formControlName="tecnica" required>
+                  <mat-option *ngFor="let tipo of tiposSponsor" [value]="tipo">{{ tipo }}</mat-option>
+                </mat-select>
+              </mat-form-field>
+              <mat-form-field appearance="outline">
+                <mat-label>Descripción (ej: Logo, Número)</mat-label>
+                <input matInput formControlName="descripcion" required>
+              </mat-form-field>
+              <button mat-icon-button color="warn" type="button" (click)="removerSponsor(i)">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+            <button mat-stroked-button type="button" (click)="agregarSponsor()">
+              <mat-icon>add</mat-icon> Añadir Sponsor
+            </button>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="section-card" formArrayName="tallas" @fadeIn>
+        <mat-card-header>
+          <mat-card-title>Paso 5: Tallas y Cantidades</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div *ngFor="let talla of tallasArray.controls; let i = index" [formGroupName]="i" class="form-row talla-row">
+            <mat-form-field appearance="outline">
+              <mat-label>Talla (ej: S, 12, XXL)</mat-label>
+              <input matInput formControlName="talla" required>
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-label>Cantidad</mat-label>
+              <input matInput type="number" formControlName="cantidad" required>
+            </mat-form-field>
+            <button mat-icon-button color="warn" type="button" (click)="removerTalla(i)" [disabled]="tallasArray.length === 1">
+              <mat-icon>remove_circle_outline</mat-icon>
+            </button>
+          </div>
+          <button mat-stroked-button type="button" (click)="agregarTalla()">
+            <mat-icon>add</mat-icon> Añadir Talla
+          </button>
+        </mat-card-content>
+      </mat-card>
+
+      <div class="actions" @fadeIn>
+        <button mat-raised-button color="accent" (click)="irAResumen()">
+          Calcular y Ver Resumen
+        </button>
+      </div>
+
+    </ng-container>
+  </div>
+</div>
+
+<ng-template #imagenDetalleModal let-data>
+  <h2 mat-dialog-title>
+    <mat-icon>style</mat-icon>
+    Detalle: {{ data.nombre }}
+  </h2>
+  <mat-dialog-content class="imagen-detalle-content">
+    <ng-container *ngIf="data.imagenes && data.imagenes.length > 0; else noImagen">
+      <img [src]="data.imagenes[0]" [alt]="data.nombre" class="imagen-modal-grande">
+    </ng-container>
+    <ng-template #noImagen>
+      <div class="empty-state-modal">
+        <mat-icon>image_not_supported</mat-icon>
+        <span>No hay imagen detallada disponible.</span>
+      </div>
+    </ng-template>
+  </mat-dialog-content>
+  <mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close>Cerrar</button>
+  </mat-dialog-actions>
+</ng-template>
+
+<ng-template #packDetalleModal let-pack>
+  <h2 mat-dialog-title>
+    <mat-icon>style</mat-icon>
+    Moldes del Pack: {{ pack.nombre }}
+  </h2>
+  <mat-dialog-content class="pack-detalle-content">
+    <p *ngIf="pack.descripcion">{{ pack.descripcion }}</p>
+    <mat-divider></mat-divider>
+
+    <h3>Componentes Incluidos ({{ pack.componentes?.length || 0 }})</h3>
+
+    <div class="molde-list-container">
+      <div *ngFor="let molde of pack.componentes" class="molde-list-item">
+        <img [src]="molde.imagenes[0] || 'https://placehold.co/150x150/EFEFEF/AAAAAA&text=Molde'"
+             [alt]="molde.nombre"
+             class="molde-list-imagen"
+             (click)="abrirDetalleImagen(molde, $event)">
+        <span class="molde-list-nombre">{{ molde.nombre }}</span>
+      </div>
+      <div *ngIf="!pack.componentes?.length" class="empty-state-modal">
+        <span>Este pack no tiene componentes definidos.</span>
+      </div>
+    </div>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close>Cerrar</button>
+    <button mat-raised-button color="primary"
+            (click)="seleccionarPackDesdeModal(pack.id)"
+            [disabled]="packSeleccionado?.id === pack.id">
+      <mat-icon>check_circle_outline</mat-icon>
+      {{ packSeleccionado?.id === pack.id ? 'Ya Seleccionado' : 'Seleccionar este Pack' }}
+    </button>
+  </mat-dialog-actions>
+</ng-template>

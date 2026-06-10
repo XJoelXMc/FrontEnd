@@ -1,0 +1,90 @@
+<!-- home.component.html -->
+<div class="home-container">
+  <!-- Hero Section con Efecto Parallax -->
+  <section class="hero-section">
+    <div class="hero-background" [style.background-image]="'url(https://res.cloudinary.com/duwi3jylx/image/upload/v1748991601/PORTADA_1_ie6z4c.jpg)'"></div>
+    <div class="hero-content">
+      <h1 class="hero-title animate-fade-in">
+        <span class="title-main">ENERGÍA EN CADA</span>
+        <span class="title-accent">MOVIMIENTO</span>
+      </h1>
+      <p class="hero-subtitle animate-slide-up">Descubre nuestra colección exclusiva de ropa deportiva</p>
+      <button class="cta-button" mat-raised-button (click)="scrollToProducts()">
+        <span>EXPLORAR COLECCIÓN</span>
+        <mat-icon>arrow_downward</mat-icon>
+      </button>
+    </div>
+    <div class="scroll-indicator">
+      <div class="scroll-arrow"></div>
+    </div>
+  </section>
+
+  <!-- Sección de Carrusel Mejorado -->
+  <section class="carousel-section">
+    <div class="section-header">
+      <h2 class="section-title">Novedades Destacadas</h2>
+      <p class="section-subtitle">Lo último en tecnología y diseño deportivo</p>
+    </div>
+    
+    <div class="modern-carousel">
+      <div class="carousel-track" [style.transform]="'translateX(-' + (currentIndex * 100) + '%)'">
+        <div class="carousel-slide" *ngFor="let image of images; let i = index">
+          <div class="slide-image" [style.background-image]="'url(' + image + ')'"></div>
+          <div class="slide-overlay">
+            <h3 class="slide-title">{{ getSlideTitle(i) }}</h3>
+            <p class="slide-description">{{ getSlideDescription(i) }}</p>
+            <button class="slide-button" mat-stroked-button>Ver Detalles</button>
+          </div>
+        </div>
+      </div>
+      
+      <button class="carousel-nav prev" (click)="prevImage()" mat-icon-button>
+        <mat-icon>chevron_left</mat-icon>
+      </button>
+      <button class="carousel-nav next" (click)="nextImage()" mat-icon-button>
+        <mat-icon>chevron_right</mat-icon>
+      </button>
+      
+      <div class="carousel-indicators">
+        <div *ngFor="let image of images; let i = index" 
+             class="indicator" 
+             [class.active]="currentIndex === i"
+             (click)="goToSlide(i)"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Sección de Categorías -->
+  <section class="categories-section">
+    <div class="section-header">
+      <h2 class="section-title">Categorías</h2>
+      <p class="section-subtitle">Encuentra lo que necesitas para tu deporte</p>
+    </div>
+    
+    <div class="categories-grid">
+      <div class="category-card" *ngFor="let category of categories">
+        <div class="category-icon">
+          <mat-icon>{{ category.icon }}</mat-icon>
+        </div>
+        <h3 class="category-name">{{ category.name }}</h3>
+        <p class="category-description">{{ category.description }}</p>
+        <div class="category-overlay">
+          <button class="category-button" mat-button>Explorar</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Sección de Beneficios -->
+  <section class="benefits-section">
+    <div class="benefits-container">
+      <div class="benefit-item" *ngFor="let benefit of benefits">
+        <div class="benefit-icon">
+          <mat-icon>{{ benefit.icon }}</mat-icon>
+        </div>
+        <h3 class="benefit-title">{{ benefit.title }}</h3>
+        <p class="benefit-description">{{ benefit.description }}</p>
+      </div>
+    </div>
+  </section>
+</div>

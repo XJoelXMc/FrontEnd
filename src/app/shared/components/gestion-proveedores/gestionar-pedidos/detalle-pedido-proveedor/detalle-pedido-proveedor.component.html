@@ -1,0 +1,142 @@
+<ng-container>
+  <!-- Encabezado con degradado naranja -->
+  <div class="detail-header">
+    <h2 mat-dialog-title class="detail-title">
+      <mat-icon class="icon-white">assignment</mat-icon>
+      <span>Detalle del Pedido #{{ pedido.id }}</span>
+    </h2>
+    <button mat-icon-button class="close-btn" mat-dialog-close>
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <!-- Contenido con fondo claro degradado -->
+  <mat-dialog-content class="detail-content">
+    <!-- Sección de información básica -->
+    <div class="detail-section">
+      <div class="detail-row">
+        <mat-icon class="detail-icon accent-icon">event</mat-icon>
+        <div class="detail-info">
+          <span class="detail-label">Fecha:</span>
+          <span class="detail-value">{{ pedido.fecha | date:'mediumDate' }}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sección Proveedor -->
+    <div class="detail-section card-style">
+      <h3 class="section-title">
+        <mat-icon class="accent-icon">local_shipping</mat-icon>
+        <span>Información del Proveedor</span>
+      </h3>
+      
+      <div class="detail-grid">
+        <div class="detail-row">
+          <mat-icon class="detail-icon accent-icon">business</mat-icon>
+          <div class="detail-info">
+            <span class="detail-label">Nombre:</span>
+            <span class="detail-value">{{ pedido.proveedor.nombre }}</span>
+          </div>
+        </div>
+        
+        <div class="detail-row">
+          <mat-icon class="detail-icon accent-icon">contact_phone</mat-icon>
+          <div class="detail-info">
+            <span class="detail-label">Contacto:</span>
+            <span class="detail-value">{{ pedido.proveedor.contacto || 'No especificado' }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sección Solicitante -->
+    <div class="detail-section card-style">
+      <h3 class="section-title">
+        <mat-icon class="accent-icon">person</mat-icon>
+        <span>Información del Solicitante</span>
+      </h3>
+      
+      <div class="detail-grid">
+        <!-- ✨ CAMBIO: Usamos el nuevo campo plano solicitanteNombre -->
+        <div class="detail-row">
+          <mat-icon class="detail-icon accent-icon">badge</mat-icon>
+          <div class="detail-info">
+            <span class="detail-label">Nombre:</span>
+            <span class="detail-value">{{ pedido.solicitanteNombre }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sección Items optimizada -->
+    <div class="detail-section card-style">
+      <h3 class="section-title">
+        <mat-icon class="accent-icon">list_alt</mat-icon>
+        <span>Materiales Solicitados</span>
+      </h3>
+      
+      <div class="table-container">
+        <table mat-table [dataSource]="pedido.items" class="items-table orange-table">
+          <!-- Columnas optimizadas -->
+          <ng-container matColumnDef="nombreMaterial">
+            <th mat-header-cell *matHeaderCellDef class="header-cell">Material</th>
+            <td mat-cell *matCellDef="let item" class="data-cell">{{ item.nombreMaterial }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="tipoMaterial">
+            <th mat-header-cell *matHeaderCellDef class="header-cell">Tipo</th>
+            <td mat-cell *matCellDef="let item" class="data-cell">{{ item.tipoMaterial }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="cantidad">
+            <th mat-header-cell *matHeaderCellDef class="header-cell">Cantidad</th>
+            <td mat-cell *matCellDef="let item" class="data-cell">
+              <div class="quantity-cell">{{ item.cantidad }}</div>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="unidadPresentacion">
+            <th mat-header-cell *matHeaderCellDef class="header-cell">Presentación</th>
+            <td mat-cell *matCellDef="let item" class="data-cell">
+              <div class="presentation-cell">{{ item.unidadPresentacion }}</div>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="cantidadTotal">
+            <th mat-header-cell *matHeaderCellDef class="header-cell">Total</th>
+            <td mat-cell *matCellDef="let item" class="data-cell">
+              <div class="total-cell">{{ item.cantidadTotal }}</div>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="unidadMedida">
+            <th mat-header-cell *matHeaderCellDef class="header-cell">Unidad</th>
+            <td mat-cell *matCellDef="let item" class="data-cell">
+              <div class="unit-cell">{{ item.unidadMedida }}</div>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="color">
+            <th mat-header-cell *matHeaderCellDef class="header-cell">Color</th>
+            <td mat-cell *matCellDef="let item" class="data-cell">
+              <div class="color-display">
+                <span class="color-circle" [style.background]="item.color"></span>
+                <span class="color-value">{{ item.color }}</span>
+              </div>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns" class="header-row"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="data-row"></tr>
+        </table>
+      </div>
+    </div>
+  </mat-dialog-content>
+
+  <!-- Acciones -->
+  <mat-dialog-actions align="end" class="detail-actions">
+    <button mat-stroked-button color="primary" mat-dialog-close class="close-btn">
+      <mat-icon>close</mat-icon> Cerrar
+    </button>
+  </mat-dialog-actions>
+</ng-container>

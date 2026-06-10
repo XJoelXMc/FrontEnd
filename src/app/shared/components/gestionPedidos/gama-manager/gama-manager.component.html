@@ -1,0 +1,157 @@
+<div class="component-wrapper">
+  
+  <!-- ✅ MODAL INTEGRADO PARA SUBLIMABLE -->
+  <div *ngIf="showSublimableModal" class="modal-overlay" (click)="cerrarModal()">
+    <div class="sublimable-modal" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h3>Configurar Tela</h3>
+        <button mat-icon-button class="close-btn" (click)="cerrarModal()">
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+      
+      <div class="modal-content">
+        <div class="tela-info">
+          <mat-icon class="tela-icon">texture</mat-icon>
+          <div class="tela-details">
+            <strong>{{ currentTela?.nombreMaterial | titlecase }}</strong>
+            <div class="color-display">
+              <div class="color-circle" [style.background-color]="currentTela?.color"></div>
+              <span>{{ currentTela?.color | titlecase }}</span>
+            </div>
+          </div>
+        </div>
+        
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>¿Esta tela es sublimable?</mat-label>
+          <mat-select [(value)]="esSublimable">
+            <mat-option [value]="true">Sí, es sublimable</mat-option>
+            <mat-option [value]="false">No, no es sublimable</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <div class="info-note">
+          <mat-icon>info</mat-icon>
+          <span>Esta configuración afectará las opciones disponibles al crear productos.</span>
+        </div>
+      </div>
+
+      <div class="modal-actions">
+        <button mat-button (click)="cerrarModal()">Cancelar</button>
+        <button mat-raised-button color="primary" (click)="confirmarAsignacionTela()">
+          Confirmar
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <mat-card class="source-list-card">
+    <mat-card-header>
+      <mat-card-title>Telas Disponibles en Inventario</mat-card-title>
+      <mat-card-subtitle>Arrastra una tela desde aquí hacia una gama para añadirla al catálogo y asignarla.</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content
+      id="source-telas"
+      cdkDropList
+      [cdkDropListData]="telasEnInventario"
+      [cdkDropListConnectedTo]="getGamaDropListIds()"
+      (cdkDropListEntered)="onDragEnter($event)"
+      (cdkDropListExited)="onDragExit($event)"
+      class="source-list">
+      
+      <!-- Indicador de Carga -->
+      <div *ngIf="isLoadingTelas" class="loading-container">
+        <mat-spinner diameter="40"></mat-spinner>
+      </div>
+
+      <!-- Lista de Telas Arrastrables -->
+      <div *ngFor="let tela of telasEnInventario" 
+           cdkDrag 
+           [cdkDragData]="tela" 
+           class="source-item"
+           [class.dragging]="isDragging">
+        <div class="item-content">
+          <mat-icon matListItemIcon>texture</mat-icon>
+          <div class="source-item-content">
+            <div matListItemTitle>{{ tela.nombreMaterial | titlecase }}</div>
+            <div class="color-display">
+              <div class="color-circle" [style.background-color]="tela.color"></div>
+              <span class="color-name">{{ tela.color | titlecase }}</span>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Preview que se ve al arrastrar -->
+        <div *cdkDragPreview class="drag-preview">
+          <div class="preview-content">
+            <mat-icon>texture</mat-icon>
+            <div class="preview-info">
+              <span>{{ tela.nombreMaterial | titlecase }}</span>
+              <div class="preview-color" [style.background-color]="tela.color"></div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Placeholder personalizado -->
+        <div *cdkDragPlaceholder class="drag-placeholder">
+          <div class="placeholder-content">
+            <mat-icon>open_with</mat-icon>
+            <span>Soltar aquí</span>
+          </div>
+        </div>
+      </div>
+
+    </mat-card-content>
+  </mat-card>
+
+  <div class="gamas-container">
+    <mat-card class="gama-card create-gama-card">
+        <mat-card-header>
+            <mat-card-title>1. Crear Nueva Gama</mat-card-title>
+        </mat-card-header>
+        <mat-card-content class="form-row">
+            <mat-form-field appearance="outline" class="flex-item">
+                <mat-label>Nombre de la Gama</mat-label>
+                <input matInput #gamaNameInput (keyup.enter)="crearGama(gamaNameInput.value)">
+            </mat-form-field>
+            <button mat-raised-button color="primary" (click)="crearGama(gamaNameInput.value)">Crear Gama</button>
+        </mat-card-content>
+    </mat-card>
+    
+    <!-- Itera sobre las gamas existentes para crear las zonas de drop -->
+    <mat-card *ngFor="let gama of datos?.todasLasGamasConTelas" 
+              class="gama-card"
+              [class.drop-active]="activeDropZone === gama.id">
+        <mat-card-header>
+            <mat-card-title class="gama-title">
+                <mat-icon>widgets</mat-icon>
+                {{ gama.nombre }}
+            </mat-card-title>
+        </mat-card-header>
+        <mat-card-content
+            [id]="'gama-' + gama.id"
+            cdkDropList
+            [cdkDropListData]="gama.telas"
+            (cdkDropListDropped)="onDrop($event, gama.id)"
+            (cdkDropListEntered)="onGamaDragEnter(gama.id)"
+            (cdkDropListExited)="onGamaDragExit()"
+            class="gama-droplist">
+            <!-- Telas ya asignadas a la gama -->
+            <div *ngFor="let telaAsignada of gama.telas" 
+                 cdkDrag 
+                 class="gama-item"
+                 [class.dragging]="isDragging">
+                <div class="gama-item-content">
+                  <span class="tela-name">{{ telaAsignada.nombre | titlecase }}</span>
+                  <div class="color-circle" [style.background-color]="extractColorFromTela(telaAsignada)"></div>
+                </div>
+            </div>
+            <!-- Mensaje si la gama está vacía -->
+            <div *ngIf="gama.telas.length === 0" class="empty-gama-message">
+                <mat-icon>move_to_inbox</mat-icon>
+                <p>Arrastra una tela aquí para asignarla a esta gama.</p>
+            </div>
+        </mat-card-content>
+    </mat-card>
+  </div>
+</div>
