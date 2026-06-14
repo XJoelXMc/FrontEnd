@@ -25,8 +25,9 @@ import { MatStepperModule } from '@angular/material/stepper';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatListModule } from '@angular/material/list';
-import { MatRadioModule } from '@angular/material/radio'; // ✅ 1. IMPORT THE MISSING MODULE
+import { MatRadioModule } from '@angular/material/radio'; 
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+
 // Componentes compartidos
 import { HomeComponent } from './components/home/home.component';
 import { ClientRoutingModule } from '../pages/client/clientRouting.module';
@@ -57,11 +58,12 @@ import { ControlarPedidoComponent } from './components/gestionPedidos/controlar-
 import { BaseChartDirective, provideCharts, withDefaultRegisterables } from 'ng2-charts';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { GoogleChartsModule } from 'angular-google-charts';
+
 @NgModule({
   declarations: [
     HomeComponent,
     GestionDeVentasComponent,
-    ModeloDialogComponent,
+    ModeloDialogComponent, // <-- DEJAMOS SOLO ESTA DECLARACIÓN
     NavbarComponent,
     FooterComponent,
     GestionEmpleadosComponent,
@@ -70,7 +72,7 @@ import { GoogleChartsModule } from 'angular-google-charts';
     GestionarPedidosComponent,
     NuevoPedidoProveedorComponent,
     DetallePedidoProveedorComponent,
-    ModeloDialogComponent,
+    // ModeloDialogComponent, <-- ¡ELIMINADO EL DUPLICADO QUE CAUSABA EL ERROR!
     GestionInventarioComponent,
     GestionPacksComponentComponent,
     GamaManagerComponent,
@@ -92,7 +94,7 @@ import { GoogleChartsModule } from 'angular-google-charts';
     ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,
-  MatCheckboxModule,
+    MatCheckboxModule,
     MatSelectModule,
     MatIconModule,
     MatDialogModule,
@@ -113,12 +115,10 @@ import { GoogleChartsModule } from 'angular-google-charts';
     MatListModule,
     MatTabsModule,
     MatProgressSpinnerModule,
-    MatRadioModule, // ✅ 2. ADD IT TO THE IMPORTS ARRAY
+    MatRadioModule, 
     MatSlideToggleModule,
-    DragDropModule,
     BaseChartDirective,
     GoogleChartsModule
-    
   ],
   exports: [
     DragDropModule,
@@ -127,7 +127,7 @@ import { GoogleChartsModule } from 'angular-google-charts';
     ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,
-  MatCheckboxModule,
+    MatCheckboxModule,
     MatIconModule,
     MatButtonModule,
     MatToolbarModule,
@@ -138,7 +138,7 @@ import { GoogleChartsModule } from 'angular-google-charts';
     MatChipsModule,
     MatListModule,
     MatSelectModule,
-    MatRadioModule, // ✅ 3. ADD IT TO THE EXPORTS ARRAY
+    MatRadioModule, 
     HomeComponent,
     GestionDeVentasComponent,
     NavbarComponent,
@@ -160,7 +160,7 @@ import { GoogleChartsModule } from 'angular-google-charts';
     ImageGalleryDialogComponent,
     CuellosModalComponent,
     MoldeCuellosComponent,
-    MatSlideToggleModule, // ✅ también aquí para usarlo fuera del módulo
+    MatSlideToggleModule, 
     DetalleCotizacionComponent,
     PersonalizacionComponent
   ],

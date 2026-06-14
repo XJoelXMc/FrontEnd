@@ -1,70 +1,70 @@
-<h2 mat-dialog-title>
-  <mat-icon>{{ modoEdicion ? 'edit' : 'add' }}</mat-icon>
-  {{ modoEdicion ? 'Editar Proveedor' : 'Nuevo Proveedor' }}
-</h2>
+<div class="modal-proveedor-custom">
+  <h2 mat-dialog-title>
+    <mat-icon>{{ modoEdicion ? 'edit' : 'add' }}</mat-icon>
+    {{ modoEdicion ? 'Editar Proveedor' : 'Nuevo Proveedor' }}
+  </h2>
 
-<mat-dialog-content [formGroup]="proveedorForm" class="formulario">
-  <!-- Campos con iconos -->
-  <mat-form-field appearance="outline">
-    <mat-icon matPrefix>person</mat-icon>
-    <mat-label>Nombre del Proveedor</mat-label>
-    <input matInput formControlName="nombre">
-    <mat-error *ngIf="proveedorForm.get('nombre')?.invalid && proveedorForm.get('nombre')?.touched">Campo obligatorio</mat-error>
-  </mat-form-field>
+  <mat-dialog-content [formGroup]="proveedorForm" class="formulario">
+    <mat-form-field appearance="outline">
+      <mat-icon matPrefix>person</mat-icon>
+      <mat-label>Nombre del Proveedor</mat-label>
+      <input matInput formControlName="nombre">
+      <mat-error *ngIf="proveedorForm.get('nombre')?.invalid && proveedorForm.get('nombre')?.touched">Campo obligatorio</mat-error>
+    </mat-form-field>
 
-  <mat-form-field appearance="outline">
-    <mat-icon matPrefix>business</mat-icon>
-    <mat-label>Nombre de la Empresa</mat-label>
-    <input matInput formControlName="nombreEmpresa">
-    <mat-error *ngIf="proveedorForm.get('nombreEmpresa')?.invalid && proveedorForm.get('nombreEmpresa')?.touched">Campo obligatorio</mat-error>
-  </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-icon matPrefix>business</mat-icon>
+      <mat-label>Nombre de la Empresa</mat-label>
+      <input matInput formControlName="nombreEmpresa">
+      <mat-error *ngIf="proveedorForm.get('nombreEmpresa')?.invalid && proveedorForm.get('nombreEmpresa')?.touched">Campo obligatorio</mat-error>
+    </mat-form-field>
 
-  <mat-form-field appearance="outline">
-    <mat-icon matPrefix>alternate_email</mat-icon>
-    <mat-label>Contacto (email o celular)</mat-label>
-    <input matInput formControlName="contacto">
-    <mat-error *ngIf="proveedorForm.get('contacto')?.invalid && proveedorForm.get('contacto')?.touched">Contacto inválido o incompleto</mat-error>
-  </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-icon matPrefix>alternate_email</mat-icon>
+      <mat-label>Contacto (email o celular)</mat-label>
+      <input matInput formControlName="contacto">
+      <mat-error *ngIf="proveedorForm.get('contacto')?.invalid && proveedorForm.get('contacto')?.touched">Contacto inválido o incompleto</mat-error>
+    </mat-form-field>
 
-  <mat-form-field appearance="outline">
-    <mat-icon matPrefix>location_on</mat-icon>
-    <mat-label>Dirección</mat-label>
-    <textarea matInput rows="2" formControlName="direccion"></textarea>
-  </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-icon matPrefix>location_on</mat-icon>
+      <mat-label>Dirección</mat-label>
+      <textarea matInput rows="2" formControlName="direccion"></textarea>
+    </mat-form-field>
 
-  <mat-form-field appearance="outline">
-    <mat-icon matPrefix>image</mat-icon>
-    <mat-label>URL de Imagen (opcional)</mat-label>
-    <input matInput formControlName="imagenUrl">
-  </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-icon matPrefix>image</mat-icon>
+      <mat-label>URL de Imagen (opcional)</mat-label>
+      <input matInput formControlName="imagenUrl">
+    </mat-form-field>
 
-  <!-- Nuevo campo para seleccionar categorías -->
-  <mat-form-field appearance="outline">
-    <mat-icon matPrefix>inventory</mat-icon>
-    <mat-label>Categorías de materiales ofrecidos</mat-label>
-    <mat-select formControlName="categoriasOfrecidasIds" multiple>
-      <mat-option *ngIf="cargandoCategorias" disabled>Cargando categorías...</mat-option>
-      <mat-option *ngIf="!cargandoCategorias && categoriasDisponibles.length === 0" disabled>
-        No hay categorías disponibles
-      </mat-option>
-      <mat-option *ngFor="let categoria of categoriasDisponibles" [value]="categoria.id">
-        {{ categoria.nombre }}
-      </mat-option>
-    </mat-select>
-    <mat-error *ngIf="proveedorForm.get('categoriasOfrecidasIds')?.invalid && proveedorForm.get('categoriasOfrecidasIds')?.touched">
-      Seleccione al menos una categoría
-    </mat-error>
-  </mat-form-field>
-</mat-dialog-content>
+    <mat-form-field appearance="outline">
+      <mat-icon matPrefix>inventory</mat-icon>
+      <mat-label>Categorías de materiales ofrecidos</mat-label>
+      <mat-select formControlName="categoriasOfrecidasIds" multiple>
+        <mat-option *ngIf="cargandoCategorias" disabled>Cargando categorías...</mat-option>
+        <mat-option *ngIf="!cargandoCategorias && categoriasDisponibles.length === 0" disabled>
+          No hay categorías disponibles
+        </mat-option>
+        <mat-option *ngFor="let categoria of categoriasDisponibles" [value]="categoria.id">
+          {{ categoria.nombre }}
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="proveedorForm.get('categoriasOfrecidasIds')?.invalid && proveedorForm.get('categoriasOfrecidasIds')?.touched">
+        Seleccione al menos una categoría
+      </mat-error>
+    </mat-form-field>
+  </mat-dialog-content>
 
-<mat-dialog-actions align="end">
-  <button mat-button (click)="cancelar()">
-    <mat-icon>cancel</mat-icon>
-    Cancelar
-  </button>
-  <button mat-flat-button color="primary" (click)="guardar()" 
-          [disabled]="!proveedorForm.valid || cargandoCategorias">
-    <mat-icon>{{ modoEdicion ? 'save' : 'check_circle' }}</mat-icon>
-    {{ modoEdicion ? 'Actualizar' : 'Guardar' }}
-  </button>
-</mat-dialog-actions>
+  <mat-dialog-actions align="end">
+    <button mat-button (click)="cancelar()">
+      <mat-icon>cancel</mat-icon>
+      Cancelar
+    </button>
+    <button mat-flat-button color="primary" (click)="guardar()" 
+            [disabled]="!proveedorForm.valid || cargandoCategorias">
+      <mat-icon>{{ modoEdicion ? 'save' : 'check_circle' }}</mat-icon>
+      {{ modoEdicion ? 'Actualizar' : 'Guardar' }}
+    </button>
+  </mat-dialog-actions>
+</div>

@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, ViewEncapsulation } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Proveedor } from '../../../../models/proveedor.model';
@@ -12,6 +12,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   selector: 'app-proveedor-form-modal',
   templateUrl: './proveedor-form-modal.component.html',
   styleUrls: ['./proveedor-form-modal.component.scss'],
+  encapsulation: ViewEncapsulation.None
 })
 export class ProveedorFormModalComponent implements OnInit {
   proveedorForm!: FormGroup;

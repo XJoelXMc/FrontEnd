@@ -1,42 +1,42 @@
 <h2 mat-dialog-title>{{ data.id ? 'Editar modelo' : 'Añadir modelo' }}</h2>
+
 <mat-dialog-content [formGroup]="form">
   <mat-form-field appearance="outline" class="full-width">
-  <mat-label>Nombre</mat-label>
-  <input matInput formControlName="nombre">
-  <mat-error *ngIf="form.get('nombre')?.hasError('required')">
-    El nombre es obligatorio
-  </mat-error>
-  <mat-error *ngIf="form.get('nombre')?.hasError('pattern')">
-    Solo se permiten letras, números y espacios
-  </mat-error>
-</mat-form-field>
+    <mat-label>Nombre</mat-label>
+    <input matInput formControlName="nombre">
+    <mat-error *ngIf="form.get('nombre')?.hasError('required')">
+      El nombre es obligatorio
+    </mat-error>
+    <mat-error *ngIf="form.get('nombre')?.hasError('pattern')">
+      Solo se permiten letras, números y espacios
+    </mat-error>
+  </mat-form-field>
 
   <mat-form-field appearance="outline" class="full-width">
-  <mat-label>Imagen URL</mat-label>
-  <input matInput formControlName="imagenUrl">
-  <mat-error *ngIf="form.get('imagenUrl')?.hasError('required')">
-    La URL de la imagen es obligatoria
-  </mat-error>
-  <mat-error *ngIf="form.get('imagenUrl')?.hasError('pattern')">
-    Debe ser una URL válida de Cloudinary
-  </mat-error>
-  <mat-error *ngIf="form.get('imagenUrl')?.hasError('duplicada')">
-    Ya existe un modelo con esa imagen
-  </mat-error>
-</mat-form-field>
-
+    <mat-label>Imagen URL</mat-label>
+    <input matInput formControlName="imagenUrl">
+    <mat-error *ngIf="form.get('imagenUrl')?.hasError('required')">
+      La URL de la imagen es obligatoria
+    </mat-error>
+    <mat-error *ngIf="form.get('imagenUrl')?.hasError('pattern')">
+      Debe ser una URL válida de Cloudinary
+    </mat-error>
+    <mat-error *ngIf="form.get('imagenUrl')?.hasError('duplicada')">
+      Ya existe un modelo con esa imagen
+    </mat-error>
+  </mat-form-field>
 
   <mat-form-field appearance="outline" class="full-width">
-  <mat-label>Categoría</mat-label>
-  <mat-select formControlName="categoria">
-    <mat-option *ngFor="let c of categorias | keyvalue" [value]="c.value">
-      {{ c.key.replace('_', ' ') }}
-    </mat-option>
-  </mat-select>
-  <mat-error *ngIf="form.get('categoria')?.hasError('required')">
-    Debes seleccionar una categoría
-  </mat-error>
-</mat-form-field>
+    <mat-label>Categoría</mat-label>
+    <mat-select formControlName="categoria">
+      <mat-option *ngFor="let c of categorias | keyvalue" [value]="c.value">
+        {{ c.key.replace('_', ' ') }}
+      </mat-option>
+    </mat-select>
+    <mat-error *ngIf="form.get('categoria')?.hasError('required')">
+      Debes seleccionar una categoría
+    </mat-error>
+  </mat-form-field>
 </mat-dialog-content>
 
 <mat-dialog-actions align="end">
@@ -44,7 +44,4 @@
   <button mat-flat-button color="primary" (click)="guardar()" [disabled]="form.invalid">
     <mat-icon>check</mat-icon> {{ data.id ? 'Actualizar' : 'Crear' }}
   </button>
-  <mat-error *ngIf="form.get('imagenUrl')?.hasError('duplicada')">
-  Ya existe un modelo con esa imagen
-</mat-error>
 </mat-dialog-actions>
