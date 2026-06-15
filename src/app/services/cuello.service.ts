@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Cuello } from '../models/cuello.model';
 
@@ -8,32 +8,36 @@ import { Cuello } from '../models/cuello.model';
 })
 export class CuelloService {
 
-  private apiUrl = '/api/admin/cuellos';
+  // 🚪 Puerta Blindada (Solo Admin/Dueño)
+  private adminUrl = 'http://localhost:8080/api/admin/cuellos'; 
+  
+  // 🚪 Puerta Pública (Clientes en el cotizador)
+  private catalogoUrl = 'http://localhost:8080/api/catalogo/cuellos';
 
   constructor(private http: HttpClient) { }
 
-  // Obtiene todos los cuellos
+  // ✅ GET: Obtiene todos los cuellos (Usa el CATÁLOGO para que el cliente no sea bloqueado)
   getAllCuellos(): Observable<Cuello[]> {
-    return this.http.get<Cuello[]>(this.apiUrl);
+    return this.http.get<Cuello[]>(this.catalogoUrl);
   }
 
-  // Obtiene un cuello por su ID
+  // ✅ GET por ID: Puede usar admin o catálogo dependiendo de quién lo consulte
   getCuelloById(id: number): Observable<Cuello> {
-    return this.http.get<Cuello>(`${this.apiUrl}/${id}`);
+    return this.http.get<Cuello>(`${this.adminUrl}/${id}`);
   }
 
-  // Crea un nuevo cuello (envía FormData por las imágenes)
+  // 🔒 POST: Crea un nuevo cuello (Usa ADMIN)
   createCuello(formData: FormData): Observable<Cuello> {
-    return this.http.post<Cuello>(this.apiUrl, formData);
+    return this.http.post<Cuello>(this.adminUrl, formData);
   }
 
-  // Actualiza un cuello existente (envía FormData por las imágenes)
+  // 🔒 PUT: Actualiza un cuello existente (Usa ADMIN)
   updateCuello(id: number, formData: FormData): Observable<Cuello> {
-    return this.http.put<Cuello>(`${this.apiUrl}/${id}`, formData);
+    return this.http.put<Cuello>(`${this.adminUrl}/${id}`, formData);
   }
 
-  // Elimina un cuello
+  // 🔒 DELETE: Elimina un cuello (Usa ADMIN)
   deleteCuello(id: number): Observable<any> {
-    return this.http.delete<any>(`${this.apiUrl}/${id}`);
+    return this.http.delete<any>(`${this.adminUrl}/${id}`);
   }
 }

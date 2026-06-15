@@ -3,7 +3,6 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { PackPublico, PackDetalle, CotizacionPayload, TelaInfo, UsuarioInfo } from '../models/crear-cotizacion.model';
 
-
 @Injectable({
   providedIn: 'root'
 })
@@ -12,31 +11,32 @@ export class CrearCotizacionService {
 
   constructor(private http: HttpClient) { }
 
- 
+  // 1. Obtener Packs (Apuntaremos a un nuevo controlador que crearemos en el Paso 2)
   getPacksDisponibles(): Observable<PackPublico[]> {
     return this.http.get<PackPublico[]>(`${this.API_BASE_URL}/catalogo/packs`);
   }
 
-  
   getPackDetalle(id: number): Observable<PackDetalle> {
     return this.http.get<PackDetalle>(`${this.API_BASE_URL}/catalogo/packs/${id}`);
   }
+
   getMiInformacion(): Observable<UsuarioInfo> {
     return this.http.get<UsuarioInfo>(`${this.API_BASE_URL}/usuarios/me`);
   }
 
-   crearCotizacion(payload: CotizacionPayload): Observable<any> {
-    return this.http.post(`${this.API_BASE_URL}/cotizaciones`, payload);
+  // ✨ CORRECCIÓN: Apuntando a /cotizaciones-cliente como dice tu Backend
+  crearCotizacion(payload: CotizacionPayload): Observable<any> {
+    return this.http.post(`${this.API_BASE_URL}/cotizaciones-cliente`, payload); 
   }
-getTelasSugeridasPorPack(id: number): Observable<{ superior: TelaInfo[], inferior: TelaInfo[] }> {
-  return this.http.get<{ superior: TelaInfo[], inferior: TelaInfo[] }>(
-    `${this.API_BASE_URL}/catalogo/packs/${id}/telas-sugeridas`
-  );
-}
-buscarPorCodigo(codigo: string): Observable<CotizacionPayload> {
+
+  // ✨ CORRECCIÓN: Apuntando a la ruta exacta de Telas en tu CotizacionClienteController
+  getTelasSugeridasPorPack(id: number): Observable<{ superior: TelaInfo[], inferior: TelaInfo[] }> {
+    return this.http.get<{ superior: TelaInfo[], inferior: TelaInfo[] }>(
+      `${this.API_BASE_URL}/cotizaciones-cliente/pack/${id}/telas-disponibles`
+    );
+  }
+
+  buscarPorCodigo(codigo: string): Observable<CotizacionPayload> {
     return this.http.get<CotizacionPayload>(`${this.API_BASE_URL}/cotizaciones/buscar/${codigo}`);
   }
-
-
 }
-

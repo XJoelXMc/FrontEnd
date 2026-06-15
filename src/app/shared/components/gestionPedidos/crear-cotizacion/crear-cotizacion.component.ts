@@ -297,16 +297,33 @@ export class CrearCotizacionComponent implements OnInit {
 
     const { desglosePorTalla, totalFinal, selecciones } = this.calcularDesgloseDetallado();
 
-    // ✅ USAR getRawValue() para incluir campos deshabilitados (como datos de cliente)
-    const payload = this.cotizacionForm.getRawValue() as CotizacionPayload;
+    // 1. Obtenemos los valores crudos y agrupados del formulario
+    const formValue = this.cotizacionForm.getRawValue();
 
+    // 🔥 2. AQUÍ ESTÁ LA CORRECCIÓN: Construimos el payload aplanando "configuraciones"
+    // para que sea un reflejo exacto del DTO de nuestro backend en Spring Boot.
+    const payloadAjustado: CotizacionPayload = {
+      packId: formValue.packId,
+      cuelloId: formValue.cuelloId,
+      seleccionTelas: formValue.seleccionTelas,
+      clienteInfo: formValue.clienteInfo,
+      tallas: formValue.tallas, // Enviamos el array tal cual, Java ya sabe procesarlo
+      
+      // Sacamos estos 3 datos del grupo "configuraciones" y los ponemos en la raíz:
+      conMangasLargas: formValue.configuraciones.conMangasLargas,
+      conBolsillos: formValue.configuraciones.conBolsillos,
+      sponsors: formValue.configuraciones.sponsors
+    };
+
+    // 3. Guardamos en caché el payload ya procesado y corregido
     this.cacheService.setDatos({
-      payload: payload,
+      payload: payloadAjustado,
       selecciones: selecciones,
       desglosePorTalla: desglosePorTalla,
       totalFinal: totalFinal
     });
 
+    // 4. Viajamos a la vista de resumen
     this.router.navigate(['/detalle-cotizacion']);
   }
 

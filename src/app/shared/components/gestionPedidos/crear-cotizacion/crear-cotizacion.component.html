@@ -92,16 +92,19 @@
             </button>
 
             <div class="pack-image-gallery">
-              <div *ngFor="let comp of pack.componentes.slice(0, 4)" class="pack-image-item">
-                <img [src]="comp.imagenes[0] || 'https://placehold.co/150x150/EFEFEF/AAAAAA&text=Molde'"
+              <div *ngFor="let comp of (pack.componentes || []).slice(0, 4)" class="pack-image-item">
+                
+                <img [src]="comp.imagenes && comp.imagenes.length > 0 ? comp.imagenes[0] : 'https://placehold.co/150x150/EFEFEF/AAAAAA&text=Molde'"
                      [alt]="comp.nombre"
                      class="miniatura-molde"
                      (click)="abrirDetalleImagen(comp, $event)">
+                     
                 <div class="image-overlay">
                   {{ comp.nombre }}
                 </div>
               </div>
-              <div *ngIf="!pack.componentes.length" class="pack-image-item placeholder">
+              
+              <div *ngIf="!pack.componentes || pack.componentes.length === 0" class="pack-image-item placeholder">
                 <mat-icon>inventory_2</mat-icon>
               </div>
             </div>
