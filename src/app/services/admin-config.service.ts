@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import {
   DatosCreacionPackDTO,
   PackCreacionDTO,
-  MoldeResponseDTO, // <-- Se importa la interfaz correcta
+  MoldeResponseDTO,
   TelaSimpleDTO
 } from '../models/admin-config.models';
 
@@ -31,30 +31,37 @@ export class AdminConfigService {
   }
 
   createOrUpdateTela(telaData: { materialInventarioId: number; gamaIds: number[]; sublimable: boolean }): Observable<any> {
-  return this.http.post(`${this.API_BASE_URL}/admin/telas-catalogo`, telaData);
-}
-
-
-  updateGama(gamaId: number, nombre: string, telaIds: number[]): Observable<any> {
-    return this.http.put(`${this.API_BASE_URL}/admin/gamas/${gamaId}`, { nombre, telaIds });
+    return this.http.post(`${this.API_BASE_URL}/admin/telas-catalogo`, telaData);
   }
+
+  // 🔥 CORRECCIÓN 1: Se ajustó para recibir solo 2 argumentos (el ID y el payload entero)
+  updateGama(gamaId: number, payload: { nombre: string, telaIds: number[] }): Observable<any> {
+    return this.http.put(`${this.API_BASE_URL}/admin/gamas/${gamaId}`, payload);
+  }
+
+  // 🔥 CORRECCIÓN 2: Se agregó el método que faltaba para eliminar la Gama
+  deleteGama(id: number): Observable<any> {
+    return this.http.delete(`${this.API_BASE_URL}/admin/gamas/${id}`);
+  }
+
   getTelasSublimablesByGama(gamaId: number): Observable<TelaSimpleDTO[]> {
-  return this.http.get<TelaSimpleDTO[]>(`${this.API_BASE_URL}/admin/gamas/${gamaId}/telas-sublimables`);
-}
+    return this.http.get<TelaSimpleDTO[]>(`${this.API_BASE_URL}/admin/gamas/${gamaId}/telas-sublimables`);
+  }
+
   // --- MOLDES ---
   getAllMoldes(): Observable<MoldeResponseDTO[]> {
     return this.http.get<MoldeResponseDTO[]>(`${this.API_BASE_URL}/admin/moldes`);
   }
- createMolde(formData: FormData): Observable<MoldeResponseDTO> {
-  return this.http.post<MoldeResponseDTO>(`${this.API_BASE_URL}/admin/moldes`, formData);
-}
+  
+  createMolde(formData: FormData): Observable<MoldeResponseDTO> {
+    return this.http.post<MoldeResponseDTO>(`${this.API_BASE_URL}/admin/moldes`, formData);
+  }
 
-updateMolde(id: number, formData: FormData): Observable<MoldeResponseDTO> {
-  return this.http.put<MoldeResponseDTO>(`${this.API_BASE_URL}/admin/moldes/${id}`, formData);
-}
+  updateMolde(id: number, formData: FormData): Observable<MoldeResponseDTO> {
+    return this.http.put<MoldeResponseDTO>(`${this.API_BASE_URL}/admin/moldes/${id}`, formData);
+  }
 
   deleteMolde(id: number): Observable<any> {
     return this.http.delete(`${this.API_BASE_URL}/admin/moldes/${id}`);
   }
 }
-

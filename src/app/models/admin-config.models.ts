@@ -44,6 +44,7 @@ export interface PiezaMoldeDTO {
 export interface TelaSimpleDTO {
   id: number;
   nombre: string;
+  color?: string;
 }
 
 export interface GamaTelaDTO {

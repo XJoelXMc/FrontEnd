@@ -1,24 +1,23 @@
 <div class="container">
 
   <div *ngIf="mostrarOpcionesInicio" class="inicio-container" @fadeIn>
-    <h1>
-      <mat-icon>shopping_bag</mat-icon>
-      Bienvenido al Cotizador
-    </h1>
-    <p class="subtitle">Comienza a diseñar tu pedido ahora mismo.</p>
+  <h1>
+    <mat-icon>shopping_bag</mat-icon>
+    Bienvenido al Cotizador
+  </h1>
+  <p class="subtitle">Comienza a diseñar tu pedido ahora mismo.</p>
 
-    <div class="opciones-grid" style="justify-content: center;">
-      <mat-card class="opcion-card" (click)="iniciarNuevaCotizacion()">
-        <div class="icon-circle new">
-          <mat-icon>add_circle_outline</mat-icon>
-        </div>
-        <h3>Nueva Cotización</h3>
-        <p>Explora nuestros packs y crea un diseño desde cero.</p>
-        <button mat-raised-button color="primary">Comenzar</button>
-      </mat-card>
-    </div>
+  <div class="opciones-grid">
+    <mat-card class="opcion-card" (click)="iniciarNuevaCotizacion()">
+      <div class="icon-circle new">
+        <mat-icon>add_circle_outline</mat-icon>
+      </div>
+      <h3>Nueva Cotización</h3>
+      <p>Explora nuestros packs y crea un diseño desde cero.</p>
+      <button mat-raised-button color="primary">Comenzar</button>
+    </mat-card>
   </div>
-
+</div>
   <div *ngIf="!mostrarOpcionesInicio" [formGroup]="cotizacionForm" @fadeIn>
 
     <div class="form-header">

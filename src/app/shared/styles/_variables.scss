@@ -1,9 +1,9 @@
-// Variables compartidas para los componentes de gestión de moldes
+/* Archivo: src/styles/_variables.scss */
 $color-primario: #FF6600;
 $color-secundario: #000000;
 $color-fondo-claro: #FFF8F5;
 $color-texto: #000000;
-$color-borde: rgba($color-primario, 0.15);
+$color-borde: rgba(255, 102, 0, 0.15); /* Basado en tu color primario */
 $transition-base: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 $shadow-base: 0 4px 12px rgba(0,0,0,0.08);
 

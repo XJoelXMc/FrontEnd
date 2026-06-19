@@ -1,6 +1,5 @@
 <div class="component-wrapper">
   
-  <!-- ✅ MODAL INTEGRADO PARA SUBLIMABLE -->
   <div *ngIf="showSublimableModal" class="modal-overlay" (click)="cerrarModal()">
     <div class="sublimable-modal" (click)="$event.stopPropagation()">
       <div class="modal-header">
@@ -59,12 +58,10 @@
       (cdkDropListExited)="onDragExit($event)"
       class="source-list">
       
-      <!-- Indicador de Carga -->
       <div *ngIf="isLoadingTelas" class="loading-container">
         <mat-spinner diameter="40"></mat-spinner>
       </div>
 
-      <!-- Lista de Telas Arrastrables -->
       <div *ngFor="let tela of telasEnInventario" 
            cdkDrag 
            [cdkDragData]="tela" 
@@ -81,7 +78,6 @@
           </div>
         </div>
         
-        <!-- Preview que se ve al arrastrar -->
         <div *cdkDragPreview class="drag-preview">
           <div class="preview-content">
             <mat-icon>texture</mat-icon>
@@ -92,7 +88,6 @@
           </div>
         </div>
         
-        <!-- Placeholder personalizado -->
         <div *cdkDragPlaceholder class="drag-placeholder">
           <div class="placeholder-content">
             <mat-icon>open_with</mat-icon>
@@ -118,16 +113,20 @@
         </mat-card-content>
     </mat-card>
     
-    <!-- Itera sobre las gamas existentes para crear las zonas de drop -->
     <mat-card *ngFor="let gama of datos?.todasLasGamasConTelas" 
               class="gama-card"
               [class.drop-active]="activeDropZone === gama.id">
-        <mat-card-header>
-            <mat-card-title class="gama-title">
-                <mat-icon>widgets</mat-icon>
-                {{ gama.nombre }}
-            </mat-card-title>
+        
+        <mat-card-header class="gama-header-flex">
+            <div class="gama-title-group">
+                <mat-icon class="gama-icon-orange">widgets</mat-icon>
+                <h4 class="gama-title-text">{{ gama.nombre }}</h4>
+                <button mat-icon-button color="warn" class="delete-gama-inline-btn" (click)="abrirModalEliminarGama(gama)" matTooltip="Eliminar Gama">
+                    <mat-icon>delete</mat-icon>
+                </button>
+            </div>
         </mat-card-header>
+
         <mat-card-content
             [id]="'gama-' + gama.id"
             cdkDropList
@@ -136,17 +135,27 @@
             (cdkDropListEntered)="onGamaDragEnter(gama.id)"
             (cdkDropListExited)="onGamaDragExit()"
             class="gama-droplist">
-            <!-- Telas ya asignadas a la gama -->
+            
             <div *ngFor="let telaAsignada of gama.telas" 
                  cdkDrag 
                  class="gama-item"
                  [class.dragging]="isDragging">
+                
                 <div class="gama-item-content">
-                  <span class="tela-name">{{ telaAsignada.nombre | titlecase }}</span>
-                  <div class="color-circle" [style.background-color]="extractColorFromTela(telaAsignada)"></div>
+                  <div class="tela-info-basic">
+                    <span class="tela-name">{{ telaAsignada.nombre | titlecase }}</span>
+                    <div class="color-display-inline">
+                      <div class="color-circle" [style.background-color]="telaAsignada.color"></div>
+                      <span class="color-code">{{ telaAsignada.color || '#N/A' }}</span>
+                    </div>
+                  </div>
+                  <button mat-icon-button class="remove-tela-btn" (click)="quitarTelaDeGama(gama, telaAsignada.id)" matTooltip="Quitar tela">
+                    <mat-icon>close</mat-icon>
+                  </button>
                 </div>
+
             </div>
-            <!-- Mensaje si la gama está vacía -->
+            
             <div *ngIf="gama.telas.length === 0" class="empty-gama-message">
                 <mat-icon>move_to_inbox</mat-icon>
                 <p>Arrastra una tela aquí para asignarla a esta gama.</p>
@@ -155,3 +164,17 @@
     </mat-card>
   </div>
 </div>
+
+<ng-template #confirmDeleteModal let-data>
+  <h2 mat-dialog-title class="warn-title">
+    <mat-icon>warning</mat-icon> Confirmar Eliminación
+  </h2>
+  <mat-dialog-content>
+    <p>¿Estás seguro de que deseas eliminar la gama <strong>{{ data.nombre }}</strong>?</p>
+    <p class="small-text text-muted">Esta acción no se puede deshacer. Las telas no se borrarán del inventario, solo se desvincularán de esta gama.</p>
+  </mat-dialog-content>
+  <mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close>Cancelar</button>
+    <button mat-raised-button color="warn" [mat-dialog-close]="true">Eliminar Gama</button>
+  </mat-dialog-actions>
+</ng-template>

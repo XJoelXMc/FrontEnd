@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatDialog } from '@angular/material/dialog'; // ✅ Importante para el Modal
 import { AdminConfigService } from '../../../../services/admin-config.service';
 import { InventarioService } from '../../../../services/inventario.service';
-import { DatosCreacionPackDTO, TelaInventarioDTO, TelaSimpleDTO, GamaTelaDTO } from '../../../../models/admin-config.models';
+import { DatosCreacionPackDTO, TelaInventarioDTO, TelaSimpleDTO } from '../../../../models/admin-config.models';
 
 @Component({
   selector: 'app-gama-manager',
@@ -17,16 +18,20 @@ export class GamaManagerComponent implements OnInit {
   isDragging = false;
   activeDropZone: number | null = null;
   
-  // ✅ Variables para el modal
+  // ✅ Variables para el modal de asignación (Sublimable)
   showSublimableModal = false;
   currentTela: TelaInventarioDTO | null = null;
   currentGamaId: number | null = null;
   esSublimable: boolean = false;
 
+  // ✅ Referencia al modal de confirmar eliminación de Gama
+  @ViewChild('confirmDeleteModal') confirmDeleteModal!: TemplateRef<any>;
+
   constructor(
     private adminConfigService: AdminConfigService,
     private inventarioService: InventarioService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    public dialog: MatDialog // ✅ Inyectamos MatDialog
   ) { }
 
   ngOnInit(): void {
@@ -69,6 +74,70 @@ export class GamaManagerComponent implements OnInit {
     });
   }
 
+  // ==========================================
+  // ✅ NUEVOS MÉTODOS: ELIMINAR GAMA Y QUITAR TELA
+  // ==========================================
+
+  /**
+   * Abre Modal y Elimina la Gama si se confirma
+   */
+  abrirModalEliminarGama(gama: any): void {
+    const dialogRef = this.dialog.open(this.confirmDeleteModal, {
+      data: gama,
+      width: '400px'
+    });
+
+    dialogRef.afterClosed().subscribe((confirmado: boolean) => {
+      if (confirmado) {
+        // Asegúrate de tener deleteGama en tu AdminConfigService
+        this.adminConfigService.deleteGama(gama.id).subscribe({
+          next: () => {
+            // Actualiza la vista eliminando la gama de la lista local
+            if (this.datos) {
+              this.datos.todasLasGamasConTelas = this.datos.todasLasGamasConTelas.filter((g: any) => g.id !== gama.id);
+            }
+            this.snackBar.open('Gama eliminada con éxito', 'Cerrar', { duration: 3000 });
+          },
+          error: (err) => {
+            this.snackBar.open('Error al eliminar la gama. Verifique si está en uso.', 'Cerrar', { duration: 4000 });
+          }
+        });
+      }
+    });
+  }
+
+  /**
+   * Quita una tela específica de la Gama
+   */
+  quitarTelaDeGama(gama: any, telaIdToRemove: number): void {
+    // 1. Filtramos las telas, quitando la que el usuario quiere eliminar
+    const nuevasTelas = gama.telas.filter((t: any) => t.id !== telaIdToRemove);
+    const nuevosTelaIds = nuevasTelas.map((t: any) => t.id);
+
+    // 2. Preparamos el DTO como lo espera el Backend (GamaTelaRequestDTO)
+    const payload = {
+      nombre: gama.nombre,
+      telaIds: nuevosTelaIds
+    };
+
+    // 3. Enviamos la actualización al Backend
+    // Asegúrate de tener updateGama en tu AdminConfigService
+    this.adminConfigService.updateGama(gama.id, payload).subscribe({
+      next: (gamaActualizada) => {
+        // Actualizamos la vista localmente sin necesidad de recargar todo
+        gama.telas = nuevasTelas;
+        this.snackBar.open('Tela removida de la gama', 'Cerrar', { duration: 2000 });
+      },
+      error: (err) => {
+        this.snackBar.open('Error al remover la tela', 'Cerrar', { duration: 3000 });
+      }
+    });
+  }
+
+  // ==========================================
+  // MÉTODOS DE DRAG & DROP Y MODAL DE ASIGNACIÓN
+  // ==========================================
+
   /**
    * Maneja el evento de soltar una tela en una gama
    */
@@ -81,31 +150,31 @@ export class GamaManagerComponent implements OnInit {
     
     if (!targetGama) return;
 
-    // Previene duplicados
-    const nombreCompletoTela = `${droppedItem.nombreMaterial} (${droppedItem.color})`;
-    if (targetGama.telas.some(t => t.nombre.toLowerCase() === nombreCompletoTela.toLowerCase())) {
+    // Previene duplicados (verificando por nombreMaterial)
+    if (targetGama.telas.some((t: any) => t.nombre.toLowerCase() === droppedItem.nombreMaterial.toLowerCase())) {
         this.snackBar.open('Esta tela ya está asignada a la gama.', 'Cerrar', { duration: 2000 });
         return;
     }
     
-    // ✅ REEMPLAZAR EL CONFIRM POR MODAL INTEGRADO
+    // Abre el modal para preguntar si es sublimable
     this.currentTela = droppedItem;
     this.currentGamaId = gamaId;
-    this.esSublimable = false; // Resetear valor por defecto
+    this.esSublimable = false; 
     this.showSublimableModal = true;
   }
 
   /**
-   * ✅ NUEVO MÉTODO: Confirma la asignación de la tela
+   * Confirma la asignación de la tela
    */
   confirmarAsignacionTela(): void {
     if (!this.currentTela || !this.currentGamaId) return;
 
-    // Construye la lista de gamas
+    // Construye la lista de gamas a las que pertenecerá esta tela
     const gamaIds = new Set<number>([this.currentGamaId]);
     
     this.datos?.todasLasGamasConTelas.forEach(gama => {
-      if (gama.telas.some(telaCatalogo => this.isSameTela(telaCatalogo, this.currentTela!))) {
+      // Si la tela ya estaba en otras gamas, mantenemos la relación
+      if (gama.telas.some((telaCatalogo: any) => telaCatalogo.nombre.toLowerCase() === this.currentTela!.nombreMaterial.toLowerCase())) {
         gamaIds.add(gama.id);
       }
     });
@@ -119,7 +188,7 @@ export class GamaManagerComponent implements OnInit {
     this.adminConfigService.createOrUpdateTela(telaData).subscribe({
       next: () => {
         this.snackBar.open(`Tela "${this.currentTela!.nombreMaterial}" asignada correctamente.`, 'OK', { duration: 3000 });
-        this.loadInitialData();
+        this.loadInitialData(); // Recargamos para ver los colores frescos y el ID de backend
         this.cerrarModal();
       },
       error: (err) => {
@@ -130,7 +199,7 @@ export class GamaManagerComponent implements OnInit {
   }
 
   /**
-   * ✅ NUEVO MÉTODO: Cierra el modal
+   * Cierra el modal de asignación
    */
   cerrarModal(): void {
     this.showSublimableModal = false;
@@ -140,19 +209,13 @@ export class GamaManagerComponent implements OnInit {
   }
 
   /**
-   * Extrae el color de una tela del catálogo
+   * Extrae el color de una tela del catálogo.
+   * Ahora primero intenta usar el color directo que arreglamos en el backend.
    */
-  extractColorFromTela(tela: TelaSimpleDTO): string {
-    const match = tela.nombre.match(/\(([^)]+)\)$/);
+  extractColorFromTela(tela: any): string {
+    if (tela.color) return tela.color; // ✅ Si ya viene del backend (Paso 1), lo usamos directo
+    const match = tela.nombre.match(/\(([^)]+)\)$/); // Respaldo antiguo
     return match ? match[1] : '#CCCCCC';
-  }
-
-  /**
-   * Compara una tela del catálogo con una del inventario
-   */
-  private isSameTela(telaCatalogo: TelaSimpleDTO, telaInventario: TelaInventarioDTO): boolean {
-    const nombreCompletoInventario = `${telaInventario.nombreMaterial} (${telaInventario.color})`;
-    return telaCatalogo.nombre.toLowerCase() === nombreCompletoInventario.toLowerCase();
   }
 
   /**
